@@ -5,18 +5,18 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import Constants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class DriveSubsystem extends SubsystemBase {
 
   // defining motor names
-  private final CANSparkMax leftFront = new CANSparkMax(1, MotorType.kBrushless);
+  private final CANSparkMax leftFront = new CANSparkMax(DriveConstants.leftFrontID, MotorType.kBrushless);
   private final CANSparkMax leftRear = new CANSparkMax(2, MotorType.kBrushless);
   private final CANSparkMax rightFront = new CANSparkMax(3, MotorType.kBrushless);
   private final CANSparkMax rightRear = new CANSparkMax(4, MotorType.kBrushless);
