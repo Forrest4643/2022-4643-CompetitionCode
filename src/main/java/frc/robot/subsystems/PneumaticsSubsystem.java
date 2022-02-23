@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants.PNConstants;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -8,10 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PneumaticsSubsystem extends SubsystemBase {
-    Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+    Compressor pcmCompressor = new Compressor(PNConstants.compressorID, PneumaticsModuleType.CTREPCM);
 
-    DoubleSolenoid frontIntake = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, 1, 2);
-    DoubleSolenoid rearIntake = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, 3, 4);
+    DoubleSolenoid frontIntake = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, PNConstants.frontForwardID, PNConstants.frontReverseID);
+    DoubleSolenoid rearIntake = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, PNConstants.rearForwardID, PNConstants.rearReverseID);
     
     @Override
     public void periodic() {

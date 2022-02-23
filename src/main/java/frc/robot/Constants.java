@@ -14,38 +14,39 @@ package frc.robot;
  */
 public final class Constants {
     public static final class DriveConstants {
-        public static final double leftFrontID = 1;
-        public static final double leftRearID = 2;
-        public static final double rightFrontID = 3;
-        public static final double rightRearID = 4;
+        public static final int leftFrontID = 1;
+        public static final int leftRearID = 2;
+        public static final int rightFrontID = 3;
+        public static final int rightRearID = 4;
 
     }
 
     public static final class IndexerConstants {
-        public static final double frontID = 11;
-        public static final double rearID = 12;
+        public static final int frontID = 11;
+        public static final int rearID = 12;
 
     }
     
     public static final class IntakeConstants {
-        public static final double frontID = 5;
-        public static final double rearID = 6;
+        public static final int frontID = 5;
+        public static final int rearID = 6;
 
     }
 
-    public static final class PneumaticsConstants {
-        public static final double frontForwardID = 1;
-        public static final double frontReverseID = 2;
-        public static final double rearForwardID = 3;
-        public static final double rearReverseID = 4;
+    public static final class PNConstants {
+        public static final int compressorID = 0;
+        public static final int frontForwardID = 1;
+        public static final int frontReverseID = 2;
+        public static final int rearForwardID = 3;
+        public static final int rearReverseID = 4;
 
     }
 
     public static final class ShooterConstants {
-        public static final double leftMotorID = 7;
-        public static final double rightMotorID = 8;
-        public static final double turretID = 9;
-        public static final double hoodID = 10;
+        public static final int leftMotorID = 7;
+        public static final int rightMotorID = 8;
+        public static final int turretID = 9;
+        public static final int hoodID = 10;
 
     }
 

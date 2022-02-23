@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants.ShooterConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -8,10 +9,10 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
-    private final CANSparkMax leftMotor = new CANSparkMax(7, MotorType.kBrushless);
-    private final CANSparkMax rightMotor = new CANSparkMax(8, MotorType.kBrushless);
-    private final CANSparkMax Turret = new CANSparkMax(9, MotorType.kBrushless);
-    private final CANSparkMax Hood = new CANSparkMax(10, MotorType.kBrushless);
+    private final CANSparkMax leftMotor = new CANSparkMax(ShooterConstants.leftMotorID, MotorType.kBrushless);
+    private final CANSparkMax rightMotor = new CANSparkMax(ShooterConstants.rightMotorID, MotorType.kBrushless);
+    private final CANSparkMax Turret = new CANSparkMax(ShooterConstants.turretID, MotorType.kBrushless);
+    private final CANSparkMax Hood = new CANSparkMax(ShooterConstants.hoodID, MotorType.kBrushless);
 
     //shooter encoders
     private RelativeEncoder lEncoder = leftMotor.getEncoder();
