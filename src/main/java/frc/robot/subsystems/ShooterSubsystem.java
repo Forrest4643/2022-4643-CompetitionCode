@@ -17,10 +17,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private RelativeEncoder lEncoder = leftMotor.getEncoder();
     private RelativeEncoder rEncoder = rightMotor.getEncoder();  
 
-    //turret encoder
     private RelativeEncoder turretEncoder = Turret.getEncoder();
 
-    //hood encoder
     private RelativeEncoder hoodEncoder = Hood.getEncoder();
 
     private final MotorControllerGroup Shooter = new MotorControllerGroup(leftMotor, rightMotor);
@@ -41,8 +39,8 @@ public class ShooterSubsystem extends SubsystemBase {
         Hood.set(Speed);
     }
 
-    public double getTurretSpeed() {
-        return turretEncoder.getVelocity();
+    public double getTurretPosition() {
+        return turretEncoder.getPosition();
     }
     public void setTurretSpeed(double Speed) {
         Turret.set(Speed);

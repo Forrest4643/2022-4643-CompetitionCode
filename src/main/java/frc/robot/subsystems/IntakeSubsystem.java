@@ -19,8 +19,16 @@ public class IntakeSubsystem extends SubsystemBase {
         Front.set(Speed);
     }
 
+    public double getFrontIntakeSpeed() {
+        return fEncoder.getVelocity();
+    }
+
     public void setRearIntakeSpeed(double Speed) {
         Rear.set(Speed);
+    }
+
+    public double getRearIntakeSpeed() {
+        return rEncoder.getVelocity();
     }
 
     @Override
