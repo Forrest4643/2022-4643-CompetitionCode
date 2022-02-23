@@ -36,6 +36,11 @@ public class ShooterSubsystem extends SubsystemBase {
     public double getHoodPosition() {
         return hoodEncoder.getPosition();
     }
+
+    public void resetHoodEncoder() {
+        hoodEncoder.setPosition(0);
+    }
+
     public void setHoodSpeed(double Speed) {
         Hood.set(Speed);
     }
@@ -43,6 +48,11 @@ public class ShooterSubsystem extends SubsystemBase {
     public double getTurretPosition() {
         return turretEncoder.getPosition();
     }
+
+    public void resetTurretEncoder() {
+        turretEncoder.setPosition(0);
+    }
+    
     public void setTurretSpeed(double Speed) {
         Turret.set(Speed);
     }

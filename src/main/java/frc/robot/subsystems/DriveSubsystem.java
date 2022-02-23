@@ -31,8 +31,16 @@ public class DriveSubsystem extends SubsystemBase {
   private RelativeEncoder rightRearEncoder = rightRear.getEncoder();
 
   public double getDriveForwardPosition() {
+    //returns the average position of all drive encoders. 
     return ((leftFrontEncoder.getPosition() + leftRearEncoder.getPosition()) / 2)
         + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
+  }
+
+  public void resetDriveForwardPosition() {
+    leftFrontEncoder.setPosition(0);
+    leftRearEncoder.setPosition(0);
+    rightFrontEncoder.setPosition(0);
+    rightRearEncoder.setPosition(0);
   }
 
   /** Creates a new ExampleSubsystem. */

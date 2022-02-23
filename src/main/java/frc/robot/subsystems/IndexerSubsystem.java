@@ -28,6 +28,10 @@ public class IndexerSubsystem extends SubsystemBase {
         return fEncoder.getPosition();
     }
 
+    public void resetFrontEncoder() {
+        fEncoder.setPosition(0);
+    }
+
     public void setRearIndexerSpeed(double Speed) {
         Rear.set(Speed);
     }
@@ -38,6 +42,10 @@ public class IndexerSubsystem extends SubsystemBase {
 
     public double getRearIndexerPosition() {
         return rEncoder.getPosition();
+    }
+
+    public void resetRearEncoder() {
+        rEncoder.setPosition(0);
     }
 
     @Override
