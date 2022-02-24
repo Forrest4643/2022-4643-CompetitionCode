@@ -12,18 +12,28 @@ public class VisionSubsystem extends SubsystemBase {
 
     PhotonCamera camera = new PhotonCamera("photonvision");
 
-    public double getTargetYaw() {
-        var result = camera.getLatestResult();
-        return result.getBestTarget().getYaw();
-    }
+    double m_targetYaw, m_targetDistanceMeters;
 
-    public double getTargetDistance() {
+    @Override public void periodic() {
         var result = camera.getLatestResult();
-        return PhotonUtils.calculateDistanceToTargetMeters(
+        m_targetYaw = result.getBestTarget().getYaw();
+        m_targetDistanceMeters = PhotonUtils.calculateDistanceToTargetMeters(
             VisionConstants.cameraHeightMETERS,
             VisionConstants.targetHeightMETERS, 
             VisionConstants.cameraAngleRAD, 
             Units.degreesToRadians(result.getBestTarget().getPitch()));
+
+        SmartDashboard.putNumber("targetYaw", m_targetYaw);
+        SmartDashboard.putNumber("targetDistanceMETERS", m_targetDistanceMeters);
+    }
+
+    public double getTargetYaw() {
+        return m_targetYaw;
+
+    }
+
+    public double getTargetDistance() {
+        return m_targetDistanceMeters;
 
     }
 
