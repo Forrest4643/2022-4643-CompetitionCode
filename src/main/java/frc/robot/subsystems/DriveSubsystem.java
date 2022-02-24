@@ -12,6 +12,8 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -29,6 +31,8 @@ public class DriveSubsystem extends SubsystemBase {
   private RelativeEncoder leftRearEncoder = leftRear.getEncoder();
   private RelativeEncoder rightFrontEncoder = rightFront.getEncoder();
   private RelativeEncoder rightRearEncoder = rightRear.getEncoder();
+
+  private final DifferentialDrive m_robotDrive = new DifferentialDrive(leftDrive, rightDrive);
 
   public double getDriveForwardPosition() {
     //returns the average position of all drive encoders. 
@@ -55,8 +59,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("DriveForwardPositiom", getDriveForwardPosition());
   }
 
-  public void setMotors(double leftSpeed, double rightSpeed) {
-    leftDrive.set(leftSpeed);
-    rightDrive.set(rightSpeed);
+  public void setDrive(double Speed, double turnRate, boolean quickTurn) {
+    m_robotDrive.curvatureDrive(Speed, turnRate, quickTurn);
   }
 }
