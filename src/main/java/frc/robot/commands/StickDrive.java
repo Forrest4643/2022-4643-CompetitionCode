@@ -21,9 +21,22 @@ public class StickDrive extends CommandBase {
     addRequirements(m_driveSubsystem);
   }
 
+  // This runs once per scheduler run
   @Override
   public void execute() {
     m_driveSubsystem.setDrive(m_Speed.getAsDouble(), m_turnRate.getAsDouble(), m_quickTurn.getAsBoolean());
   }
+
+   // Make this return true when this Command no longer needs to run execute()
+   @Override
+   public boolean isFinished() {
+     return false; // Runs until interrupted
+   }
+ 
+   // Called once after isFinished returns true
+   @Override
+   public void end(boolean interrupted) {
+     m_driveSubsystem.setDrive(0, 0, false);
+   }
 
 }

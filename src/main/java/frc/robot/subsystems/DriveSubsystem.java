@@ -34,10 +34,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(leftDrive, rightDrive);
 
-  public double getDriveForwardPosition() {
+  public double getDriveDistanceIN() {
     //returns the average position of all drive encoders. 
-    return ((leftFrontEncoder.getPosition() + leftRearEncoder.getPosition()) / 2)
-        + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
+    double driveForwardRAW = ((leftFrontEncoder.getPosition() + leftRearEncoder.getPosition()) / 2)
+    + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
+
+    return (driveForwardRAW * DriveConstants.NEOticksToDegrees / 10) * DriveConstants.wheelRadius * (2 * Math.PI);
+
   }
 
   public void resetDriveForwardPosition() {
@@ -56,7 +59,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("DriveForwardPositiom", getDriveForwardPosition());
+    SmartDashboard.putNumber("DriveDistanceIN", getDriveDistanceIN());
   }
 
   public void setDrive(double Speed, double turnRate, boolean quickTurn) {

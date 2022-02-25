@@ -19,6 +19,9 @@ public final class Constants {
         public static final int rightFrontID = 3;
         public static final int rightRearID = 4;
 
+        public static final double NEOticksToDegrees = 8.57142857143;
+        public static final double driveReduction = 10; 
+        public static final double wheelRadius = 3; 
     }
 
     public static final class IndexerConstants {
@@ -45,11 +48,33 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int leftMotorID = 7;
         public static final int rightMotorID = 8;
-        public static final int turretID = 9;
-        public static final int hoodID = 10;
+
+        public static final double shooterkP = 0;
+        public static final double shooterkI = 0;
+        public static final double shooterkD = 0;
+        public static final double shooterkF = 0;
 
     }
 
+    public static final class HoodConstants {
+        public static final int hoodID = 10;
+
+        public static final double hoodkP = 0;
+        public static final double hoodkI = 0;
+        public static final double hoodkD = 0;
+        public static final double hoodkF = 0;
+
+    }
+
+    public static final class TurretConstants {
+        public static final int turretID = 9;
+
+        public static final double turretkP = 0;
+        public static final double turretkI = 0;
+        public static final double turretkD = 0;
+        public static final double turretkF = 0;
+
+    }
     public static final class VisionConstants {
         public static final double cameraHeightMETERS = Units.inchesToMeters(37.65);
         public static final double targetHeightMETERS = Units.inchesToMeters(104); 
