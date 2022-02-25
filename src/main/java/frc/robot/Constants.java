@@ -18,10 +18,9 @@ public final class Constants {
         public static final int leftRearID = 2;
         public static final int rightFrontID = 3;
         public static final int rightRearID = 4;
-
-        public static final double NEOticksToDegrees = 8.57142857143;
-        public static final double driveReduction = 10; 
-        public static final double wheelRadius = 3; 
+        
+        //drive tick to in = 1/ticks per rev * GR * wheel dia * pi
+        public static final double driveTickToIN = (((1.0/42) * 10) * 6) * Math.PI;
     }
 
     public static final class IndexerConstants {
@@ -68,7 +67,8 @@ public final class Constants {
 
     public static final class TurretConstants {
         public static final int turretID = 9;
-
+        //tickstodeg = turret pulley GR * 360/ticks per rev
+        public static final double turretTicksToDegrees = (224/30) * (360/4096);
         public static final double turretkP = 0;
         public static final double turretkI = 0;
         public static final double turretkD = 0;

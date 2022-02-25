@@ -39,11 +39,10 @@ public class DriveSubsystem extends SubsystemBase {
     double driveForwardRAW = ((leftFrontEncoder.getPosition() + leftRearEncoder.getPosition()) / 2)
     + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
 
-    return (driveForwardRAW * DriveConstants.NEOticksToDegrees / 10) * DriveConstants.wheelRadius * (2 * Math.PI);
-
+    return driveForwardRAW * DriveConstants.driveTickToIN;
   }
 
-  public void resetDriveForwardPosition() {
+  public void resetDriveEncoders() {
     leftFrontEncoder.setPosition(0);
     leftRearEncoder.setPosition(0);
     rightFrontEncoder.setPosition(0);
