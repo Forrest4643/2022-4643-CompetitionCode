@@ -14,10 +14,10 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
     public static final class DriveConstants {
-        public static final int leftFrontID = 1;
-        public static final int leftRearID = 2;
-        public static final int rightFrontID = 3;
-        public static final int rightRearID = 4;
+        public static final int leftFrontID = 2;
+        public static final int leftRearID = 3;
+        public static final int rightFrontID = 13;
+        public static final int rightRearID = 12;
         
         //drive tick to in = 1/ticks per rev * GR * wheel dia * pi
         public static final double driveTickToIN = (((1.0/42) * 10) * 6) * Math.PI;
@@ -30,8 +30,8 @@ public final class Constants {
     }
     
     public static final class IntakeConstants {
-        public static final int frontID = 5;
-        public static final int rearID = 6;
+        public static final int frontID = 0;
+        public static final int rearID = 8;
 
     }
 
