@@ -30,7 +30,7 @@ public final class Constants {
     }
     
     public static final class IntakeConstants {
-        public static final int frontID = 0;
+        public static final int frontID = 7;
         public static final int rearID = 8;
 
     }

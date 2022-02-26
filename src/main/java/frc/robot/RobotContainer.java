@@ -7,31 +7,49 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.FrontIntakeSet;
+import frc.robot.commands.StickDrive;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
-  private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-  private final PneumaticsSubsystem m_PneumaticsSubsystem = new PneumaticsSubsystem();
-  private final ShooterPIDSubsystem m_ShooterPIDSubsystem = new ShooterPIDSubsystem();
-  //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private final DriveSubsystem DriveSubsystem = new DriveSubsystem();
+  private final IntakeSubsystem IntakeSubsystem = new IntakeSubsystem();
+  private final PneumaticsSubsystem PneumaticsSubsystem = new PneumaticsSubsystem();
+  private final ShooterPIDSubsystem ShooterPIDSubsystem = new ShooterPIDSubsystem();
+  private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
+  private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  private final XboxController driveController = new XboxController(1);
+
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    DriveSubsystem.setDefaultCommand(
+        new StickDrive(() -> driveController.getRawAxis(1), () -> driveController.getRawAxis(4),
+            () -> driveController.getRawButtonPressed(6), DriveSubsystem));
   }
 
   /**
@@ -40,7 +58,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    new JoystickButton(driveController, 1).whileActiveOnce(new FrontIntakeSet(IntakeSubsystem, true));
+    new JoystickButton(driveController, 2).whileActiveOnce(new FrontIntakeSet(IntakeSubsystem, false));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
