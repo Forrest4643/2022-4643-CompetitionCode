@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.FrontIntakeSet;
 import frc.robot.commands.StickDrive;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.IndexerSubsystem;
+// import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PneumaticsSubsystem;
-import frc.robot.subsystems.ShooterPIDSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.PneumaticsSubsystem;
+// import frc.robot.subsystems.ShooterPIDSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
@@ -33,10 +33,10 @@ public class RobotContainer {
 
   private final DriveSubsystem DriveSubsystem = new DriveSubsystem();
   private final IntakeSubsystem IntakeSubsystem = new IntakeSubsystem();
-  private final PneumaticsSubsystem PneumaticsSubsystem = new PneumaticsSubsystem();
-  private final ShooterPIDSubsystem ShooterPIDSubsystem = new ShooterPIDSubsystem();
-  private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
-  private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
+  // private final PneumaticsSubsystem PneumaticsSubsystem = new PneumaticsSubsystem();
+  // private final ShooterPIDSubsystem ShooterPIDSubsystem = new ShooterPIDSubsystem();
+  // private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
+  // private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
 
   private final XboxController driveController = new XboxController(1);
 
