@@ -4,37 +4,46 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TurretPIDSubsystem;
-
-
+import frc.robot.subsystems.VisionSubsystem;
 
 public class AimTurret extends CommandBase {
-  /** Creates a new AimTurret. */
-  private double setpoint;
-
+  /** Creates a new TurretPosition. */
+  private final VisionSubsystem visionSubsystem;
   private final TurretPIDSubsystem turretPIDSubsystem;
+  private final BooleanSupplier m_aiming;
 
-  public AimTurret(TurretPIDSubsystem turretPIDSubsystem) {
+  public AimTurret(BooleanSupplier aiming, TurretPIDSubsystem turretPIDSubsystem, VisionSubsystem visionSubsystem) {
+    this.visionSubsystem = visionSubsystem;
     this.turretPIDSubsystem = turretPIDSubsystem;
-    addRequirements(turretPIDSubsystem);
+    m_aiming = aiming;
+    addRequirements(turretPIDSubsystem, visionSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("AimTurret Started!");
+    System.out.println("TurretPosition Started!");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    if (m_aiming.getAsBoolean()) {
+      turretPIDSubsystem.setSetpoint(visionSubsystem.getTargetYaw() + turretPIDSubsystem.turretPosition());
+    } else {
+      turretPIDSubsystem.disable();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("AimTurret Ended!");
+    System.out.println("TurretPosition Started!");
   }
 
   // Returns true when the command should end.

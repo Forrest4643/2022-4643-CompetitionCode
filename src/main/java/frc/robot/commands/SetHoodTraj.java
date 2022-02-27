@@ -5,37 +5,40 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.TurretPIDSubsystem;
+import frc.robot.Constants.HoodConstants;
+import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
-public class TurretPosition extends CommandBase {
-  /** Creates a new TurretPosition. */
+public class SetHoodTraj extends CommandBase {
+  private final HoodPIDSubsystem hoodPIDSubsystem;
   private final VisionSubsystem visionSubsystem;
-  private final TurretPIDSubsystem turretPIDSubsystem;
-  private double m_setpoint; 
-  public TurretPosition(TurretPIDSubsystem turretPIDSubsystem, VisionSubsystem visionSubsystem) {
+
+  public SetHoodTraj(HoodPIDSubsystem hoodPIDSubsystem, VisionSubsystem visionSubsystem) {
+    this.hoodPIDSubsystem = hoodPIDSubsystem;
     this.visionSubsystem = visionSubsystem;
-    this.turretPIDSubsystem = turretPIDSubsystem;
-    addRequirements(turretPIDSubsystem, visionSubsystem);
+    addRequirements(hoodPIDSubsystem, visionSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("TurretPosition Started!");
+    System.out.println("SetHoodTraj Started!");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_setpoint = visionSubsystem.getTargetYaw() + turretPIDSubsystem.turretPosition();
-    turretPIDSubsystem.setSetpoint(m_setpoint);
+    hoodPIDSubsystem.setSetpoint(hoodSetpoint());
+  }
+
+  private double hoodSetpoint() {
+    return visionSubsystem.getTargetDistance() * HoodConstants.targetDistToSetpoint;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("TurretPosition Started!");
+    System.out.println("SetHoodTraj Ended!");
   }
 
   // Returns true when the command should end.

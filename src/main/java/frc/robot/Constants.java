@@ -26,7 +26,7 @@ public final class Constants {
         public static final int rightRearID = 12;
 
         // drive tick to in = 1/ticks per rev * GR * wheel dia * pi
-        public static final double driveTickToIN = (((1.0 / 42) * 10) * 6) * Math.PI;
+        public static final double driveTickToIN = (((360 / 42) * 10) * 6) * Math.PI;
     }
 
     public static final class IndexerConstants {
@@ -64,10 +64,18 @@ public final class Constants {
     public static final class HoodConstants {
         public static final int hoodID = 4;
 
+        public static final double targetDistToSetpoint = 0;
+        public static final float hoodForwardLimit = 5;
+        public static final float hoodReverseLimit = 0;
+        public static final double hoodAccInPerSec = 10; 
+        public static final double hoodInPerSec = 19.59;
         public static final double hoodkP = 0;
         public static final double hoodkI = 0;
         public static final double hoodkD = 0;
-        public static final double hoodkF = 0;
+        public static final double hoodkS = 0; 
+        public static final double hoodkG = 0.02;
+        public static final double hoodkV = 0.05;
+        public static final double hoodkA = 0; 
 
     }
 
@@ -75,13 +83,13 @@ public final class Constants {
         public static final int turretID = 1;
         // tickstodeg = turret pulley GR * 360/ticks per rev
         public static final double turretTicksToDegrees = (224 / 30) * (360 / 4096);
+        public static final int turretTicksPerRev = 4096 * (224/30);
         public static final double turretPulleyR = 224 / 30;
         public static final float turretForwardLimit = (float) (10 * turretPulleyR);
         public static final float turretReverseLimit = (float) (10 * turretPulleyR);
         public static final double turretkP = 0;
         public static final double turretkI = 0;
         public static final double turretkD = 0;
-        public static final double turretkF = 0;
 
     }
 

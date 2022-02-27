@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.common.hardware.VisionLEDMode;
@@ -23,9 +22,6 @@ public class VisionSubsystem extends SubsystemBase {
                 VisionConstants.targetHeightMETERS,
                 VisionConstants.cameraAngleRAD,
                 Units.degreesToRadians(result.getBestTarget().getPitch()));
-
-        SmartDashboard.putNumber("targetYaw", m_targetYaw);
-        SmartDashboard.putNumber("targetDistanceMETERS", m_targetDistanceMeters);
     }
 
     public double getTargetYaw() {
@@ -34,7 +30,7 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public double getTargetDistance() {
-        return m_targetDistanceMeters;
+        return Units.metersToInches(m_targetDistanceMeters);
 
     }
 

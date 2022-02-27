@@ -1,12 +1,10 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.TurretConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -14,7 +12,7 @@ public class TurretPIDSubsystem extends PIDSubsystem {
 
     private final CANSparkMax turretMotor = new CANSparkMax(TurretConstants.turretID, MotorType.kBrushless);
 
-    private RelativeEncoder m_turretEncoder = turretMotor.getAlternateEncoder(4096);
+    private RelativeEncoder turretEncoder = turretMotor.getAlternateEncoder(TurretConstants.turretTicksPerRev);
     private double m_turretPosition;
 
     public TurretPIDSubsystem() {
@@ -27,7 +25,7 @@ public class TurretPIDSubsystem extends PIDSubsystem {
 
     @Override
     public void periodic() {
-        m_turretPosition = m_turretEncoder.getPosition() * TurretConstants.turretTicksToDegrees;
+        m_turretPosition = turretEncoder.getPosition() * TurretConstants.turretTicksToDegrees;
     }
 
     @Override
