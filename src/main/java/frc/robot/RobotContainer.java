@@ -59,8 +59,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveController, 1).whileActiveOnce(new FrontIntakeSet(IntakeSubsystem, true));
-    new JoystickButton(driveController, 2).whileActiveOnce(new FrontIntakeSet(IntakeSubsystem, false));
+    new JoystickButton(driveController, 1).whenPressed(new FrontIntakeSet(IntakeSubsystem, true));
+    new JoystickButton(driveController, 2).whenPressed(new FrontIntakeSet(IntakeSubsystem, false));
   }
 
   /**
