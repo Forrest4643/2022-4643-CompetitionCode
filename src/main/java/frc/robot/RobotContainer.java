@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.FrontIntakeSet;
 import frc.robot.commands.StickDrive;
 import frc.robot.subsystems.DriveSubsystem;
-// import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-// import frc.robot.subsystems.PneumaticsSubsystem;
-// import frc.robot.subsystems.ShooterPIDSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.PneumaticsSubsystem;
+import frc.robot.subsystems.ShooterPIDSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
@@ -33,16 +33,13 @@ public class RobotContainer {
 
   private final DriveSubsystem DriveSubsystem = new DriveSubsystem();
   private final IntakeSubsystem IntakeSubsystem = new IntakeSubsystem();
-  // private final PneumaticsSubsystem PneumaticsSubsystem = new PneumaticsSubsystem();
-  // private final ShooterPIDSubsystem ShooterPIDSubsystem = new ShooterPIDSubsystem();
-  // private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
-  // private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
+  private final PneumaticsSubsystem PneumaticsSubsystem = new PneumaticsSubsystem();
+  private final ShooterPIDSubsystem ShooterPIDSubsystem = new ShooterPIDSubsystem();
+  private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
+  private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
 
   private final XboxController driveController = new XboxController(1);
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -52,20 +49,12 @@ public class RobotContainer {
             () -> driveController.getRawButtonPressed(6), DriveSubsystem));
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
   private void configureButtonBindings() {
+    //a button = intake on
     new JoystickButton(driveController, 1).whenPressed(new FrontIntakeSet(IntakeSubsystem, true));
+    //b button = intake off
     new JoystickButton(driveController, 2).whenPressed(new FrontIntakeSet(IntakeSubsystem, false));
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+  
 }

@@ -19,7 +19,7 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
 
     private double m_shooterSpeed;
 
-    private final MotorControllerGroup m_Shooter = new MotorControllerGroup(leftMotor, rightMotor);
+    private final MotorControllerGroup Shooter = new MotorControllerGroup(leftMotor, rightMotor);
 
     public ShooterPIDSubsystem() {
         super(new PIDController(ShooterConstants.shooterkP, ShooterConstants.shooterkI, ShooterConstants.shooterkD));
@@ -38,7 +38,7 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
 
     @Override
     public void useOutput(double output, double setpoint) {
-        m_Shooter.set(output);
+        Shooter.set(output);
     }
 
     public double getShooterSpeed() {
