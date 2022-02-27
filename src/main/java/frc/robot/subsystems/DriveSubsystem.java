@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-
 public class DriveSubsystem extends SubsystemBase {
 
   // defining motor names
@@ -35,9 +34,9 @@ public class DriveSubsystem extends SubsystemBase {
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(leftDrive, rightDrive);
 
   public double getDriveDistanceIN() {
-    //returns the average position of all drive encoders. 
+    // returns the average position of all drive encoders.
     double driveForwardRAW = ((leftFrontEncoder.getPosition() + leftRearEncoder.getPosition()) / 2)
-    + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
+        + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
 
     return driveForwardRAW * DriveConstants.driveTickToIN;
   }

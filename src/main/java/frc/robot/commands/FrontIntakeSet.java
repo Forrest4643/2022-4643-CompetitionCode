@@ -25,7 +25,7 @@ public class FrontIntakeSet extends CommandBase {
     }
 
     @Override
-    public void end (boolean interrupted) {
+    public void end(boolean interrupted) {
         System.out.println("FrontIntakeSet Ended!");
     }
 
@@ -33,6 +33,5 @@ public class FrontIntakeSet extends CommandBase {
     public boolean isFinished() {
         return false;
     }
-
 
 }
