@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class IntakeSubsystem extends SubsystemBase {
 
     public final CANSparkMax Front = new CANSparkMax(IntakeConstants.frontID, MotorType.kBrushless);
-    //public final CANSparkMax Rear = new CANSparkMax(IntakeConstants.rearID, MotorType.kBrushless);
+    public final CANSparkMax Rear = new CANSparkMax(IntakeConstants.rearID, MotorType.kBrushless);
 
     private RelativeEncoder fEncoder = Front.getEncoder();
-    //private RelativeEncoder rEncoder = Rear.getEncoder();
+    private RelativeEncoder rEncoder = Rear.getEncoder();
 
     public void setFrontWheels(Boolean on) {
         if (on = true) {
@@ -29,22 +29,22 @@ public class IntakeSubsystem extends SubsystemBase {
         return fEncoder.getVelocity();
     }
 
-    // public void setRearWheels(Boolean on) {
-    //     if (on = true) {
-    //         Rear.set(-1);
-    //     } else {
-    //         Rear.set(0);
-    //     }
-    // }
+    public void setRearWheels(Boolean on) {
+        if (on = true) {
+            Rear.set(-1);
+        } else {
+            Rear.set(0);
+        }
+    }
 
-    // public double getRearIntakeSpeed() {
-    //     return rEncoder.getVelocity();
-    // }
+    public double getRearIntakeSpeed() {
+        return rEncoder.getVelocity();
+    }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("frontIntakeRPM", fEncoder.getVelocity());
-      //  SmartDashboard.putNumber("rearIntakeRPM", rEncoder.getVelocity());
+       SmartDashboard.putNumber("rearIntakeRPM", rEncoder.getVelocity());
     }
 
 }
