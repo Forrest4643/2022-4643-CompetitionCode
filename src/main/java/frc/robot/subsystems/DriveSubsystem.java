@@ -62,5 +62,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void setDrive(double Speed, double turnRate, boolean quickTurn) {
     m_robotDrive.curvatureDrive(Speed, turnRate, quickTurn);
+    SmartDashboard.putBoolean("quickTurn", quickTurn);
+    SmartDashboard.putNumber("turnRate", turnRate);
+    SmartDashboard.putNumber("Speed", Speed);
   }
 }

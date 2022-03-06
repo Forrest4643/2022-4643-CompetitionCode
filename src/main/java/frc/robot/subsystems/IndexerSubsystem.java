@@ -36,8 +36,12 @@ public class IndexerSubsystem extends SubsystemBase {
         fEncoder.setPosition(0);
     }
 
-    public void setRearIndexerSpeed(double Speed) {
-    Rear.set(Speed);
+    public void setRearIndexer(Boolean on) {
+        if (on = true) {
+            Rear.set(1);
+        } else {
+            Rear.set(0);
+        }
     }
 
     public double getRearIndexerSpeed() {
