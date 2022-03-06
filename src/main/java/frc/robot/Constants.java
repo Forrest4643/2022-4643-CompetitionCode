@@ -18,14 +18,14 @@ public final class Constants {
     }
 
     public static final class IndexerConstants {
-        public static final int frontID = 5;
-        public static final int rearID = 6;
+        public static final int frontID = 6;
+        public static final int rearID = 8;
 
     }
 
     public static final class IntakeConstants {
         public static final int frontID = 7;
-        public static final int rearID = 8;
+        public static final int rearID = 9;
 
     }
 
@@ -40,7 +40,7 @@ public final class Constants {
 
     public static final class ShooterConstants {
         public static final int leftMotorID = 10;
-        public static final int rightMotorID = 11;
+        public static final int rightMotorID = 1;
 
         public static final double shooterkP = 0;
         public static final double shooterkI = 0;
@@ -68,7 +68,7 @@ public final class Constants {
     }
 
     public static final class TurretConstants {
-        public static final int turretID = 1;
+        public static final int turretID = 11;
         // tickstodeg = turret pulley GR * 360/ticks per rev
         public static final double turretTicksToDegrees = (224 / 30) * (360 / 4096);
         public static final int turretTicksPerRev = 4096 * (224/30);
