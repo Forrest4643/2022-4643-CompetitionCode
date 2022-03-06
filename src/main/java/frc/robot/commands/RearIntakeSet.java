@@ -1,14 +1,14 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class RearIntakeSet extends CommandBase {
+public class RearIntakeSet extends InstantCommand {
 
     private final IntakeSubsystem intakeSubsystem;
-    private final boolean on;
+    private final Boolean on;
 
-    public RearIntakeSet(IntakeSubsystem intakeSubsystem, boolean on) {
+    public RearIntakeSet(IntakeSubsystem intakeSubsystem, Boolean on) {
         this.on = on;
         this.intakeSubsystem = intakeSubsystem;
         addRequirements(intakeSubsystem);
@@ -17,10 +17,6 @@ public class RearIntakeSet extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("RearIntakeSet Started!");
-    }
-
-    @Override
-    public void execute() {
         intakeSubsystem.setRearWheels(on);
     }
 
@@ -29,9 +25,5 @@ public class RearIntakeSet extends CommandBase {
         System.out.println("RearIntakeSet Ended!");
     }
 
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
 
 }
