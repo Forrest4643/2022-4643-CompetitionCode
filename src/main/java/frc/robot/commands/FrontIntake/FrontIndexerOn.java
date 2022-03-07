@@ -1,7 +1,6 @@
 package frc.robot.commands.FrontIntake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.IndexerSubsystem;
 
 public class FrontIndexerOn extends CommandBase {

@@ -1,54 +1,48 @@
-// // Copyright (c) FIRST and other WPILib contributors.
-// // Open Source Software; you can modify and/or share it under the terms of
-// // the WPILib BSD license file in the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
-// package frc.robot.commands;
+package frc.robot.commands;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.TurretPIDSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
-// import java.util.function.BooleanSupplier;
+public class AimTurret extends CommandBase {
+  /** Creates a new TurretPosition. */
+  private final VisionSubsystem visionSubsystem;
+  private final TurretPIDSubsystem turretPIDSubsystem;
 
-// import edu.wpi.first.wpilibj2.command.CommandBase;
-// import frc.robot.subsystems.TurretPIDSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
+  public AimTurret(TurretPIDSubsystem turretPIDSubsystem, VisionSubsystem visionSubsystem) {
+    this.visionSubsystem = visionSubsystem;
+    this.turretPIDSubsystem = turretPIDSubsystem;
+    addRequirements(turretPIDSubsystem, visionSubsystem);
+  }
 
-// public class AimTurret extends CommandBase {
-//   /** Creates a new TurretPosition. */
-//   private final VisionSubsystem visionSubsystem;
-//   private final TurretPIDSubsystem turretPIDSubsystem;
-//   private final BooleanSupplier m_aiming;
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    System.out.println("TurretPosition Started!");
+  }
 
-//   public AimTurret(BooleanSupplier aiming, TurretPIDSubsystem turretPIDSubsystem, VisionSubsystem visionSubsystem) {
-//     this.visionSubsystem = visionSubsystem;
-//     this.turretPIDSubsystem = turretPIDSubsystem;
-//     m_aiming = aiming;
-//     addRequirements(turretPIDSubsystem, visionSubsystem);
-//   }
+  public double turretSetpoint() {
+      return visionSubsystem.getTargetYaw() + turretPIDSubsystem.turretPosition();
+  }
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+      turretPIDSubsystem.setSetpoint(turretSetpoint());
+  }
 
-//   // Called when the command is initially scheduled.
-//   @Override
-//   public void initialize() {
-//     System.out.println("TurretPosition Started!");
-//   }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    System.out.println("TurretPosition Started!");
+    turretPIDSubsystem.setSetpoint(0);
+  }
 
-//   // Called every time the scheduler runs while the command is scheduled.
-//   @Override
-//   public void execute() {
-
-//     if (m_aiming.getAsBoolean()) {
-//       turretPIDSubsystem.setSetpoint(visionSubsystem.getTargetYaw() + turretPIDSubsystem.turretPosition());
-//     } else {
-//       turretPIDSubsystem.disable();
-//     }
-//   }
-
-//   // Called once the command ends or is interrupted.
-//   @Override
-//   public void end(boolean interrupted) {
-//     System.out.println("TurretPosition Started!");
-//   }
-
-//   // Returns true when the command should end.
-//   @Override
-//   public boolean isFinished() {
-//     return false;
-//   }
-// }
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+}

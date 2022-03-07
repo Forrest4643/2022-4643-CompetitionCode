@@ -6,41 +6,42 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.HoodPIDSubsystem;
+import frc.robot.subsystems.ShooterPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
-public class SetHoodTraj extends CommandBase {
-    private final HoodPIDSubsystem hoodPIDSubsystem;
+public class SetShooter extends CommandBase {
+    private final ShooterPIDSubsystem shooterPIDSubsystem;
     private final VisionSubsystem visionSubsystem;
 
-    public SetHoodTraj(HoodPIDSubsystem hoodPIDSubsystem, VisionSubsystem visionSubsystem) {
-        this.hoodPIDSubsystem = hoodPIDSubsystem;
+    public SetShooter(ShooterPIDSubsystem shooterPIDSubsystem, VisionSubsystem visionSubsystem) {
+        this.shooterPIDSubsystem = shooterPIDSubsystem;
         this.visionSubsystem = visionSubsystem;
-        addRequirements(hoodPIDSubsystem, visionSubsystem);
+        addRequirements(shooterPIDSubsystem, visionSubsystem);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        System.out.println("SetHoodTraj Started!");
+        System.out.println("SetLauncher Started!");
+        shooterPIDSubsystem.enable();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        hoodPIDSubsystem.setSetpoint(hoodSetpoint());
-        SmartDashboard.putNumber("hoodSetpoint", hoodSetpoint());
+        shooterPIDSubsystem.setSetpoint(shooterRPM());
+        SmartDashboard.putNumber("shooterRPM", shooterRPM());
     }
 
-    private double hoodSetpoint() {
+    private double shooterRPM() {
         return visionSubsystem.getTargetDistance() * 1;
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        System.out.println("SetHoodTraj Ended!");
-        hoodPIDSubsystem.setSetpoint(0);
+        System.out.println("SetLauncher Ended!");
+        shooterPIDSubsystem.disable();
     }
 
     // Returns true when the command should end.

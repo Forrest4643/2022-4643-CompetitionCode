@@ -17,7 +17,7 @@ public class TurretPIDSubsystem extends PIDSubsystem {
 
     public TurretPIDSubsystem() {
         super(new PIDController(TurretConstants.turretkP, TurretConstants.turretkI, TurretConstants.turretkD));
-        getController().setTolerance(0.15);
+        getController().setTolerance(1);
         turretMotor.setSoftLimit(SoftLimitDirection.kForward, TurretConstants.turretForwardLimit);
         turretMotor.setSoftLimit(SoftLimitDirection.kReverse, TurretConstants.turretReverseLimit);
 
