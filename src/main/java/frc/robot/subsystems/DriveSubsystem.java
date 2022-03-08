@@ -64,7 +64,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void setDrive(double Speed, double turnRate, boolean quickTurn) {
 
-    // inputs to the pow of 1.4 for a nice response curve
+    // inputs to a power for a nice response curve
 
     double SqrSpeed = Math.pow(MathUtil.applyDeadband(Math.abs(Speed), DriveConstants.stickDB), DriveConstants.speedPow);
     double SqrTurn = Math.pow(MathUtil.applyDeadband(Math.abs(turnRate), DriveConstants.stickDB), DriveConstants.turnPow);
