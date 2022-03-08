@@ -30,6 +30,7 @@ public class RobotContainer {
 
   private final XboxController driveController = new XboxController(0);
 
+
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -40,10 +41,13 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    // drive a button = front intake enable
     new JoystickButton(driveController, 1)
         .whileActiveOnce(new FrontIntakeEnable(IntakeSubsystem, PneumaticsSubsystem, IndexerSubsystem));
+    // drive y button = rear intake enable
     new JoystickButton(driveController, 4)
         .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem, IndexerSubsystem));
+
   }
 
 }
