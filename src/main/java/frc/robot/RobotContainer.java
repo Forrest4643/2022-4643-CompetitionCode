@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.StickDrive;
 import frc.robot.commands.FrontIntake.FrontIndexerOn;
@@ -30,13 +32,13 @@ public class RobotContainer {
 
   private final XboxController driveController = new XboxController(0);
 
-
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
     DriveSubsystem.setDefaultCommand(
-        new StickDrive(() -> driveController.getRawAxis(1), () -> -driveController.getRawAxis(4),
+        new StickDrive(() -> driveController.getRawAxis(3) - driveController.getRawAxis(2),
+            () -> -driveController.getRawAxis(4),
             () -> driveController.getRawButton(10), DriveSubsystem));
   }
 

@@ -13,6 +13,8 @@ public final class Constants {
         public static final int rightFrontID = 13;
         public static final int rightRearID = 12;
         public static final double stickDB = 0.05;
+        public static final double turnPow = 1.4;
+        public static final double speedPow = 1.3;
 
         // drive tick to in = 1/ticks per rev * GR * wheel dia * pi
         public static final double driveTickToIN = (((360 / 42) * 10) * 6) * Math.PI;
