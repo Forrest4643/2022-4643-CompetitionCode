@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.IntakeConstants;
 
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -17,24 +19,24 @@ public class IntakeSubsystem extends SubsystemBase {
     private RelativeEncoder fEncoder = Front.getEncoder();
     private RelativeEncoder rEncoder = Rear.getEncoder();
 
-    public void setFrontWheels(Boolean on) {
-        if (on = true) {
-            Front.set(1);
-        } else {
-            Front.set(0);
-        }
+    public void frontWheelsOn() {
+        Front.set(1);
+    }
+
+    public void frontWheelsOff() {
+        Front.set(0);
     }
 
     public double getFrontIntakeSpeed() {
         return fEncoder.getVelocity();
     }
 
-    public void setRearWheels(Boolean on) {
-        if (on = true) {
-            Rear.set(-1);
-        } else {
-            Rear.set(0);
-        }
+    public void rearWheelsOn() {
+        Rear.set(1);
+    }
+
+    public void rearWheelsOff() {
+        Rear.set(0);
     }
 
     public double getRearIntakeSpeed() {
@@ -44,7 +46,7 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("frontIntakeRPM", fEncoder.getVelocity());
-       SmartDashboard.putNumber("rearIntakeRPM", rEncoder.getVelocity());
+        SmartDashboard.putNumber("rearIntakeRPM", rEncoder.getVelocity());
     }
 
 }

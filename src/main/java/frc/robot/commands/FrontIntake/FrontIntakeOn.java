@@ -14,20 +14,20 @@ public class FrontIntakeOn extends CommandBase {
 
     @Override
     public void initialize() {
+        intakeSubsystem.frontWheelsOn();
         System.out.println("FrontIntake On!");
+
     }
 
     @Override
     public void execute() {
-        intakeSubsystem.setFrontWheels(true);
 
     }
 
     @Override
     public void end(boolean interrupted) {
+        intakeSubsystem.frontWheelsOff();
         System.out.println("FrontIntake Off!");
-        intakeSubsystem.setFrontWheels(false);
-
     }
 
 }

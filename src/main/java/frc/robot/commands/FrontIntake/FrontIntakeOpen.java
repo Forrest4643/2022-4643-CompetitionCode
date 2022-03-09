@@ -16,19 +16,15 @@ public class FrontIntakeOpen extends CommandBase {
 
   @Override
   public void initialize() {
-    System.out.println("FrontIntake Open!");;
+    System.out.println("FrontIntake Open!");
+    pneumaticsSubsystem.frontIntakeOpen();
+
   }  
-
-  @Override
-  public void execute() {
-    pneumaticsSubsystem.frontIntakePosition(true);
-
-  }
 
   @Override
   public void end(boolean interrupted) {
       System.out.println("FrontIntake Closed!");
-      pneumaticsSubsystem.frontIntakePosition(false);
+      pneumaticsSubsystem.frontIntakeClosed();
 
   }
 }

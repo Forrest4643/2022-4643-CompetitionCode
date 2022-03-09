@@ -15,18 +15,13 @@ public class RearIndexerOn extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("RearIndexer On!");
-    }
-
-    @Override
-    public void execute() {
-        IndexerSubsystem.setRearIndexer(true);
-
+        IndexerSubsystem.rearWheelsOn();
     }
 
     @Override
     public void end(boolean interrupted) {
         System.out.println("RearIndexer Off!");
-        IndexerSubsystem.setRearIndexer(false);
+        IndexerSubsystem.rearWheelsOff();
     }
 
 }

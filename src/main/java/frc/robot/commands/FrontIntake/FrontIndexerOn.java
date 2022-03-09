@@ -15,18 +15,14 @@ public class FrontIndexerOn extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("FrontIndexer On!");
+        IndexerSubsystem.frontWheelsOn();
     }
 
-    @Override
-    public void execute() {
-        IndexerSubsystem.setFrontIndexer(true);
-
-    }
 
     @Override
     public void end(boolean interrupted) {
         System.out.println("FrontIndexer Off!");
-        IndexerSubsystem.setFrontIndexer(false);
+        IndexerSubsystem.frontWheelsOff();
     }
 
 }
