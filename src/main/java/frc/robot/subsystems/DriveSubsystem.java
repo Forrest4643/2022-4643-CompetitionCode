@@ -12,6 +12,8 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -61,9 +63,24 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void setDrive(double Speed, double turnRate, boolean quickTurn) {
-    m_robotDrive.curvatureDrive(Speed, turnRate, quickTurn);
+
+    // inputs to a power for a nice response curve
+
+    double SqrSpeed = Math.pow(MathUtil.applyDeadband(Math.abs(Speed), DriveConstants.stickDB), DriveConstants.speedPow);
+    double SqrTurn = Math.pow(MathUtil.applyDeadband(Math.abs(turnRate), DriveConstants.stickDB), DriveConstants.turnPow);
+
+    if (Speed < 0) {
+      SqrSpeed = SqrSpeed * -1;
+    }
+
+    if (turnRate < 0) {
+      SqrTurn = SqrTurn * -1;
+    }
+
+    m_robotDrive.curvatureDrive(SqrSpeed, SqrTurn, quickTurn);
+
     SmartDashboard.putBoolean("quickTurn", quickTurn);
-    SmartDashboard.putNumber("turnRate", turnRate);
-    SmartDashboard.putNumber("Speed", Speed);
+    SmartDashboard.putNumber("sqrturn", SqrTurn);
+    SmartDashboard.putNumber("sqrspeed", SqrSpeed);
   }
 }

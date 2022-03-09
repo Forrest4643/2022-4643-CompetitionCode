@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.StickDrive;
 import frc.robot.commands.FrontIntake.FrontIndexerOn;
@@ -35,15 +37,23 @@ public class RobotContainer {
     configureButtonBindings();
 
     DriveSubsystem.setDefaultCommand(
-        new StickDrive(() -> driveController.getRawAxis(1), () -> -driveController.getRawAxis(4),
-            () -> driveController.getRawButton(5), DriveSubsystem));
+
+        new StickDrive(() -> driveController.getRawAxis(3) - driveController.getRawAxis(2),
+            () -> -driveController.getRawAxis(4),
+            () -> driveController.getRawButton(10), DriveSubsystem));
+
   }
 
   private void configureButtonBindings() {
+    // drive a button = front intake enable
     new JoystickButton(driveController, 1)
         .whileActiveOnce(new FrontIntakeEnable(IntakeSubsystem, PneumaticsSubsystem, IndexerSubsystem));
-    // new JoystickButton(driveController, 4)
-    //     .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem, IndexerSubsystem));
+
+    // drive y button = rear intake enable
+    new JoystickButton(driveController, 4)
+        .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem, IndexerSubsystem));
+
+
   }
 
 }
