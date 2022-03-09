@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.RearIntake;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.PneumaticsSubsystem;
 
@@ -16,19 +17,14 @@ public class RearIntakeOpen extends CommandBase {
 
   @Override
   public void initialize() {
-    System.out.println("RearIntake Open!");;
-  }  
-
-  @Override
-  public void execute() {
-    pneumaticsSubsystem.rearIntakePosition(true);
-
+    System.out.println("RearIntake Open!");
+    pneumaticsSubsystem.rearIntakeOpen();
   }
 
   @Override
   public void end(boolean interrupted) {
-      System.out.println("RearIntake Closed!");
-      pneumaticsSubsystem.rearIntakePosition(false);
+    System.out.println("RearIntake Closed!");
+    pneumaticsSubsystem.rearIntakeClosed();
 
   }
 }

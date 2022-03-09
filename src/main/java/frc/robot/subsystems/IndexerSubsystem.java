@@ -11,17 +11,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class IndexerSubsystem extends SubsystemBase {
 
     public final CANSparkMax Front = new CANSparkMax(IndexerConstants.frontID, MotorType.kBrushless);
-    public final CANSparkMax Rear = new CANSparkMax(IndexerConstants.rearID,  MotorType.kBrushless);
+    public final CANSparkMax Rear = new CANSparkMax(IndexerConstants.rearID, MotorType.kBrushless);
 
     private RelativeEncoder fEncoder = Front.getEncoder();
     private RelativeEncoder rEncoder = Rear.getEncoder();
 
-    public void setFrontIndexer(Boolean on) {
-        if (on = true) {
-            Front.set(1);
-        } else {
-            Front.set(0);
-        }
+    public void frontWheelsOn() {
+        Front.set(1);
+    }
+
+    public void frontWheelsOff() {
+        Front.set(0);
+    }
+
+    public void rearWheelsOn() {
+        Rear.set(1);
+    }
+
+    public void rearWheelsOff() {
+        Rear.set(0);
     }
 
     public double getFrontIndexerSpeed() {
@@ -36,24 +44,16 @@ public class IndexerSubsystem extends SubsystemBase {
         fEncoder.setPosition(0);
     }
 
-    public void setRearIndexer(Boolean on) {
-        if (on = true) {
-            Rear.set(1);
-        } else {
-            Rear.set(0);
-        }
-    }
-
     public double getRearIndexerSpeed() {
-    return rEncoder.getVelocity();
+        return rEncoder.getVelocity();
     }
 
     public double getRearIndexerPosition() {
-    return rEncoder.getPosition();
+        return rEncoder.getPosition();
     }
 
     public void resetRearEncoder() {
-    rEncoder.setPosition(0);
+        rEncoder.setPosition(0);
     }
 
     @Override

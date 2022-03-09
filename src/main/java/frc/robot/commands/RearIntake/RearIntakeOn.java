@@ -15,22 +15,14 @@ public class RearIntakeOn extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("RearIntake On!");
-    }
-
-    @Override
-    public void execute() {
-        intakeSubsystem.setRearWheels(true);
-
+        intakeSubsystem.rearWheelsOn();
     }
 
     @Override
     public void end(boolean interrupted) {
         System.out.println("RearIntake Off!");
-        intakeSubsystem.setRearWheels(false);
+        intakeSubsystem.rearWheelsOff();
 
     }
 
 }
-
-
-

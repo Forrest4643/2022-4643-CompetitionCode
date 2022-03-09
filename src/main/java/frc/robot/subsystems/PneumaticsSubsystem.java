@@ -35,21 +35,19 @@ public class PneumaticsSubsystem extends SubsystemBase {
         return pcmCompressor.getCurrent();
     }
 
-    public void frontIntakePosition(Boolean Open) {
-        if (Open = true) {
-            frontIntake.set(Value.kForward);
-        }
-        if (Open = false) {
-            frontIntake.set(Value.kReverse);
-        }
+    public void frontIntakeOpen() {
+        frontIntake.set(Value.kForward);
     }
 
-    public void rearIntakePosition(Boolean Open) {
-        if (Open = true) {
-            rearIntake.set(Value.kForward);
-        }
-        if (Open = false) {
-            rearIntake.set(Value.kReverse);
-        }
+    public void frontIntakeClosed() {
+        frontIntake.set(Value.kReverse);
+    }
+
+    public void rearIntakeOpen() {
+            rearIntake.set(Value.kForward);     
+    }
+
+    public void rearIntakeClosed() {
+        rearIntake.set(Value.kReverse);
     }
 }

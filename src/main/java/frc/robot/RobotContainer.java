@@ -36,14 +36,14 @@ public class RobotContainer {
 
     DriveSubsystem.setDefaultCommand(
         new StickDrive(() -> driveController.getRawAxis(1), () -> -driveController.getRawAxis(4),
-            () -> driveController.getRawButton(10), DriveSubsystem));
+            () -> driveController.getRawButton(5), DriveSubsystem));
   }
 
   private void configureButtonBindings() {
     new JoystickButton(driveController, 1)
         .whileActiveOnce(new FrontIntakeEnable(IntakeSubsystem, PneumaticsSubsystem, IndexerSubsystem));
-    new JoystickButton(driveController, 4)
-        .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem, IndexerSubsystem));
+    // new JoystickButton(driveController, 4)
+    //     .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem, IndexerSubsystem));
   }
 
 }
