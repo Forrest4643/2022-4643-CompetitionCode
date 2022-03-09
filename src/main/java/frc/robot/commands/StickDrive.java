@@ -11,21 +11,19 @@ public class StickDrive extends CommandBase {
   private final DriveSubsystem m_driveSubsystem;
   private final DoubleSupplier m_Speed;
   private final DoubleSupplier m_turnRate;
-  private final BooleanSupplier m_quickTurn;
 
-  public StickDrive(DoubleSupplier Speed, DoubleSupplier turnRate, BooleanSupplier quickTurn,
+  public StickDrive(DoubleSupplier Speed, DoubleSupplier turnRate,
       DriveSubsystem driveSubsystem) {
     m_driveSubsystem = driveSubsystem;
     m_Speed = Speed;
     m_turnRate = turnRate;
-    m_quickTurn = quickTurn;
     addRequirements(m_driveSubsystem);
   }
 
   // This runs once per scheduler run
   @Override
   public void execute() {
-    m_driveSubsystem.setDrive(m_Speed.getAsDouble(), m_turnRate.getAsDouble(), m_quickTurn.getAsBoolean());
+    m_driveSubsystem.setDrive(m_Speed.getAsDouble(), m_turnRate.getAsDouble());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -37,7 +35,7 @@ public class StickDrive extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    m_driveSubsystem.setDrive(0, 0, false);
+    m_driveSubsystem.setDrive(0, 0);
   }
 
 }

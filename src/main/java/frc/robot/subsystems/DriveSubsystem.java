@@ -62,7 +62,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("DriveDistanceIN", getDriveDistanceIN());
   }
 
-  public void setDrive(double Speed, double turnRate, boolean quickTurn) {
+  public void setDrive(double Speed, double turnRate) {
 
     // inputs to a power for a nice response curve
 
@@ -77,9 +77,8 @@ public class DriveSubsystem extends SubsystemBase {
       SqrTurn = SqrTurn * -1;
     }
 
-    m_robotDrive.curvatureDrive(SqrSpeed, SqrTurn, quickTurn);
+    m_robotDrive.arcadeDrive(SqrSpeed, SqrTurn);
 
-    SmartDashboard.putBoolean("quickTurn", quickTurn);
     SmartDashboard.putNumber("sqrturn", SqrTurn);
     SmartDashboard.putNumber("sqrspeed", SqrSpeed);
   }
