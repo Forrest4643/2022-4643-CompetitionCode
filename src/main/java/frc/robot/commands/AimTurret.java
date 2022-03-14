@@ -3,19 +3,22 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TurretPIDSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+//import frc.robot.subsystems.VisionSubsystem;
 
 public class AimTurret extends CommandBase {
   /** Creates a new TurretPosition. */
-  private final VisionSubsystem visionSubsystem;
+  //private final VisionSubsystem visionSubsystem;
   private final TurretPIDSubsystem turretPIDSubsystem;
-
-  public AimTurret(TurretPIDSubsystem turretPIDSubsystem, VisionSubsystem visionSubsystem) {
-    this.visionSubsystem = visionSubsystem;
+  private final double turretSetpoint;
+  public AimTurret(TurretPIDSubsystem turretPIDSubsystem, /*VisionSubsystem visionSubsystem,*/ double turretSetpoint) {
+    //this.visionSubsystem = visionSubsystem;
     this.turretPIDSubsystem = turretPIDSubsystem;
-    addRequirements(turretPIDSubsystem, visionSubsystem);
+    this.turretSetpoint = turretSetpoint;
+    addRequirements(turretPIDSubsystem/*, visionSubsystem*/);
   }
 
   // Called when the command is initially scheduled.
@@ -24,13 +27,14 @@ public class AimTurret extends CommandBase {
     System.out.println("TurretPosition Started!");
   }
 
-  public double turretSetpoint() {
-      return visionSubsystem.getTargetYaw() + turretPIDSubsystem.turretPosition();
-  }
+  // public double turretSetpoint() {
+  //     return visionSubsystem.getTargetYaw() + turretPIDSubsystem.turretPosition();
+  // }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      turretPIDSubsystem.setSetpoint(turretSetpoint());
+      turretPIDSubsystem.setSetpoint(turretSetpoint);
   }
 
   // Called once the command ends or is interrupted.
