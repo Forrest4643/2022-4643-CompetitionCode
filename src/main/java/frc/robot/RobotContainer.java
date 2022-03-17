@@ -6,9 +6,10 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.AimTurret;
 import frc.robot.commands.StickDrive;
+import frc.robot.commands.TurretPIDControl;
 import frc.robot.commands.FrontIntake.FrontIndexerOn;
 import frc.robot.commands.FrontIntake.FrontIntakeEnable;
 import frc.robot.commands.FrontIntake.FrontIntakeOn;
@@ -18,9 +19,8 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
-import frc.robot.subsystems.ShooterPIDSubsystem;
-import frc.robot.subsystems.TurretPIDSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
@@ -29,11 +29,9 @@ public class RobotContainer {
   private final DriveSubsystem DriveSubsystem = new DriveSubsystem();
   private final IntakeSubsystem IntakeSubsystem = new IntakeSubsystem();
   private final PneumaticsSubsystem PneumaticsSubsystem = new PneumaticsSubsystem();
-  private final TurretPIDSubsystem turretPIDSubsystem = new TurretPIDSubsystem(); 
-  //private final ShooterPIDSubsystem ShooterPIDSubsystem = new ShooterPIDSubsystem();
+  private final TurretSubsystem turretSubsystem = new TurretSubsystem();
   private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
-  // private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
-
+  private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
   private final XboxController driveController = new XboxController(0);
 
   public RobotContainer() {
@@ -50,15 +48,16 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // // drive a button = front intake enable
     // new JoystickButton(driveController, 1)
-    //     .whileActiveOnce(new FrontIntakeEnable(IntakeSubsystem, PneumaticsSubsystem, IndexerSubsystem));
+    // .whileActiveOnce(new FrontIntakeEnable(IntakeSubsystem, PneumaticsSubsystem,
+    // IndexerSubsystem));
 
     // // drive y button = rear intake enable
     // new JoystickButton(driveController, 4)
-    //     .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem, IndexerSubsystem));
+    // .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem,
+    // IndexerSubsystem));
 
-    new JoystickButton(driveController, 1).whileActiveOnce(new AimTurret(turretPIDSubsystem, 30));
-    new JoystickButton(driveController, 3).whileActiveOnce(new AimTurret(turretPIDSubsystem, -30));
-
+    new JoystickButton(driveController, 1).whileActiveOnce(new TurretPIDControl(turretSubsystem,
+        () -> VisionSubsystem.getTargetYaw() + turretSubsystem.turretPositionDEG()));
   }
 
 }
