@@ -56,8 +56,7 @@ public class RobotContainer {
     // .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem,
     // IndexerSubsystem));
 
-    new JoystickButton(driveController, 1).whileActiveOnce(new TurretPIDControl(turretSubsystem,
-        () -> VisionSubsystem.getTargetYaw() + turretSubsystem.turretPositionDEG()));
+    new JoystickButton(driveController, 1).whileActiveOnce(new TurretPIDControl(turretSubsystem, () -> VisionSubsystem.getTargetYaw()));
   }
 
 }

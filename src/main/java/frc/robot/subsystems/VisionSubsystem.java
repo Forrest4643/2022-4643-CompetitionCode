@@ -5,23 +5,39 @@ import frc.robot.Constants.VisionConstants;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.common.hardware.VisionLEDMode;
+
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class VisionSubsystem extends SubsystemBase {
 
     PhotonCamera camera = new PhotonCamera("photonvision");
 
-    double m_targetYaw, m_targetDistanceMeters;
+    double m_targetYaw;
+
+    double m_targetDistanceMeters;
 
     @Override
     public void periodic() {
         var result = camera.getLatestResult();
-        m_targetYaw = result.getBestTarget().getYaw();
-        m_targetDistanceMeters = PhotonUtils.calculateDistanceToTargetMeters(
-                VisionConstants.cameraHeightMETERS,
-                VisionConstants.targetHeightMETERS,
-                VisionConstants.cameraAngleRAD,
-                Units.degreesToRadians(result.getBestTarget().getPitch()));
+
+        SmartDashboard.putBoolean("result.hasTargets", result.hasTargets());
+
+        if (result.hasTargets()) {
+            m_targetYaw = result.getBestTarget().getYaw();
+            m_targetDistanceMeters = PhotonUtils.calculateDistanceToTargetMeters(
+                    VisionConstants.cameraHeightMETERS,
+                    VisionConstants.targetHeightMETERS,
+                    VisionConstants.cameraAngleRAD,
+                    Units.degreesToRadians(result.getBestTarget().getPitch()));
+            SmartDashboard.putBoolean("hasTargets", result.hasTargets());
+
+        } else {
+            m_targetYaw = 0;
+            m_targetDistanceMeters = 0;
+            SmartDashboard.putBoolean("hasTargets", result.hasTargets());
+        }
+
     }
 
     public double getTargetYaw() {

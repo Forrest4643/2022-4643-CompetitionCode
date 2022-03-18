@@ -4,26 +4,28 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TurretPIDControl extends PIDCommand {
   /** Creates a new TurretPIDControl. */
-  public TurretPIDControl(TurretSubsystem turretSubsystem, DoubleSupplier setpoint) {
+  public TurretPIDControl(TurretSubsystem turretSubsystem, DoubleSupplier targetYaw) {
     super(
         // The controller that the command will use
         new PIDController(TurretConstants.turretkP, TurretConstants.turretkI, TurretConstants.turretkD),
         // This should return the measurement
-        () -> turretSubsystem.turretPositionDEG(),
+        () -> targetYaw.getAsDouble(),
         // This should return the setpoint (can also be a constant)
-        () -> setpoint.getAsDouble(),
+        () -> 0,
         // This uses the output
         output -> {
         turretSubsystem.setTurretSpeed(output);
