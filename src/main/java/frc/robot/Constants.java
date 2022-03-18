@@ -45,9 +45,9 @@ public final class Constants {
         public static final int leftMotorID = 10;
         public static final int rightMotorID = 1;
 
-        public static final double shooterkP = 0;
-        public static final double shooterkI = 0;
-        public static final double shooterkD = 0;
+        public static final double shooterkP = 0.1;
+        public static final double shooterkI = 0.0;
+        public static final double shooterkD = 0.0001;
         public static final double shooterkF = 0;
 
     }
@@ -60,7 +60,7 @@ public final class Constants {
         public static final float hoodReverseLimit = 0;
         public static final double hoodAccInPerSec = 10; 
         public static final double hoodInPerSec = 19.59;
-        public static final double hoodkP = 0;
+        public static final double hoodkP = .05;
         public static final double hoodkI = 0;
         public static final double hoodkD = 0;
         public static final double hoodkS = 0; 

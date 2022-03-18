@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
@@ -30,7 +31,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("shooterRPM", getShooterRPM());
   }
 
   public void setShooterSpeed(double speed) {
@@ -38,7 +39,7 @@ public class ShooterSubsystem extends SubsystemBase {
     rightMotor.set(speed);
   }
 
-  public double shooterRPM() {
-    return (leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2;
+  public double getShooterRPM() {
+    return (leftEncoder.getVelocity() + -rightEncoder.getVelocity()) / 2;
   }
 }
