@@ -29,25 +29,28 @@ public class TurretTrackTarget extends PIDCommand {
         () -> 0,
         // This uses the output
         output -> {
-        output = MathUtil.clamp(output, -1, 1);
-        turretSubsystem.setTurretSpeed(output);
+          output = MathUtil.clamp(output, -1, 1);
+          turretSubsystem.setTurretSpeed(output);
         });
-        addRequirements(turretSubsystem);
+    addRequirements(turretSubsystem);
 
-        SmartDashboard.putNumber("PIDyaw", targetYaw.getAsDouble());
+    getController().setTolerance(0.1);
 
-        getController().setTolerance(0.1);
- 
   }
 
-  @Override 
+  @Override
   public void initialize() {
     System.out.println("TurretTrackTarget Started!");
   }
 
   @Override
-  public boolean isFinished() {
+  public void end(boolean interrupted) {
     System.out.println("TurretTrackTarget Ended!");
+  }
+
+  @Override
+  public boolean isFinished() {
+
     return false;
   }
 }

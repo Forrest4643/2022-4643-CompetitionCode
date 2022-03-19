@@ -36,7 +36,17 @@ public class shooterPID extends PIDCommand {
         });
     addRequirements(shooterSubsystem);
     getController().enableContinuousInput(-135, 135);
-    getController().setTolerance(100);
+    getController().setTolerance(50);
+  }
+
+  @Override
+  public void initialize() {
+    System.out.println("shooterPID started!");
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    System.out.println("shooterPID ended!");
   }
 
   // Returns true when the command should end.

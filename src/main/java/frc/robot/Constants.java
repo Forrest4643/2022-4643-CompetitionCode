@@ -21,6 +21,9 @@ public final class Constants {
     }
 
     public static final class IndexerConstants {
+        public static final int sensorThresh = 1;
+        public static final int blueThresh = 100;
+        public static final int redThresh = 100; 
         public static final int frontID = 6;
         public static final int rearID = 8;
 

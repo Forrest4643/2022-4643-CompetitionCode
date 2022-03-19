@@ -36,6 +36,16 @@ public class hoodPID extends PIDCommand {
     addRequirements(hoodSubsystem);
   }
 
+  @Override
+  public void initialize() {
+    System.out.println("hoodPID started!");
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    System.out.println("hoodPID ended!");
+  }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

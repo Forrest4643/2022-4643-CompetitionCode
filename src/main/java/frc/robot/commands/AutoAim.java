@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -23,15 +25,19 @@ public class AutoAim extends CommandBase {
   private ShooterSubsystem shooterSubsystem;
   private HoodSubsystem hoodSubsystem;
   private XboxController drivercontroller;
+  private IndexerSubsystem indexerSubsystem;
+  private hoodPID hoodPID;
+  private shooterPID shooterPID;
+  private TurretTrackTarget turretTrackTarget;
 
   /** Creates a new AutoAim. */
   public AutoAim(VisionSubsystem visionSubsystem, TurretSubsystem turretSubsystem, HoodSubsystem hoodSubsystem,
-      ShooterSubsystem shooterSubsystem,
-      XboxController driverController) {
+      ShooterSubsystem shooterSubsystem, XboxController driverController, IndexerSubsystem indexerSubsystem) {
     this.visionSubsystem = visionSubsystem;
     this.turretSubsystem = turretSubsystem;
     this.hoodSubsystem = hoodSubsystem;
     this.shooterSubsystem = shooterSubsystem;
+    this.indexerSubsystem = indexerSubsystem;
     this.drivercontroller = driverController;
 
   }
@@ -39,8 +45,7 @@ public class AutoAim extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //enable PIDS
-
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,16 +59,24 @@ public class AutoAim extends CommandBase {
 
     calcHoodPos(targetDist);
 
-    calcShooterRPM(targetDist);
+    if (hoodPID.getController().atSetpoint() && turretTrackTarget.getController().atSetpoint()) {
+
+      calcShooterRPM(targetDist);
+
+      if (shooterPID.getController().atSetpoint()) {
+
+      }
+
+    }
 
   }
 
   // alerts driver which direction to turn the robot for aiming
   private void alertDriver(double turretPosition) {
-    if (turretPosition < 0) {
+    if (turretPosition > 0) {
       drivercontroller.setRumble(RumbleType.kLeftRumble, 1);
     }
-    if (turretPosition > 0) {
+    if (turretPosition < 0) {
       drivercontroller.setRumble(RumbleType.kRightRumble, 1);
     }
   }
@@ -73,7 +86,7 @@ public class AutoAim extends CommandBase {
     // calculates hood position based on Shooter Calculations spreadsheet
     double HoodPos = (HoodConstants.quadAimC + (HoodConstants.quadAimB * targetDist)
         + (Math.pow(HoodConstants.quadAimA * targetDist, 2)));
-    new hoodPID(hoodSubsystem, () -> HoodPos);
+    hoodPID.getController().setSetpoint(HoodPos);
 
     SmartDashboard.putNumber("calculated hoodPos", HoodPos);
   }
@@ -83,14 +96,14 @@ public class AutoAim extends CommandBase {
 
     double shooterRPM = (ShooterConstants.quadAimC + ((ShooterConstants.quadAimB * targetDist)
         + (Math.pow((ShooterConstants.quadAimA * targetDist), 2))));
-    
-    new shooterPID(shooterSubsystem, () -> shooterRPM);
+
+    shooterPID.getController().setSetpoint(shooterRPM);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //disable PIDS
+    // disable PIDS
   }
 
   // Returns true when the command should end.
