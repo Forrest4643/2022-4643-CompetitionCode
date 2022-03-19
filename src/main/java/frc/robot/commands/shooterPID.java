@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
@@ -27,12 +28,15 @@ public class shooterPID extends PIDCommand {
         () -> shooterRPM.getAsDouble(),
         // This uses the output
         output -> {
-        shooterSubsystem.setShooterSpeed(output);
-        SmartDashboard.putNumber("sspeed", output);
+          // sets the min and max output to 1 and -1
+          shooterSubsystem.setShooterSpeed(MathUtil.clamp(output, -1, 1));
+
+          SmartDashboard.putNumber("sspeed", output);
+
         });
-        
-    // Use addRequirements() here to declare subsystem dependencies.
-    // Configure additional PID options by calling `getController` here.
+    addRequirements(shooterSubsystem);
+    getController().enableContinuousInput(-135, 135);
+    getController().setTolerance(100);
   }
 
   // Returns true when the command should end.

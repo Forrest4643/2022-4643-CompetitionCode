@@ -3,18 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.StickDrive;
-import frc.robot.commands.TurretPIDControl;
+import frc.robot.commands.TurretTrackTarget;
 import frc.robot.commands.shooterPID;
-import frc.robot.commands.FrontIntake.FrontIndexerOn;
 import frc.robot.commands.FrontIntake.FrontIntakeEnable;
-import frc.robot.commands.FrontIntake.FrontIntakeOn;
-import frc.robot.commands.FrontIntake.FrontIntakeOpen;
 import frc.robot.commands.RearIntake.RearIntakeEnable;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
@@ -24,7 +17,6 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 public class RobotContainer {
 
@@ -35,8 +27,10 @@ public class RobotContainer {
   private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
-  // private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
+  private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
   private final XboxController driveController = new XboxController(0);
+  private final XboxController operateController = new XboxController(1);
+
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -49,18 +43,20 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    // drive a button = front intake enable
-    new JoystickButton(driveController, 1)
-    .whileActiveOnce(new FrontIntakeEnable(IntakeSubsystem, PneumaticsSubsystem,
-    IndexerSubsystem));
+    // operate a button = front intake enable
+    new JoystickButton(operateController, 1)
+        .whileActiveOnce(new FrontIntakeEnable(IntakeSubsystem, PneumaticsSubsystem,
+            IndexerSubsystem));
 
-    // drive y button = rear intake enable
-    new JoystickButton(driveController, 4)
-    .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem,
-    IndexerSubsystem));
+    // operate y button = rear intake enable
+    new JoystickButton(operateController, 4)
+        .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem,
+            IndexerSubsystem));
 
     new JoystickButton(driveController, 3).whileActiveOnce(new shooterPID(shooterSubsystem, () -> 3000));
-    // new JoystickButton(driveController, 1).whileActiveOnce(new TurretPIDControl(turretSubsystem, () -> VisionSubsystem.getTargetYaw()));
+
+    new JoystickButton(driveController, 1)
+        .whileActiveOnce(new TurretTrackTarget(turretSubsystem, () -> VisionSubsystem.getTargetYaw()));
   }
 
 }

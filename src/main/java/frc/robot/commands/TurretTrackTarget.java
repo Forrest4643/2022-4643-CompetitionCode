@@ -7,19 +7,19 @@ package frc.robot.commands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TurretPIDControl extends PIDCommand {
-  /** Creates a new TurretPIDControl. */
-  public TurretPIDControl(TurretSubsystem turretSubsystem, DoubleSupplier targetYaw) {
+public class TurretTrackTarget extends PIDCommand {
+  /** Creates a new TurretTrackTarget. */
+  public TurretTrackTarget(TurretSubsystem turretSubsystem, DoubleSupplier targetYaw) {
     super(
         // The controller that the command will use
         new PIDController(TurretConstants.turretkP, TurretConstants.turretkI, TurretConstants.turretkD),
@@ -29,17 +29,25 @@ public class TurretPIDControl extends PIDCommand {
         () -> 0,
         // This uses the output
         output -> {
+        output = MathUtil.clamp(output, -1, 1);
         turretSubsystem.setTurretSpeed(output);
         });
         addRequirements(turretSubsystem);
-        System.out.println("TURRETPID");
+
         SmartDashboard.putNumber("PIDyaw", targetYaw.getAsDouble());
-        getController().setTolerance(0);
-    // Configure additional PID options by calling `getController` here.
+
+        getController().setTolerance(0.1);
+ 
   }
-  // Returns true when the command should end.
+
+  @Override 
+  public void initialize() {
+    System.out.println("TurretTrackTarget Started!");
+  }
+
   @Override
   public boolean isFinished() {
+    System.out.println("TurretTrackTarget Ended!");
     return false;
   }
 }

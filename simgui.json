@@ -37,10 +37,12 @@
       "/LiveWindow/PneumaticsSubsystem": "Subsystem",
       "/LiveWindow/ShooterPIDSubsystem": "Subsystem",
       "/LiveWindow/ShooterPIDSubsystem/PID Controller": "PIDController",
+      "/LiveWindow/ShooterSubsystem": "Subsystem",
       "/LiveWindow/TurretSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
       "/LiveWindow/Ungrouped/MotorControllerGroup[3]": "Motor Controller",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/VisionSubsystem": "Subsystem"
     }

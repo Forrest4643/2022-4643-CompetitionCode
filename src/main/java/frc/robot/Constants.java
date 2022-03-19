@@ -17,7 +17,7 @@ public final class Constants {
         public static final double speedPow = 1.2;
 
         // drive tick to in = 1/ticks per rev * GR * wheel dia * pi
-        public static final double driveTickToIN = (((360 / 42) * 10) * 6) * Math.PI;
+        public static final double driveTickToIN = 0.001020223994;
     }
 
     public static final class IndexerConstants {
@@ -50,6 +50,10 @@ public final class Constants {
         public static final double shooterkD = 0.0001;
         public static final double shooterkF = 0;
 
+        public static final double quadAimA = -0.269;
+        public static final double quadAimB = 62.4;
+        public static final double quadAimC = 2154;
+
     }
 
     public static final class HoodConstants {
@@ -58,15 +62,19 @@ public final class Constants {
         public static final double targetDistToSetpoint = 0;
         public static final float hoodForwardLimit = 5;
         public static final float hoodReverseLimit = 0;
-        public static final double hoodAccInPerSec = 10; 
-        public static final double hoodInPerSec = 19.59;
-        public static final double hoodkP = .05;
-        public static final double hoodkI = 0;
-        public static final double hoodkD = 0;
-        public static final double hoodkS = 0; 
-        public static final double hoodkG = 0.02;
-        public static final double hoodkV = 0.05;
-        public static final double hoodkA = 0; 
+        public static final double AccInPerSec = 10; 
+        public static final double InPerSec = 19.59;
+        public static final double kP = .05;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kS = 0; 
+        public static final double kG = 0.02;
+        public static final double kV = 0.05;
+        public static final double kA = 0; 
+
+        public static final double quadAimA = -0.00212;
+        public static final double quadAimB = 0.418;
+        public static final double quadAimC = -17;
 
     }
 
@@ -74,8 +82,6 @@ public final class Constants {
         public static final int turretID = 11;
         // tickstodeg = turret pulley GR * 360/ticks per rev
         public static final double turretTicksToDegrees = 1.72193877551;
-        public static final int turretTicksPerRev = 4096 * (224/30);
-        public static final double turretPulleyR = 224 / 30;
         public static final float turretForwardLimit = 70;
         public static final float turretReverseLimit = 70;
         public static final double turretkP = 0.16;

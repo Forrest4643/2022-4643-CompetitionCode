@@ -18,7 +18,6 @@ public class RearIntakeEnable extends ParallelCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new RearIntakeOn(intakeSubsystem),
-        new RearIntakeOpen(pneumaticsSubsystem),
-        new RearIndexerOn(indexerSubsystem));
+        new RearIntakeOpen(pneumaticsSubsystem));
   }
 }
