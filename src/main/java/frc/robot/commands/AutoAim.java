@@ -3,9 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
