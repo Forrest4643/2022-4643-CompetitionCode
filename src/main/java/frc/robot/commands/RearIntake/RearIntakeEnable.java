@@ -4,6 +4,7 @@
 
 package frc.robot.commands.RearIntake;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.commands.Indexer.indexerWheelsOn;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
@@ -18,6 +19,7 @@ public class RearIntakeEnable extends ParallelCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new RearIntakeOn(intakeSubsystem),
-        new RearIntakeOpen(pneumaticsSubsystem));
+        new RearIntakeOpen(pneumaticsSubsystem),
+        new indexerWheelsOn(indexerSubsystem));
   }
 }

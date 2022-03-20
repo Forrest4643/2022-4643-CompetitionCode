@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
@@ -31,11 +32,15 @@ public class IndexSensors extends SubsystemBase {
   @Override
   public void periodic() {
 
-    int proximity = towerColor.getProximity();
+    double proximity = towerColor.getProximity();
 
     SmartDashboard.putNumber("Proximity", proximity);
 
     detectedColor = towerColor.getColor();
+
+    SmartDashboard.putNumber("redValue", detectedColor.red);
+    SmartDashboard.putNumber("blueValue", detectedColor.blue);
+    SmartDashboard.putBoolean("correctCargo", correctCargo());
 
   }
 
@@ -48,13 +53,19 @@ public class IndexSensors extends SubsystemBase {
   }
 
   public boolean correctCargo() {
-    if (detectedColor.blue >= IndexerConstants.blueThresh || DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-      return true;
-    } else if ((detectedColor.red >= IndexerConstants.redThresh || DriverStation.getAlliance() == DriverStation.Alliance.Red)) {
-      return false;
+    if (indexFrontPres()) {
+      if (detectedColor.blue >= IndexerConstants.blueThresh
+          && DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+        return true;
+      } else if ((detectedColor.red >= IndexerConstants.redThresh
+          && DriverStation.getAlliance() == DriverStation.Alliance.Red)) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      System.out.println("correctCargo error!! alliance color N/A");
-      return true;
+      return false;
     }
+
   }
 }

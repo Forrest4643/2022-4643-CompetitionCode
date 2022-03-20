@@ -16,6 +16,10 @@ public class IndexerSubsystem extends SubsystemBase {
     private RelativeEncoder fEncoder = Front.getEncoder();
     private RelativeEncoder rEncoder = Rear.getEncoder();
 
+    public void wheelsReverse() {
+        Front.set(-1);
+        Rear.set(-1);
+    }
     public void wheelsOn() {
         Front.set(1);
         Rear.set(1);

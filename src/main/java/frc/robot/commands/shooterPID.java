@@ -17,6 +17,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class shooterPID extends PIDCommand {
+
+  private ShooterSubsystem shooterSubsystem;
+
   /** Creates a new shooterPID. */
   public shooterPID(ShooterSubsystem shooterSubsystem, DoubleSupplier shooterRPM) {
     super(
@@ -29,16 +32,17 @@ public class shooterPID extends PIDCommand {
         // This uses the output
         output -> {
           // sets the min and max output to 1 and -1
-          shooterSubsystem.setShooterSpeed(MathUtil.clamp(output, -1, 1));
-
-          SmartDashboard.putNumber("sspeed", output);
+          shooterSubsystem.setShooterSpeed(output);
+          SmartDashboard.putNumber("shooterSetpoint", shooterRPM.getAsDouble());
+          SmartDashboard.putNumber("shooterRPM", shooterSubsystem.getShooterRPM());
+          SmartDashboard.putNumber("shooter output", output);
 
         });
+    this.shooterSubsystem = shooterSubsystem;
     addRequirements(shooterSubsystem);
-    getController().enableContinuousInput(-135, 135);
     getController().setTolerance(50);
   }
-
+  
   @Override
   public void initialize() {
     System.out.println("shooterPID started!");
@@ -46,6 +50,7 @@ public class shooterPID extends PIDCommand {
 
   @Override
   public void end(boolean interrupted) {
+    shooterSubsystem.idleShooter();
     System.out.println("shooterPID ended!");
   }
 

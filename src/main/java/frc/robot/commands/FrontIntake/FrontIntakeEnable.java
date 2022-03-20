@@ -5,7 +5,7 @@
 package frc.robot.commands.FrontIntake;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.commands.indexerWheelsOn;
+import frc.robot.commands.Indexer.indexerWheelsOn;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
@@ -14,14 +14,14 @@ import frc.robot.subsystems.PneumaticsSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class FrontIntakeEnable extends ParallelCommandGroup {
+
   /** Creates a new IntakeOn. */
   public FrontIntakeEnable(IntakeSubsystem intakeSubsystem, PneumaticsSubsystem pneumaticsSubsystem,
       IndexerSubsystem indexerSubsystem) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+
     addCommands(new FrontIntakeOn(intakeSubsystem),
         new FrontIntakeOpen(pneumaticsSubsystem),
         new indexerWheelsOn(indexerSubsystem));
-        
+
   }
 }
