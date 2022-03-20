@@ -4,13 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.HoodConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.StickDrive;
 import frc.robot.commands.driveAim;
 import frc.robot.commands.hoodPID;
 import frc.robot.commands.shooterPID;
 import frc.robot.commands.FrontIntake.FrontIntakeEnable;
 import frc.robot.commands.Indexer.indexerWheelsOn;
+import frc.robot.commands.Indexer.indexerWheelsReverse;
 import frc.robot.commands.RearIntake.RearIntakeEnable;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
@@ -67,9 +71,18 @@ public class RobotContainer {
     // new JoystickButton(operateController, 1).whenPressed(new
     // hoodPID(hoodSubsystem, () -> 1.75));
 
-    new JoystickButton(driveController, 3).whileActiveOnce(new driveAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem, true));
+    //x high goal aim
+    new JoystickButton(driveController, 3).whileActiveOnce(new driveAim(DriveSubsystem, VisionSubsystem, true));
+    new JoystickButton(driveController, 3).whileActiveOnce(new hoodPID(hoodSubsystem, () -> HoodConstants.highGoal));
+    new JoystickButton(driveController, 3).whileActiveOnce(new shooterPID(shooterSubsystem, () -> ShooterConstants.highGoal));
+
+    //b low goal aim
+    new JoystickButton(driveController, 2).whileActiveOnce(new driveAim(DriveSubsystem, VisionSubsystem, false));
+    new JoystickButton(driveController, 2).whileActiveOnce(new hoodPID(hoodSubsystem, () -> HoodConstants.lowGoal));
+    new JoystickButton(driveController, 2).whileActiveOnce(new shooterPID(shooterSubsystem, () -> ShooterConstants.lowGoal));
+    
     //l bump index rev
-    new JoystickButton(operateController, 5).whileActiveOnce(new shooterPID(shooterSubsystem, () -> 6000));
+    new JoystickButton(operateController, 5).whileActiveOnce(new indexerWheelsReverse(IndexerSubsystem));
 
     //r bump index fwd
     new JoystickButton(operateController, 6).whileActiveOnce(new indexerWheelsOn(IndexerSubsystem));

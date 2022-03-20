@@ -7,26 +7,18 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.HoodConstants;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.HoodSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 public class driveAim extends CommandBase {
   private DriveSubsystem driveSubsystem;
   private VisionSubsystem visionSubsystem;
-  private ShooterSubsystem shooterSubsystem;
-  private HoodSubsystem hoodSubsystem;
   private boolean highGoal;
 
   /** Creates a new driveAim. */
-  public driveAim(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem, ShooterSubsystem shooterSubsystem, HoodSubsystem hoodSubsystem, boolean highGoal) {
+  public driveAim(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem, boolean highGoal) {
     this.driveSubsystem = driveSubsystem;
     this.visionSubsystem = visionSubsystem;
-    this.hoodSubsystem = hoodSubsystem;
-    this.shooterSubsystem = shooterSubsystem;
     this.highGoal = highGoal;
     }
 
@@ -42,11 +34,9 @@ public class driveAim extends CommandBase {
     driveSteer.setTolerance(.1);
     driveMove.setTolerance(3);
     if (highGoal) {
-      new shooterPID(shooterSubsystem, () -> ShooterConstants.highGoal);
-      new hoodPID(hoodSubsystem, () -> HoodConstants.highGoal);
+      driveMove.setSetpoint(DriveConstants.highGoal);
     } else {
-      new shooterPID(shooterSubsystem, () -> ShooterConstants.lowGoal);
-      new hoodPID(hoodSubsystem, () -> HoodConstants.lowGoal);
+      driveMove.setSetpoint(DriveConstants.lowGoal);
     }
   }
 
