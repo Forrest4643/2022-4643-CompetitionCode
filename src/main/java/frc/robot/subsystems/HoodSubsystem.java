@@ -17,13 +17,14 @@ public class HoodSubsystem extends SubsystemBase {
   private final CANSparkMax hoodMotor = new CANSparkMax(HoodConstants.hoodID, MotorType.kBrushless);
 
   // ticks to inches conversion factor
-  private final RelativeEncoder hoodEncoder = hoodMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature,
-      (int) (1 / 514718.5404));
+  private final RelativeEncoder hoodEncoder = hoodMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 8192);
 
   /** Creates a new HoodSubsystem. */
   public HoodSubsystem() {
-    hoodMotor.setSoftLimit(SoftLimitDirection.kForward, (float) 3.7);
-    hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) .25);
+    hoodMotor.setInverted(true);
+    hoodEncoder.setPositionConversionFactor(HoodConstants.conversionFactor);
+    hoodMotor.setSoftLimit(SoftLimitDirection.kForward, (float) 2);
+    hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) 1);
   }
 
   @Override
@@ -38,7 +39,7 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public double getHoodPositionIN() {
-    return hoodEncoder.getPosition();
+    return -hoodEncoder.getPosition();
   }
 
   public void setHoodMotor(double speed) {

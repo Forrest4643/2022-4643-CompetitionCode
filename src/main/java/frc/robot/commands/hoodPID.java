@@ -17,6 +17,7 @@ import frc.robot.subsystems.HoodSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class hoodPID extends PIDCommand {
+  private HoodSubsystem hoodSubsystem;
   /** Creates a new turretPID. */
   public hoodPID(HoodSubsystem hoodSubsystem, DoubleSupplier hoodPositionIN) {
     super(
@@ -30,10 +31,11 @@ public class hoodPID extends PIDCommand {
         output -> {
           ElevatorFeedforward hFeedforward = new ElevatorFeedforward(HoodConstants.kS, HoodConstants.kG,
               HoodConstants.kV);
-          output = MathUtil.clamp(output, -.3, .3);
-          hoodSubsystem.setHoodMotor(output + hFeedforward.calculate(hoodSubsystem.getHoodVelocity()));
+          output = MathUtil.clamp(output, -1, 1);
+          hoodSubsystem.setHoodMotor(output);
         });
     addRequirements(hoodSubsystem);
+    this.hoodSubsystem = hoodSubsystem;
   }
 
   @Override
@@ -43,6 +45,7 @@ public class hoodPID extends PIDCommand {
 
   @Override
   public void end(boolean interrupted) {
+    hoodSubsystem.setHoodMotor(0);
     System.out.println("hoodPID ended!");
   }
 
