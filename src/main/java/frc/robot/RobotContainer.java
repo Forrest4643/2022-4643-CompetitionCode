@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.StickDrive;
+import frc.robot.commands.driveAim;
 import frc.robot.commands.hoodPID;
 import frc.robot.commands.shooterPID;
 import frc.robot.commands.FrontIntake.FrontIntakeEnable;
@@ -19,7 +20,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
-//import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
@@ -32,9 +34,10 @@ public class RobotContainer {
   private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
-  // private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
+  private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
   private final XboxController driveController = new XboxController(0);
   private final XboxController operateController = new XboxController(1);
+  
 
   public RobotContainer() {
     // Configure the button bindings
@@ -64,6 +67,7 @@ public class RobotContainer {
     // new JoystickButton(operateController, 1).whenPressed(new
     // hoodPID(hoodSubsystem, () -> 1.75));
 
+    new JoystickButton(driveController, 3).whileActiveOnce(new driveAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem, true));
     //l bump index rev
     new JoystickButton(operateController, 5).whileActiveOnce(new shooterPID(shooterSubsystem, () -> 6000));
 

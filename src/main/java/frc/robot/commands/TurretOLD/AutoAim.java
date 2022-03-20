@@ -54,7 +54,7 @@ public class AutoAim extends CommandBase {
       alertDriver(turretSubsystem.turretPositionDEG());
     }
 
-    double targetDist = visionSubsystem.getTargetDistance();
+    double targetDist = visionSubsystem.getTargetDistanceIN();
 
     calcHoodPos(targetDist);
 

@@ -45,7 +45,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     }
 
-    public double getTargetDistance() {
+    public double getTargetDistanceIN() {
         return Units.metersToInches(m_targetDistanceMeters);
 
     }

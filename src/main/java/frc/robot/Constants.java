@@ -24,6 +24,9 @@ public final class Constants {
         public static final double steerkI = 0;
         public static final double steerkD = 0;
 
+        public static final double highGoal = 12*6;
+        public static final double lowGoal = 12*2;
+
         public static final double driveTickToIN = -22.28169203;
     }
 
@@ -54,6 +57,9 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int leftMotorID = 10;
         public static final int rightMotorID = 1;
+
+        public static final double lowGoal = 2000;
+        public static final double highGoal = 5600;
 
         public static final double shooterkP = 0.0001;
         public static final double shooterkI = 0.0004;
