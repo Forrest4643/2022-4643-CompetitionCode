@@ -4,25 +4,19 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
-import frc.robot.Constants.HoodConstants;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.StickDrive;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.AutoIndex;
 import frc.robot.commands.IndexOne;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
-import frc.robot.subsystems.IndexSensors;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
 //import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -32,7 +26,6 @@ public class RobotContainer {
   private final IntakeSubsystem IntakeSubsystem = new IntakeSubsystem();
   private final PneumaticsSubsystem PneumaticsSubsystem = new PneumaticsSubsystem();
   // private final TurretSubsystem turretSubsystem = new TurretSubsystem();
-  private final IndexSensors indexSensors = new IndexSensors();
   private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
   private final ShooterPIDSubsystem shooterSubsystem = new ShooterPIDSubsystem();
   private final HoodPIDSubsystem hoodSubsystem = new HoodPIDSubsystem();
