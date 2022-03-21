@@ -17,7 +17,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private RelativeEncoder rEncoder = Rear.getEncoder();
 
     public void frontWheelsOn() {
-        Front.set(.75);
+        Front.set(1);
     }
 
     public void frontWheelsOff() {
@@ -29,7 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void rearWheelsOn() {
-        Rear.set(.75);
+        Rear.set(1);
     }
 
     public void rearWheelsOff() {

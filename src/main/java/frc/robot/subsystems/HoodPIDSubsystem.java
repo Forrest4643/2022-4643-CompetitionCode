@@ -3,16 +3,19 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.HoodConstants;
 
-public class HoodSubsystem extends SubsystemBase {
+public class HoodPIDSubsystem extends PIDSubsystem {
 
   private final CANSparkMax hoodMotor = new CANSparkMax(HoodConstants.hoodID, MotorType.kBrushless);
 
@@ -20,18 +23,23 @@ public class HoodSubsystem extends SubsystemBase {
   private final RelativeEncoder hoodEncoder = hoodMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 8192);
 
   /** Creates a new HoodSubsystem. */
-  public HoodSubsystem() {
+  public HoodPIDSubsystem() {
+    super(new PIDController(HoodConstants.kP, HoodConstants.kI, HoodConstants.kD));
+
+    getController().setTolerance(HoodConstants.PIDtolerance);
+
     hoodMotor.setInverted(true);
+
     hoodEncoder.setPositionConversionFactor(HoodConstants.conversionFactor);
-    hoodMotor.setSoftLimit(SoftLimitDirection.kForward, (float) 2);
-    hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) 1);
+
+    hoodMotor.setSoftLimit(SoftLimitDirection.kForward, HoodConstants.ForwardLimit);
+    hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, HoodConstants.ReverseLimit);
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("hoodPositionIN", getHoodPositionIN());
-    SmartDashboard.putNumber("hoodVelcity", getHoodVelocity());
-
+    SmartDashboard.putNumber("hoodPositionDEG", getHoodPositionDEG());
   }
 
   public double getHoodVelocity() {
@@ -41,11 +49,23 @@ public class HoodSubsystem extends SubsystemBase {
   public double getHoodPositionDEG() {
     return (hoodEncoder.getPosition() * 5) + 65;
   }
+
   public double getHoodPositionIN() {
     return hoodEncoder.getPosition();
   }
 
   public void setHoodMotor(double speed) {
     hoodMotor.set(speed);
+  }
+
+  @Override
+  protected void useOutput(double output, double setpoint) {
+    hoodMotor.set(output);
+
+  }
+
+  @Override
+  protected double getMeasurement() {
+    return getHoodPositionDEG();
   }
 }

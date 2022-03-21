@@ -8,26 +8,34 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ShooterConstants;
 
-public class ShooterSubsystem extends SubsystemBase {
+public class ShooterPIDSubsystem extends PIDSubsystem {
   private final CANSparkMax leftMotor = new CANSparkMax(ShooterConstants.leftMotorID, MotorType.kBrushless);
   private final CANSparkMax rightMotor = new CANSparkMax(ShooterConstants.rightMotorID, MotorType.kBrushless);
 
   private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
   private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
 
+  private final SimpleMotorFeedforward shooterFeedforward = new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
+
   
   /** Creates a new ShooterSubsystem. */
-  public ShooterSubsystem() {
-    leftMotor.setInverted(true);
-    rightMotor.setInverted(false);
+  public ShooterPIDSubsystem() {
+    super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
+    getController().setTolerance(ShooterConstants.PIDtolerance);
 
     rightEncoder.setVelocityConversionFactor(0.666666666667);
     leftEncoder.setVelocityConversionFactor(0.666666666667);
+
+    leftMotor.setInverted(true);
+    rightMotor.setInverted(false);
+
+   
     }
 
   @Override
@@ -49,5 +57,20 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double getShooterRPM() {
     return (leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2;
+  }
+
+  public boolean atSetpoint() {
+    return getController().atSetpoint();
+  }
+
+  @Override
+  protected void useOutput(double output, double setpoint) {
+    setShooterSpeed(output + shooterFeedforward.calculate(setpoint));
+    
+  }
+
+  @Override
+  protected double getMeasurement() {
+    return getShooterRPM();
   }
 }
