@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.ColorSensorV3;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
@@ -15,9 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class IndexSensors extends SubsystemBase {
-
-  private final AnalogInput indexFront = new AnalogInput(1);
-  private final AnalogInput indexRear = new AnalogInput(2);
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 towerColor = new ColorSensorV3(i2cPort);
