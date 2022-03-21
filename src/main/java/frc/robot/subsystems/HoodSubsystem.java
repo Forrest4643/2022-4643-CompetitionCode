@@ -38,8 +38,11 @@ public class HoodSubsystem extends SubsystemBase {
     return hoodEncoder.getVelocity();
   }
 
+  public double getHoodPositionDEG() {
+    return (hoodEncoder.getPosition() * 5) + 65;
+  }
   public double getHoodPositionIN() {
-    return -hoodEncoder.getPosition();
+    return hoodEncoder.getPosition();
   }
 
   public void setHoodMotor(double speed) {

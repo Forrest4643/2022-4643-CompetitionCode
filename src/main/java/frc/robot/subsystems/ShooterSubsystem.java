@@ -5,10 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxRelativeEncoder.Type;
+
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,8 +26,8 @@ public class ShooterSubsystem extends SubsystemBase {
     leftMotor.setInverted(true);
     rightMotor.setInverted(false);
 
-    rightEncoder.setVelocityConversionFactor(1);
-    leftEncoder.setVelocityConversionFactor(1);
+    rightEncoder.setVelocityConversionFactor(0.666666666667);
+    leftEncoder.setVelocityConversionFactor(0.666666666667);
     }
 
   @Override

@@ -113,6 +113,6 @@ public final class Constants {
     public static final class VisionConstants {
         public static final double cameraHeightMETERS = Units.inchesToMeters(37.65);
         public static final double targetHeightMETERS = Units.inchesToMeters(104);
-        public static final double cameraAngleRAD = Units.degreesToRadians(29);
+        public static final double cameraAngleRAD = Units.degreesToRadians(30);
     }
 }

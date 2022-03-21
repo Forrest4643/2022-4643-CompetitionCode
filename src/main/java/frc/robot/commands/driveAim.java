@@ -34,8 +34,10 @@ public class driveAim extends CommandBase {
     driveSteer.setTolerance(.1);
     driveMove.setTolerance(3);
     if (highGoal) {
+      System.out.println("highGoal!");
       driveMove.setSetpoint(DriveConstants.highGoal);
     } else {
+      System.out.println("lowGoal!");
       driveMove.setSetpoint(DriveConstants.lowGoal);
     }
   }
