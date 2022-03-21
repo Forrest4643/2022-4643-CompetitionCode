@@ -43,16 +43,11 @@ public class IndexSensors extends SubsystemBase {
 
   }
 
-  public boolean indexFrontPres() {
-    return (indexFront.getVoltage() < IndexerConstants.sensorThresh);
-  }
-
-  public boolean indexRearPres() {
-    return (indexRear.getVoltage() < IndexerConstants.sensorThresh);
+  public boolean towerPres() {
+    return (towerColor.getProximity() > IndexerConstants.sensorThresh);
   }
 
   public boolean correctCargo() {
-    if (indexFrontPres()) {
       if (detectedColor.blue >= IndexerConstants.blueThresh
           && DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
         return true;
@@ -62,9 +57,5 @@ public class IndexSensors extends SubsystemBase {
       } else {
         return false;
       }
-    } else {
-      return false;
-    }
-
   }
 }

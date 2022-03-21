@@ -11,6 +11,7 @@ import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.StickDrive;
 import frc.robot.commands.AutoAim;
+import frc.robot.commands.AutoIndex;
 import frc.robot.commands.IndexOne;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
@@ -49,17 +50,19 @@ public class RobotContainer {
         new StickDrive(() -> driveController.getRawAxis(2) - driveController.getRawAxis(3),
             () -> -driveController.getRawAxis(0), DriveSubsystem));
 
+    IntakeSubsystem.setDefaultCommand(new AutoIndex(IntakeSubsystem, IndexerSubsystem, PneumaticsSubsystem));
+
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(operateController, 6).whileActiveOnce(
-        new ConditionalCommand(
-            //index one if ready to shoot
-            new IndexOne(IndexerSubsystem),
-            //if not ready to shoot do nothing
-            new InstantCommand(),
-            //condition = if ready to shoot
-            autoAim::readyFire));
+
+    new JoystickButton(operateController, 6).whenPressed(new IndexOne(IndexerSubsystem));
+
+    new JoystickButton(operateController, 1).whenPressed(new InstantCommand(PneumaticsSubsystem::frontIntakeOpen))
+        .whenReleased(new InstantCommand(PneumaticsSubsystem::frontIntakeClosed));
+
+    new JoystickButton(operateController, 3).whenPressed(new InstantCommand(PneumaticsSubsystem::rearIntakeOpen))
+        .whenReleased(new InstantCommand(PneumaticsSubsystem::rearIntakeClosed));
 
     new JoystickButton(driveController, 1).whileActiveOnce(autoAim);
 
