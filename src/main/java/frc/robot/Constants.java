@@ -24,6 +24,9 @@ public final class Constants {
         public static final double steerkI = 0;
         public static final double steerkD = 0;
 
+        public static final double steerSlew = .75;
+        public static final double turnSlew = .5;
+
         public static final double highGoal = 12 * 6;
         public static final double lowGoal = 12 * 2;
 

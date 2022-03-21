@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -34,6 +35,9 @@ public class DriveSubsystem extends SubsystemBase {
   private RelativeEncoder rightRearEncoder = rightRear.getEncoder();
 
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(leftDrive, rightDrive);
+
+  SlewRateLimiter driveSlew = new SlewRateLimiter(DriveConstants.turnSlew);
+  SlewRateLimiter turnSlew = new SlewRateLimiter(DriveConstants.steerSlew);
 
   public double getDriveDistanceIN() {
     // returns the average position of all drive encoders.
@@ -77,7 +81,7 @@ public class DriveSubsystem extends SubsystemBase {
       SqrTurn = SqrTurn * -1;
     }
 
-    m_robotDrive.arcadeDrive(SqrSpeed, SqrTurn);
+    m_robotDrive.arcadeDrive(driveSlew.calculate(SqrSpeed), driveSlew.calculate(SqrTurn));
 
     SmartDashboard.putNumber("sqrturn", SqrTurn);
     SmartDashboard.putNumber("sqrspeed", SqrSpeed);
