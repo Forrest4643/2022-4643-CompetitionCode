@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
@@ -48,16 +50,25 @@ public class AutoAim extends CommandBase {
     double targetYaw = visionSubsystem.getTargetYaw();
 
     // aiming hood
-    hoodPIDSubsystem.getController().setSetpoint(HoodConstants.quadAimC + (HoodConstants.quadAimB * targetDistance)
-        + (Math.pow((HoodConstants.quadAimA * targetDistance), 2)));
+    hoodPIDSubsystem.getController().setSetpoint(MathUtil.clamp(
+        HoodConstants.quadAimC +
+            (HoodConstants.quadAimB * targetDistance) +
+            (Math.pow((HoodConstants.quadAimA * targetDistance), 2)),
+
+        65, 80));
+
     hoodPIDSubsystem.enable();
 
     // setting shooter RPM
-    shooterPIDSubsystem.getController().setSetpoint(ShooterConstants.quadAimC
-        + (ShooterConstants.quadAimB * targetDistance) + (Math.pow((ShooterConstants.quadAimA * targetDistance), 2)));
+    shooterPIDSubsystem.getController().setSetpoint(
+        ShooterConstants.quadAimD +
+            (ShooterConstants.quadAimC * targetDistance) +
+            (Math.pow((ShooterConstants.quadAimB * targetDistance), 2) +
+                (Math.pow((ShooterConstants.quadAimA * targetDistance), 3))));
+
     shooterPIDSubsystem.enable();
 
-    //aiming drivetrain
+    // aiming drivetrain
     double turnRate = driveSteer.calculate(targetYaw);
     driveSubsystem.setDrive(0, turnRate);
   }
@@ -72,7 +83,9 @@ public class AutoAim extends CommandBase {
   }
 
   public boolean readyFire() {
-    return shooterPIDSubsystem.getController().atSetpoint() && hoodPIDSubsystem.getController().atSetpoint() && driveSteer.atSetpoint();
+    return shooterPIDSubsystem.getController().atSetpoint()
+        && hoodPIDSubsystem.getController().atSetpoint()
+        && driveSteer.atSetpoint();
   }
 
   // Returns true when the command should end.

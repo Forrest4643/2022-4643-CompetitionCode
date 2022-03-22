@@ -20,6 +20,8 @@ public final class Constants {
         public static final double drivekI = 0;
         public static final double drivekD = 0;
 
+        public static final double bangTol = .25;
+
         public static final double steerkP = 0;
         public static final double steerkI = 0;
         public static final double steerkD = 0;
@@ -70,15 +72,16 @@ public final class Constants {
         public static final double kP = 0.0001;
         public static final double kI = 0.0004;
         public static final double kD = 0.0;
-        public static final double PIDtolerance = 5;
+        public static final double PIDtolerance = 10;
         public static final double kV = 0.58;
         public static final double kA = 0.03;
         public static final double kS = 0;
         public static final double responseTimeS = 0.04;
 
-        public static final double quadAimA = 1.66;
-        public static final double quadAimB = 68.7;
-        public static final double quadAimC = 3535;
+        public static final double quadAimA = 1.79;
+        public static final double quadAimB = -18.3;
+        public static final double quadAimC = 117;
+        public static final double quadAimD = 3566;
 
     }
 
@@ -104,9 +107,9 @@ public final class Constants {
         public static final double lowGoal = 3;
         public static final double highGoal = 0;
 
-        public static final double quadAimA = 0.0488;
-        public static final double quadAimB = -3.67;
-        public static final double quadAimC = 90.7;
+        public static final double quadAimA = 0.0467;
+        public static final double quadAimB = -3.64;
+        public static final double quadAimC = 90.6;
 
     }
 

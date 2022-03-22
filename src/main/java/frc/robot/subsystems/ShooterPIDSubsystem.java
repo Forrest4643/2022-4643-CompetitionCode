@@ -50,9 +50,9 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
     rightMotor.set(0);
   }
 
-  public void setShooterSpeed(double speed) {
-    leftMotor.set(speed);
-    rightMotor.set(speed);
+  public void setShooterVolts(double volts) {
+    leftMotor.setVoltage(volts);
+    rightMotor.setVoltage(volts);
   }
 
   public double getShooterRPM() {
@@ -65,7 +65,7 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
 
   @Override
   protected void useOutput(double output, double setpoint) {
-    setShooterSpeed(output + shooterFeedforward.calculate(setpoint));
+    setShooterVolts(output + shooterFeedforward.calculate(setpoint));
     
   }
 

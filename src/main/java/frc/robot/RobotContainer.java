@@ -5,18 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.StickDrive;
-import frc.robot.commands.AutoAim;
-import frc.robot.commands.AutoIndex;
-import frc.robot.commands.IndexOne;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.HoodPIDSubsystem;
-import frc.robot.subsystems.IndexerSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PneumaticsSubsystem;
-import frc.robot.subsystems.ShooterPIDSubsystem;
-//import frc.robot.subsystems.TurretSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -32,7 +22,6 @@ public class RobotContainer {
   private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
   private final XboxController driveController = new XboxController(0);
   private final XboxController operateController = new XboxController(1);
-  private final AutoAim autoAim = new AutoAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem);
 
   public RobotContainer() {
     // Configure the button bindings
@@ -57,7 +46,7 @@ public class RobotContainer {
     new JoystickButton(operateController, 3).whenPressed(new InstantCommand(PneumaticsSubsystem::rearIntakeOpen))
         .whenReleased(new InstantCommand(PneumaticsSubsystem::rearIntakeClosed));
 
-    new JoystickButton(driveController, 1).whileActiveOnce(autoAim);
+    new JoystickButton(driveController, 1).whileActiveOnce(new AutoAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem));
 
   }
 
