@@ -48,14 +48,14 @@ public class AutoAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double targetDistance = visionSubsystem.getTargetDistanceIN();
+    double targetDistance = visionSubsystem.getTargetDistanceFT();
     double targetYaw = visionSubsystem.getTargetYaw();
 
     // aiming hood
     hoodPIDSubsystem.getController().setSetpoint(MathUtil.clamp(
         HoodConstants.quadAimC +
             (HoodConstants.quadAimB * targetDistance) +
-            (Math.pow((HoodConstants.quadAimA * targetDistance), 2)),
+            (Math.pow(targetDistance, 2) * HoodConstants.quadAimA),
 
         65, 80));
 
@@ -63,8 +63,8 @@ public class AutoAim extends CommandBase {
     shooterPIDSubsystem.getController().setSetpoint(
         ShooterConstants.quadAimD +
             (ShooterConstants.quadAimC * targetDistance) +
-            (Math.pow((ShooterConstants.quadAimB * targetDistance), 2) +
-                (Math.pow((ShooterConstants.quadAimA * targetDistance), 3))));
+            (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
+                (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA));
 
     // aiming drivetrain
     double turnRate = driveSteer.calculate(targetYaw);

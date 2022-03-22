@@ -45,7 +45,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     }
 
-    public double getTargetDistanceIN() {
+    public double getTargetDistanceFT() {
         return Units.metersToFeet(m_targetDistanceMeters) + VisionConstants.distanceOffset;
 
     }
