@@ -40,6 +40,7 @@ public final class Constants {
         public static final double blueThresh = .33;
         public static final double redThresh = .33;
         public static final double oneBall = 5;
+        public static final double primeShot = -3;
         public static final double bangTolerance = .75;
         public static final int frontID = 6;
         public static final int rearID = 8;
@@ -82,6 +83,8 @@ public final class Constants {
         public static final double quadAimB = -18.3;
         public static final double quadAimC = 117;
         public static final double quadAimD = 3566;
+        public static final double efficiencyConversion = .84;
+
 
     }
 

@@ -32,9 +32,8 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
     getController().setTolerance(ShooterConstants.PIDtolerance);
 
-    rightEncoder.setVelocityConversionFactor(0.666666666667);
-    leftEncoder.setVelocityConversionFactor(0.666666666667);
-
+    rightEncoder.setVelocityConversionFactor(ShooterConstants.efficiencyConversion);
+    leftEncoder.setVelocityConversionFactor(ShooterConstants.efficiencyConversion);
     leftMotor.setInverted(true);
     rightMotor.setInverted(false);
 
