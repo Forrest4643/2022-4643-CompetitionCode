@@ -28,19 +28,16 @@ public class AutoIndex extends CommandBase {
 
   BangBangController indexBangController = new BangBangController();
 
-
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     indexBangController.setTolerance(IndexerConstants.bangTolerance);
-    
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    
 
     if (pneumaticsSubsystem.rearStatus()) {
       intakeSubsystem.rearWheelsOn();
@@ -48,7 +45,7 @@ public class AutoIndex extends CommandBase {
       intakeSubsystem.rearWheelsOff();
     }
 
-    if (pneumaticsSubsystem.frontStatus()){
+    if (pneumaticsSubsystem.frontStatus()) {
       intakeSubsystem.frontWheelsOn();
     } else {
       intakeSubsystem.frontWheelsOff();
@@ -59,9 +56,8 @@ public class AutoIndex extends CommandBase {
     } else {
       indexerSubsystem.wheelsOff();
     }
-    
+
   }
-  
 
   // Called once the command ends or is interrupted.
   @Override

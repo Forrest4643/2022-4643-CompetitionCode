@@ -50,7 +50,7 @@ public class RobotContainer {
 
     // new JoystickButton(driveController, 1).whileActiveOnce(new
     // AutoAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem));\
-    
+
     new JoystickButton(driveController, 1).whenPressed(new InstantCommand(shooterSubsystem::enable))
         .whenReleased(new InstantCommand(shooterSubsystem::disable));
 

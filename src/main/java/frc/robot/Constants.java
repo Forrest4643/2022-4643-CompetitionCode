@@ -85,7 +85,6 @@ public final class Constants {
         public static final double quadAimD = 3566;
         public static final double efficiencyConversion = .84;
 
-
     }
 
     public static final class HoodConstants {

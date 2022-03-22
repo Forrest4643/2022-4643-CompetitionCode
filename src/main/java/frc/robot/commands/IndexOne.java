@@ -12,6 +12,7 @@ import frc.robot.subsystems.IndexerSubsystem;
 public class IndexOne extends CommandBase {
 
   private IndexerSubsystem indexerSubsystem;
+
   /** Creates a new IndexOne. */
   public IndexOne(IndexerSubsystem indexerSubsystem) {
     this.indexerSubsystem = indexerSubsystem;
@@ -37,7 +38,8 @@ public class IndexOne extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

@@ -13,7 +13,9 @@ public class DriveDistance extends CommandBase {
 
   private DriveSubsystem driveSubsystem;
   private double distance;
-  private PIDController drivePID = new PIDController(DriveConstants.drivekP, DriveConstants.drivekI, DriveConstants.drivekD);
+  private PIDController drivePID = new PIDController(DriveConstants.drivekP, DriveConstants.drivekI,
+      DriveConstants.drivekD);
+
   /** Creates a new DriveDistance. */
   public DriveDistance(DriveSubsystem driveSubsystem, double distance) {
     this.driveSubsystem = driveSubsystem;
@@ -35,7 +37,8 @@ public class DriveDistance extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

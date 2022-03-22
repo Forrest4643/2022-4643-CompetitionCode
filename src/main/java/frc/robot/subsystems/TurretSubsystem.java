@@ -16,16 +16,18 @@ public class TurretSubsystem extends SubsystemBase {
 
   private final CANSparkMax turretMotor = new CANSparkMax(TurretConstants.turretID, MotorType.kBrushless);
   private final RelativeEncoder turretEncoder = turretMotor.getEncoder();
-  
-  /** Creates a new TurretSubsystem. */
-  public TurretSubsystem() {}
 
-  public double turretPositionDEG(){
+  /** Creates a new TurretSubsystem. */
+  public TurretSubsystem() {
+  }
+
+  public double turretPositionDEG() {
     return turretEncoder.getPosition() * TurretConstants.turretTicksToDegrees;
-  } 
+  }
+
   @Override
   public void periodic() {
-  SmartDashboard.putNumber("turretPositionDEG", turretPositionDEG());
+    SmartDashboard.putNumber("turretPositionDEG", turretPositionDEG());
   }
 
   public void setTurretSpeed(double speed) {

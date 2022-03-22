@@ -25,6 +25,7 @@ public class IndexerSubsystem extends SubsystemBase {
         Front.set(-1);
         Rear.set(-1);
     }
+
     public void wheelsOn() {
         Front.set(1);
         Rear.set(1);
@@ -34,6 +35,7 @@ public class IndexerSubsystem extends SubsystemBase {
         Front.set(0);
         Rear.set(0);
     }
+
     public void frontWheelsOn() {
         Front.set(1);
     }

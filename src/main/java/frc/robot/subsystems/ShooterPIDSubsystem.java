@@ -21,13 +21,13 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
   private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
   private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
 
-  private final SimpleMotorFeedforward shooterFeedforward = new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
+  private final SimpleMotorFeedforward shooterFeedforward = new SimpleMotorFeedforward(ShooterConstants.kS,
+      ShooterConstants.kV);
 
-  
   /** Creates a new ShooterSubsystem. */
   public ShooterPIDSubsystem() {
 
-    //TODO bangbang instead?
+    // TODO bangbang instead?
 
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
     getController().setTolerance(ShooterConstants.PIDtolerance);
@@ -37,8 +37,7 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
     leftMotor.setInverted(true);
     rightMotor.setInverted(false);
 
-   
-    }
+  }
 
   @Override
   public void periodic() {
@@ -46,7 +45,7 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
     SmartDashboard.putNumber("rightShooterRPM", rightEncoder.getVelocity());
     SmartDashboard.putNumber("shooterRPM", getShooterRPM());
 
-    //TODO remove after testing
+    // TODO remove after testing
     getController().setSetpoint(4762);
   }
 
@@ -71,7 +70,7 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
   @Override
   protected void useOutput(double output, double setpoint) {
     setShooterVolts(output + shooterFeedforward.calculate(setpoint));
-    
+
   }
 
   @Override

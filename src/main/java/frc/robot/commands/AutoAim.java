@@ -43,7 +43,6 @@ public class AutoAim extends CommandBase {
 
   BangBangController indexBangController = new BangBangController();
 
-
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -62,13 +61,13 @@ public class AutoAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!m_primed) {
+    if (!m_primed) {
       indexBangController.calculate(indexerSubsystem.getPosition());
       if (indexBangController.atSetpoint()) {
         m_primed = true;
       }
     }
-    
+
     double targetDistance = visionSubsystem.getTargetDistanceFT();
     double targetYaw = visionSubsystem.getTargetYaw();
 
@@ -85,7 +84,7 @@ public class AutoAim extends CommandBase {
         ShooterConstants.quadAimD +
             (ShooterConstants.quadAimC * targetDistance) +
             (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
-                (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA));
+            (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA));
 
     // aiming drivetrain
     double turnRate = driveSteer.calculate(targetYaw);

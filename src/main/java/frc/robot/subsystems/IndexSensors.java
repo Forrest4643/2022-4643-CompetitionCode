@@ -44,14 +44,14 @@ public class IndexSensors extends SubsystemBase {
   }
 
   public boolean correctCargo() {
-      if (detectedColor.blue >= IndexerConstants.blueThresh
-          && DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-        return true;
-      } else if ((detectedColor.red >= IndexerConstants.redThresh
-          && DriverStation.getAlliance() == DriverStation.Alliance.Red)) {
-        return true;
-      } else {
-        return false;
-      }
+    if (detectedColor.blue >= IndexerConstants.blueThresh
+        && DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+      return true;
+    } else if ((detectedColor.red >= IndexerConstants.redThresh
+        && DriverStation.getAlliance() == DriverStation.Alliance.Red)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
