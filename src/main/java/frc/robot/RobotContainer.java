@@ -32,7 +32,7 @@ public class RobotContainer {
   private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
   private final XboxController driveController = new XboxController(0);
   private final XboxController operateController = new XboxController(1);
-  private final AutoAim autoAim = new AutoAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem);
+  private final AutoAim autoAim = new AutoAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem, IndexerSubsystem);
 
   public RobotContainer() {
     // Configure the button bindings

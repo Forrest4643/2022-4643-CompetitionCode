@@ -4,7 +4,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.IndexerConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
@@ -13,7 +15,7 @@ public class AutoIndex extends CommandBase {
   private IntakeSubsystem intakeSubsystem;
   private IndexerSubsystem indexerSubsystem;
   private PneumaticsSubsystem pneumaticsSubsystem;
- 
+  private boolean m_primed;
 
   /** Creates a new AutoIndex. */
   public AutoIndex(IntakeSubsystem intakeSubsystem, IndexerSubsystem indexerSubsystem,
@@ -24,14 +26,22 @@ public class AutoIndex extends CommandBase {
     addRequirements(intakeSubsystem, indexerSubsystem);
   }
 
+  BangBangController indexBangController = new BangBangController();
+
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    indexBangController.setTolerance(IndexerConstants.bangTolerance);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
+    
+
     if (pneumaticsSubsystem.rearStatus()) {
       intakeSubsystem.rearWheelsOn();
     } else {

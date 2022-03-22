@@ -38,6 +38,7 @@ public final class Constants {
         public static final double blueThresh = .33;
         public static final double redThresh = .33;
         public static final double oneBall = 5;
+        public static final double primeShot = -3;
         public static final double bangTolerance = .75;
         public static final int frontID = 6;
         public static final int rearID = 8;
@@ -75,10 +76,10 @@ public final class Constants {
         public static final double kA = 0.03;
         public static final double kS = 0;
         public static final double responseTimeS = 0.04;
-
-        public static final double quadAimA = 1.66;
-        public static final double quadAimB = 68.7;
-        public static final double quadAimC = 3535;
+        public static final double efficiencyConversion = .84;
+        public static final double quadAimA = 17.1;
+        public static final double quadAimB = -101;
+        public static final double quadAimC = 3979;
 
     }
 
@@ -104,9 +105,9 @@ public final class Constants {
         public static final double lowGoal = 3;
         public static final double highGoal = 0;
 
-        public static final double quadAimA = 0.0488;
-        public static final double quadAimB = -3.67;
-        public static final double quadAimC = 90.7;
+        public static final double quadAimA = 0.319;
+        public static final double quadAimB = -6.5;
+        public static final double quadAimC = 97.6;
 
     }
 

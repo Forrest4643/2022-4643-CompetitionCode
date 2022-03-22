@@ -18,6 +18,8 @@ public class IndexOne extends CommandBase {
     addRequirements(indexerSubsystem);
   }
 
+  boolean m_primed;
+
   BangBangController indexBangController = new BangBangController();
 
   // Called when the command is initially scheduled.

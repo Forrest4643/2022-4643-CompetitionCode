@@ -3,13 +3,16 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.HoodConstants;
+import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
+import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -18,19 +21,26 @@ public class AutoAim extends CommandBase {
   private VisionSubsystem visionSubsystem;
   private ShooterPIDSubsystem shooterPIDSubsystem;
   private HoodPIDSubsystem hoodPIDSubsystem;
+  private IndexerSubsystem indexerSubsystem;
 
   /** Creates a new driveAim. */
   public AutoAim(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem,
-      ShooterPIDSubsystem shooterPIDSubsystem, HoodPIDSubsystem hoodPIDSubsystem) {
+      ShooterPIDSubsystem shooterPIDSubsystem, HoodPIDSubsystem hoodPIDSubsystem, IndexerSubsystem indexerSubsystem) {
     this.driveSubsystem = driveSubsystem;
     this.visionSubsystem = visionSubsystem;
     this.shooterPIDSubsystem = shooterPIDSubsystem;
     this.hoodPIDSubsystem = hoodPIDSubsystem;
+    this.indexerSubsystem = indexerSubsystem;
 
   }
 
+  boolean m_primed;
+
   private PIDController driveSteer = new PIDController(DriveConstants.steerkP, DriveConstants.steerkP,
       DriveConstants.steerkD);
+
+  BangBangController indexBangController = new BangBangController();
+
 
   // Called when the command is initially scheduled.
   @Override
@@ -39,11 +49,21 @@ public class AutoAim extends CommandBase {
     driveSteer.setTolerance(.1);
     System.out.println("AutoAim Started!");
     addRequirements(driveSubsystem, hoodPIDSubsystem, shooterPIDSubsystem);
+    indexBangController.setTolerance(IndexerConstants.bangTolerance);
+    indexBangController.setSetpoint(indexerSubsystem.getPosition() + IndexerConstants.primeShot);
+    m_primed = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(!m_primed) {
+      indexBangController.calculate(indexerSubsystem.getPosition());
+      if (indexBangController.atSetpoint()) {
+        m_primed = true;
+      }
+    }
+    
     double targetDistance = visionSubsystem.getTargetDistanceIN();
     double targetYaw = visionSubsystem.getTargetYaw();
 
