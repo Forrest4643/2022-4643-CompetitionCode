@@ -32,6 +32,9 @@ public class AutoIndex extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    //TODO remove forgotten push
+
     if (pneumaticsSubsystem.rearStatus()) {
       intakeSubsystem.rearWheelsOn();
     } else {

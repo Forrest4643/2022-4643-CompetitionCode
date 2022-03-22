@@ -74,7 +74,7 @@ public final class Constants {
         public static final double kD = 0.0;
         public static final double PIDtolerance = 10;
         public static final double kV = 0.58;
-        public static final double kA = 0.03;
+        public static final double kA = 0.02;
         public static final double kS = 0;
         public static final double responseTimeS = 0.04;
 

@@ -10,6 +10,7 @@ import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
@@ -40,6 +41,8 @@ public class HoodPIDSubsystem extends PIDSubsystem {
   public void periodic() {
     SmartDashboard.putNumber("hoodPositionIN", getHoodPositionIN());
     SmartDashboard.putNumber("hoodPositionDEG", getHoodPositionDEG());
+
+    getController().setSetpoint(80);
   }
 
   public double getHoodVelocity() {
@@ -60,7 +63,9 @@ public class HoodPIDSubsystem extends PIDSubsystem {
 
   @Override
   protected void useOutput(double output, double setpoint) {
-    hoodMotor.set(output);
+
+    //TOTO remove after ensured
+    hoodMotor.set(MathUtil.clamp(output, -.25, .25));
 
   }
 

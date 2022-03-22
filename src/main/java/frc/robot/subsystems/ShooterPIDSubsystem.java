@@ -26,6 +26,9 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
   
   /** Creates a new ShooterSubsystem. */
   public ShooterPIDSubsystem() {
+
+    //TODO bangbang instead?
+
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
     getController().setTolerance(ShooterConstants.PIDtolerance);
 
@@ -43,6 +46,9 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
     SmartDashboard.putNumber("leftShooterRPM", leftEncoder.getVelocity());
     SmartDashboard.putNumber("rightShooterRPM", rightEncoder.getVelocity());
     SmartDashboard.putNumber("shooterRPM", getShooterRPM());
+
+    //TODO remove after testing
+    getController().setSetpoint(4762);
   }
 
   public void idleShooter() {
