@@ -41,6 +41,8 @@ public class AutoAim extends CommandBase {
     driveSteer.setTolerance(.1);
     System.out.println("AutoAim Started!");
     addRequirements(driveSubsystem, hoodPIDSubsystem, shooterPIDSubsystem);
+    shooterPIDSubsystem.enable();
+    hoodPIDSubsystem.enable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -57,16 +59,12 @@ public class AutoAim extends CommandBase {
 
         65, 80));
 
-    hoodPIDSubsystem.enable();
-
     // setting shooter RPM
     shooterPIDSubsystem.getController().setSetpoint(
         ShooterConstants.quadAimD +
             (ShooterConstants.quadAimC * targetDistance) +
             (Math.pow((ShooterConstants.quadAimB * targetDistance), 2) +
                 (Math.pow((ShooterConstants.quadAimA * targetDistance), 3))));
-
-    shooterPIDSubsystem.enable();
 
     // aiming drivetrain
     double turnRate = driveSteer.calculate(targetYaw);
