@@ -31,6 +31,7 @@ public class VisionSubsystem extends SubsystemBase {
                     VisionConstants.cameraAngleRAD,
                     Units.degreesToRadians(result.getBestTarget().getPitch()));
             SmartDashboard.putBoolean("hasTargets", result.hasTargets());
+            SmartDashboard.putNumber("targetDistance", getTargetDistanceFT());
 
         } else {
             m_targetYaw = 0;

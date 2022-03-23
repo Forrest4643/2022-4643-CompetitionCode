@@ -26,8 +26,8 @@ public final class Constants {
         public static final double steerkI = 0;
         public static final double steerkD = 0;
 
-        public static final double steerSlew = .75;
-        public static final double turnSlew = .5;
+        public static final double driveSlew = 2;
+        public static final double turnSlew = 2;
 
         public static final double highGoal = 12 * 6;
         public static final double lowGoal = 12 * 2;
@@ -128,7 +128,7 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
-        public static final double distanceOffset = 0;
+        public static final double distanceOffset = -1.5 / 12;
         public static final double cameraHeightMETERS = Units.inchesToMeters(37.65);
         public static final double targetHeightMETERS = Units.inchesToMeters(104);
         public static final double cameraAngleRAD = Units.degreesToRadians(30);

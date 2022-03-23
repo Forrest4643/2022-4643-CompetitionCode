@@ -36,8 +36,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(leftDrive, rightDrive);
 
-  SlewRateLimiter driveSlew = new SlewRateLimiter(DriveConstants.turnSlew);
-  SlewRateLimiter turnSlew = new SlewRateLimiter(DriveConstants.steerSlew);
+  SlewRateLimiter driveSlew = new SlewRateLimiter(DriveConstants.driveSlew);
+  SlewRateLimiter turnSlew = new SlewRateLimiter(DriveConstants.turnSlew);
 
   public double getDriveDistanceFT() {
     // returns the average position of all drive encoders.
@@ -83,7 +83,7 @@ public class DriveSubsystem extends SubsystemBase {
       SqrTurn = SqrTurn * -1;
     }
 
-    m_robotDrive.arcadeDrive(driveSlew.calculate(SqrSpeed), driveSlew.calculate(SqrTurn));
+    m_robotDrive.arcadeDrive(driveSlew.calculate(SqrSpeed), turnSlew.calculate(SqrTurn));
 
     SmartDashboard.putNumber("sqrturn", SqrTurn);
     SmartDashboard.putNumber("sqrspeed", SqrSpeed);

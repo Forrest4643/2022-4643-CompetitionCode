@@ -39,9 +39,9 @@ public class AutoIndex extends CommandBase {
   public void execute() {
 
     if (pneumaticsSubsystem.rearStatus()) {
-      intakeSubsystem.rearWheelsOn();
+      //intakeSubsystem.rearWheelsOn();
     } else {
-      intakeSubsystem.rearWheelsOff();
+      //intakeSubsystem.rearWheelsOff();
     }
 
     if (pneumaticsSubsystem.frontStatus()) {
@@ -62,7 +62,7 @@ public class AutoIndex extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     intakeSubsystem.frontWheelsOff();
-    intakeSubsystem.rearWheelsOff();
+    //intakeSubsystem.rearWheelsOff();
     indexerSubsystem.wheelsOff();
   }
 
