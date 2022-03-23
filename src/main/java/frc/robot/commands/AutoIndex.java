@@ -15,7 +15,6 @@ public class AutoIndex extends CommandBase {
   private IntakeSubsystem intakeSubsystem;
   private IndexerSubsystem indexerSubsystem;
   private PneumaticsSubsystem pneumaticsSubsystem;
-  private boolean m_primed;
 
   /** Creates a new AutoIndex. */
   public AutoIndex(IntakeSubsystem intakeSubsystem, IndexerSubsystem indexerSubsystem,
