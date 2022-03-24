@@ -48,11 +48,15 @@ public class RobotContainer {
     new JoystickButton(operateController, 3).whenPressed(new InstantCommand(PneumaticsSubsystem::rearIntakeOpen))
         .whenReleased(new InstantCommand(PneumaticsSubsystem::rearIntakeClosed));
 
-    // new JoystickButton(driveController, 1).whileActiveOnce(new
-    // AutoAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem));\
+    new JoystickButton(driveController, 1).whileActiveOnce(new
+    AutoAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem, IndexerSubsystem));
 
-    new JoystickButton(driveController, 1).whenPressed(new InstantCommand(shooterSubsystem::enable))
-        .whenReleased(new InstantCommand(shooterSubsystem::disable));
+    // new JoystickButton(driveController, 1).whenPressed(new InstantCommand(shooterSubsystem::enable, shooterSubsystem));
+    // new JoystickButton(driveController, 2).whenPressed(new InstantCommand(shooterSubsystem::disable, shooterSubsystem));
+
+    // new JoystickButton(driveController, 3).whenPressed(new InstantCommand(hoodSubsystem::enable, hoodSubsystem));
+    // new JoystickButton(driveController, 4).whenPressed(new InstantCommand(hoodSubsystem::disable, hoodSubsystem));
+
 
   }
 

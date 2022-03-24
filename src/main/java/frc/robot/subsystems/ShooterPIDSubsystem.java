@@ -39,16 +39,6 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
 
   }
 
-  @Override
-  public void periodic() {
-    SmartDashboard.putNumber("leftShooterRPM", leftEncoder.getVelocity());
-    SmartDashboard.putNumber("rightShooterRPM", rightEncoder.getVelocity());
-    SmartDashboard.putNumber("shooterRPM", getShooterRPM());
-
-    // TODO remove after testing
-    getController().setSetpoint(4762);
-  }
-
   public void idleShooter() {
     leftMotor.set(0);
     rightMotor.set(0);
@@ -69,7 +59,10 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
 
   @Override
   protected void useOutput(double output, double setpoint) {
-    setShooterVolts(output + shooterFeedforward.calculate(setpoint));
+      setShooterVolts(output + shooterFeedforward.calculate(setpoint));
+      SmartDashboard.putNumber("shooterOutput", output);
+      SmartDashboard.putNumber("shooterSetpoint", setpoint);
+
 
   }
 

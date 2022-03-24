@@ -17,10 +17,14 @@ public class VisionSubsystem extends SubsystemBase {
 
     double m_targetDistanceMeters;
 
+    
+   
+
     @Override
     public void periodic() {
         var result = camera.getLatestResult();
 
+        
         SmartDashboard.putBoolean("result.hasTargets", result.hasTargets());
 
         if (result.hasTargets()) {

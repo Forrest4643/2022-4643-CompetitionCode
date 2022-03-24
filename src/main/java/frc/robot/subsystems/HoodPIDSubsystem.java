@@ -31,27 +31,19 @@ public class HoodPIDSubsystem extends PIDSubsystem {
     getController().setTolerance(HoodConstants.PIDtolerance);
 
     hoodMotor.setInverted(true);
-
     hoodEncoder.setPositionConversionFactor(HoodConstants.conversionFactor);
 
     hoodMotor.setSoftLimit(SoftLimitDirection.kForward, HoodConstants.ForwardLimit);
     hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, HoodConstants.ReverseLimit);
   }
 
-  @Override
-  public void periodic() {
-    SmartDashboard.putNumber("hoodPositionIN", getHoodPositionIN());
-    SmartDashboard.putNumber("hoodPositionDEG", getHoodPositionDEG());
-
-    getController().setSetpoint(80);
-  }
 
   public double getHoodVelocity() {
     return hoodEncoder.getVelocity();
   }
 
   public double getHoodPositionDEG() {
-    return (hoodEncoder.getPosition() * 5) + 65;
+    return (-hoodEncoder.getPosition() * 5) + 65;
   }
 
   public double getHoodPositionIN() {
@@ -64,9 +56,9 @@ public class HoodPIDSubsystem extends PIDSubsystem {
 
   @Override
   protected void useOutput(double output, double setpoint) {
-
+    
     // TOTO remove after ensured
-    hoodMotor.set(MathUtil.clamp(output, -.25, .25));
+   // hoodMotor.set(MathUtil.clamp(output, -.25, .25));
 
   }
 

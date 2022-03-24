@@ -56,6 +56,7 @@ public class AutoAim extends CommandBase {
 
     shooterPIDSubsystem.enable();
     hoodPIDSubsystem.enable();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -72,7 +73,7 @@ public class AutoAim extends CommandBase {
     double targetYaw = visionSubsystem.getTargetYaw();
 
     // aiming hood
-    hoodPIDSubsystem.getController().setSetpoint(MathUtil.clamp(
+    hoodPIDSubsystem.setSetpoint(MathUtil.clamp(
         HoodConstants.quadAimC +
             (HoodConstants.quadAimB * targetDistance) +
             (Math.pow(targetDistance, 2) * HoodConstants.quadAimA),
@@ -80,7 +81,7 @@ public class AutoAim extends CommandBase {
         65, 80));
 
     // setting shooter RPM
-    shooterPIDSubsystem.getController().setSetpoint(
+    shooterPIDSubsystem.setSetpoint(
         ShooterConstants.quadAimD +
             (ShooterConstants.quadAimC * targetDistance) +
             (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
