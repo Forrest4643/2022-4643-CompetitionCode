@@ -22,7 +22,7 @@ public final class Constants {
 
         public static final double bangTol = .25;
 
-        public static final double steerkP = 0;
+        public static final double steerkP = 0.25;
         public static final double steerkI = 0;
         public static final double steerkD = 0;
 
@@ -70,9 +70,9 @@ public final class Constants {
         public static final double highGoal = 5600;
         public static final double ejectCargo = 1000;
 
-        public static final double kP = 0.0001;
-        public static final double kI = 0.0004;
-        public static final double kD = 0.0;
+        public static final double kP = 0.001;
+        public static final double kI = 0.00;
+        public static final double kD = 0.0001;
         public static final double PIDtolerance = 10;
         public static final double kV = 0.58;
         public static final double kA = 0.02;
@@ -128,7 +128,7 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
-        public static final double distanceOffset = -1.5 / 12;
+        public static final double distanceOffset = 0;
         public static final double cameraHeightMETERS = Units.inchesToMeters(37.65);
         public static final double targetHeightMETERS = Units.inchesToMeters(104);
         public static final double cameraAngleRAD = Units.degreesToRadians(30);
