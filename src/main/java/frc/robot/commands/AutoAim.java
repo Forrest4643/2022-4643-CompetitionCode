@@ -33,26 +33,14 @@ public class AutoAim extends CommandBase {
     this.visionSubsystem = visionSubsystem;
     this.shooterPIDSubsystem = shooterPIDSubsystem;
     this.hoodPIDSubsystem = hoodPIDSubsystem;
-    this.indexerSubsystem = indexerSubsystem;
 
   }
-
-  boolean m_primed;
-
-  
-
-  BangBangController indexBangController = new BangBangController();
-
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     
     System.out.println("AutoAim Started!");
     addRequirements(driveSubsystem, hoodPIDSubsystem, shooterPIDSubsystem);
-    indexBangController.setTolerance(IndexerConstants.bangTolerance);
-    indexBangController.setSetpoint(indexerSubsystem.getPosition() + IndexerConstants.primeShot);
-    m_primed = false;
-
     shooterPIDSubsystem.enable();
     hoodPIDSubsystem.enable();
     
@@ -61,12 +49,6 @@ public class AutoAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!m_primed) {
-      indexBangController.calculate(indexerSubsystem.getPosition());
-      if (indexBangController.atSetpoint()) {
-        m_primed = true;
-      }
-    }
 
     double targetDistance = visionSubsystem.getTargetDistanceFT();
     double targetYaw = visionSubsystem.getTargetYaw();

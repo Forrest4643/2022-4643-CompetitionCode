@@ -11,6 +11,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -23,10 +25,23 @@ public class AutoCommand extends ParallelCommandGroup {
   private IndexerSubsystem indexerSubsystem;
   private HoodPIDSubsystem hoodPIDSubsystem;
   private ShooterPIDSubsystem shooterPIDSubsystem;
+  private IntakeSubsystem intakeSubsystem;
+  private PneumaticsSubsystem pneumaticsSubsystem;
+
   /** Creates a new AutoCommand. */
-  public AutoCommand() {
+  public AutoCommand(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem, IndexerSubsystem indexerSubsystem,
+      HoodPIDSubsystem hoodPIDSubsystem, ShooterPIDSubsystem shooterPIDSubsystem, IntakeSubsystem intakeSubsystem) {
+    this.driveSubsystem = driveSubsystem;
+    this.visionSubsystem = visionSubsystem;
+    this.indexerSubsystem = indexerSubsystem;
+    this.hoodPIDSubsystem = hoodPIDSubsystem;
+    this.shooterPIDSubsystem = shooterPIDSubsystem;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new DriveDistance(driveSubsystem, DriveConstants.autoDist), new InstantCommand(indexerSubsystem::wheelsOn).alongWith(new AutoAim(driveSubsystem, visionSubsystem, shooterPIDSubsystem, hoodPIDSubsystem, indexerSubsystem)).alongWith(new WaitCommand(3)), new InstantCommand(indexerSubsystem::wheelsOff));
+    addCommands(new DriveDistance(driveSubsystem, DriveConstants.autoDist),
+        new AutoIndex(intakeSubsystem, indexerSubsystem, pneumaticsSubsystem, () -> true, () -> false)
+            .alongWith(
+                new AutoAim(driveSubsystem, visionSubsystem, shooterPIDSubsystem, hoodPIDSubsystem, indexerSubsystem))
+            .alongWith(new WaitCommand(3)), new AutoIndex(intakeSubsystem, indexerSubsystem, pneumaticsSubsystem, () -> false, () -> true));
   }
 }

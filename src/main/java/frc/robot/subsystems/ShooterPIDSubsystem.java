@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -57,7 +58,7 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
 
   @Override
   protected void useOutput(double output, double setpoint) {
-      setShooterVolts(output + shooterFeedforward.calculate(setpoint));
+      setShooterVolts(MathUtil.clamp(output, 0, 100)  /*+shooterFeedforward.calculate(setpoint)*/);
       SmartDashboard.putNumber("shooterOutput", output);
       SmartDashboard.putNumber("shooterSetpoint", setpoint);
 

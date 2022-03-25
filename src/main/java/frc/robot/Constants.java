@@ -16,7 +16,7 @@ public final class Constants {
         public static final double turnPow = 1;
         public static final double speedPow = 1.2;
 
-        public static final double drivekP = 0;
+        public static final double drivekP = 0.05    ;
         public static final double drivekI = 0;
         public static final double drivekD = 0;
 
@@ -26,7 +26,7 @@ public final class Constants {
         public static final double steerkI = 0.001;
         public static final double steerkD = 0.005;
 
-        public static final double driveSlew = 2;
+        public static final double driveSlew = 1;
         public static final double turnSlew = 3;
 
         public static final double highGoal = 12 * 6;
@@ -72,12 +72,12 @@ public final class Constants {
         public static final double highGoal = 5600;
         public static final double ejectCargo = 1000;
 
-        public static final double kP = 0.0;
+        public static final double kP = 0.01;
         public static final double kI = 0.00;
-        public static final double kD = 0.00;
+        public static final double kD = 0.00005;
         public static final double PIDtolerance = 10;
         public static final double kV = 0;
-        public static final double kA = .58;
+        public static final double kA = 0;
         public static final double kS = 8.85;
         public static final double responseTimeS = 0.04;
 

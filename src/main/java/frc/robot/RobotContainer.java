@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +25,7 @@ public class RobotContainer {
   private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
   private final XboxController driveController = new XboxController(0);
   private final XboxController operateController = new XboxController(1);
+  
 
   public RobotContainer() {
     // Configure the button bindings
@@ -60,8 +62,9 @@ public class RobotContainer {
 
   }
 
-  public void autonomousInit() {
-    
+  public Command getAutonomousCommand() {
+    SmartDashboard.putBoolean("autonStart", true);
+    return new AutoCommand(DriveSubsystem, VisionSubsystem, IndexerSubsystem, hoodSubsystem, shooterSubsystem, IntakeSubsystem);
   }
 
 }

@@ -19,7 +19,7 @@ import frc.robot.commands.AutoCommand;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand = new AutoCommand();
+  private Command m_autonomousCommand;    
 
   private RobotContainer m_robotContainer;
 
@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_autonomousCommand;
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
+  public void autonomousPeriodic() {  
   }
 
   @Override

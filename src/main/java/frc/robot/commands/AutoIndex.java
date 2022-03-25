@@ -46,7 +46,7 @@ public class AutoIndex extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    
     if (pneumaticsSubsystem.rearStatus()) {
       intakeSubsystem.rearWheelsOn();
     } else {
@@ -59,9 +59,9 @@ public class AutoIndex extends CommandBase {
       intakeSubsystem.frontWheelsOff();
     }
 
-    if (pneumaticsSubsystem.rearStatus() || pneumaticsSubsystem.frontStatus()) {
+    /* if (pneumaticsSubsystem.rearStatus() || pneumaticsSubsystem.frontStatus()) {
       indexerSubsystem.wheelsOn();
-    } else if (forward.getAsBoolean()) {
+    } else */ if (forward.getAsBoolean()) {
       indexerSubsystem.wheelsOn();
     } else if (reverse.getAsBoolean()) {
       indexerSubsystem.wheelsReverse();
