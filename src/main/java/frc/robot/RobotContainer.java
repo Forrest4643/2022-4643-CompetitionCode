@@ -29,35 +29,39 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    DriveSubsystem.setDefaultCommand(
+    DriveSubsystem.setDefaultCommand(new StickDrive(() -> driveController.getRawAxis(2) - driveController.getRawAxis(3),
+        () -> -driveController.getRawAxis(0), () -> driveController.getAButton(), DriveSubsystem, VisionSubsystem));
 
-        new StickDrive(() -> driveController.getRawAxis(2) - driveController.getRawAxis(3),
-            () -> -driveController.getRawAxis(0), DriveSubsystem));
-
-    IntakeSubsystem.setDefaultCommand(new AutoIndex(IntakeSubsystem, IndexerSubsystem, PneumaticsSubsystem));
+    IntakeSubsystem.setDefaultCommand(new AutoIndex(IntakeSubsystem, IndexerSubsystem, PneumaticsSubsystem,
+        () -> operateController.getRightBumper(), () -> operateController.getLeftBumper()));
 
   }
 
   private void configureButtonBindings() {
 
-    new JoystickButton(operateController, 6).whenPressed(new IndexOne(IndexerSubsystem));
-
-    new JoystickButton(operateController, 1).whenPressed(new InstantCommand(PneumaticsSubsystem::frontIntakeOpen))
+    new JoystickButton(operateController, 4).whenPressed(new InstantCommand(PneumaticsSubsystem::frontIntakeOpen))
         .whenReleased(new InstantCommand(PneumaticsSubsystem::frontIntakeClosed));
 
-    new JoystickButton(operateController, 3).whenPressed(new InstantCommand(PneumaticsSubsystem::rearIntakeOpen))
+    new JoystickButton(operateController, 2).whenPressed(new InstantCommand(PneumaticsSubsystem::rearIntakeOpen))
         .whenReleased(new InstantCommand(PneumaticsSubsystem::rearIntakeClosed));
 
-    new JoystickButton(driveController, 1).whileActiveOnce(new
-    AutoAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem, IndexerSubsystem));
+    new JoystickButton(driveController, 1).whileActiveOnce(
+        new AutoAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem, IndexerSubsystem));
 
-    // new JoystickButton(driveController, 1).whenPressed(new InstantCommand(shooterSubsystem::enable, shooterSubsystem));
-    // new JoystickButton(driveController, 2).whenPressed(new InstantCommand(shooterSubsystem::disable, shooterSubsystem));
+    // new JoystickButton(driveController, 1).whenPressed(new
+    // InstantCommand(shooterSubsystem::enable, shooterSubsystem));
+    // new JoystickButton(driveController, 2).whenPressed(new
+    // InstantCommand(shooterSubsystem::disable, shooterSubsystem));
 
-    // new JoystickButton(driveController, 3).whenPressed(new InstantCommand(hoodSubsystem::enable, hoodSubsystem));
-    // new JoystickButton(driveController, 4).whenPressed(new InstantCommand(hoodSubsystem::disable, hoodSubsystem));
+    // new JoystickButton(driveController, 3).whenPressed(new
+    // InstantCommand(hoodSubsystem::enable, hoodSubsystem));
+    // new JoystickButton(driveController, 4).whenPressed(new
+    // InstantCommand(hoodSubsystem::disable, hoodSubsystem));
 
+  }
 
+  public void autonomousInit() {
+    
   }
 
 }

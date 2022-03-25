@@ -13,7 +13,7 @@ public final class Constants {
         public static final int rightFrontID = 13;
         public static final int rightRearID = 12;
         public static final double stickDB = 0.05;
-        public static final double turnPow = 1.2;
+        public static final double turnPow = 1;
         public static final double speedPow = 1.2;
 
         public static final double drivekP = 0;
@@ -22,15 +22,17 @@ public final class Constants {
 
         public static final double bangTol = .25;
 
-        public static final double steerkP = 0.25;
-        public static final double steerkI = 0;
-        public static final double steerkD = 0;
+        public static final double steerkP = 0.05;
+        public static final double steerkI = 0.001;
+        public static final double steerkD = 0.005;
 
         public static final double driveSlew = 2;
-        public static final double turnSlew = 2;
+        public static final double turnSlew = 3;
 
         public static final double highGoal = 12 * 6;
         public static final double lowGoal = 12 * 2;
+
+        public static final double autoDist = 3 * 12;
 
         public static final double driveTickToIN = -22.28169203;
     }
@@ -39,8 +41,8 @@ public final class Constants {
         public static final double sensorThresh = 150;
         public static final double blueThresh = .33;
         public static final double redThresh = .33;
-        public static final double oneBall = 5;
-        public static final double primeShot = -3;
+        public static final double oneBall = 20;
+        public static final double primeShot = -10;
         public static final double bangTolerance = .75;
         public static final int frontID = 6;
         public static final int rearID = 8;
@@ -70,13 +72,13 @@ public final class Constants {
         public static final double highGoal = 5600;
         public static final double ejectCargo = 1000;
 
-        public static final double kP = 0.001;
+        public static final double kP = 0.0;
         public static final double kI = 0.00;
-        public static final double kD = 0.0001;
+        public static final double kD = 0.00;
         public static final double PIDtolerance = 10;
-        public static final double kV = 0.58;
-        public static final double kA = 0.02;
-        public static final double kS = 0;
+        public static final double kV = 0;
+        public static final double kA = .58;
+        public static final double kS = 8.85;
         public static final double responseTimeS = 0.04;
 
         public static final double quadAimA = 1.79;
@@ -109,9 +111,9 @@ public final class Constants {
         public static final double lowGoal = 3;
         public static final double highGoal = 0;
 
-        public static final double quadAimA = 0.0467;
-        public static final double quadAimB = -3.64;
-        public static final double quadAimC = 90.6;
+        public static final double quadAimA = -0.0467;
+        public static final double quadAimB = 3.64;
+        public static final double quadAimC = 54.4;
 
     }
 
@@ -128,6 +130,12 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
+
+        public static final double distA = 0.055;
+        public static final double distB = 0.765;
+        public static final double distC = -1.3;
+        public static final double distD = 0;
+
         public static final double distanceOffset = 0;
         public static final double cameraHeightMETERS = Units.inchesToMeters(37.65);
         public static final double targetHeightMETERS = Units.inchesToMeters(104);
