@@ -80,6 +80,7 @@ public class IndexerSubsystem extends SubsystemBase {
         rEncoder.setPosition(0);
     }
 
+    
     @Override
     public void periodic() {
         SmartDashboard.putNumber("frontIndexerRPM", fEncoder.getVelocity());

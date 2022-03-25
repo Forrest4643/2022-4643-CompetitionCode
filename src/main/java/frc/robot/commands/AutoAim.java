@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.HoodConstants;
@@ -38,16 +39,14 @@ public class AutoAim extends CommandBase {
 
   boolean m_primed;
 
-  private PIDController driveSteer = new PIDController(DriveConstants.steerkP, DriveConstants.steerkP,
-      DriveConstants.steerkD);
+  
 
   BangBangController indexBangController = new BangBangController();
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveSteer.setSetpoint(0);
-    driveSteer.setTolerance(.1);
+    
     System.out.println("AutoAim Started!");
     addRequirements(driveSubsystem, hoodPIDSubsystem, shooterPIDSubsystem);
     indexBangController.setTolerance(IndexerConstants.bangTolerance);
@@ -87,9 +86,8 @@ public class AutoAim extends CommandBase {
             (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
             (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA));
 
-    // aiming drivetrain
-    double turnRate = driveSteer.calculate(targetYaw);
-    driveSubsystem.setDrive(0, turnRate);
+    SmartDashboard.putNumber("shooterRPM", shooterPIDSubsystem.getShooterRPM());
+
   }
 
   // Called once the command ends or is interrupted.
@@ -103,8 +101,8 @@ public class AutoAim extends CommandBase {
 
   public boolean readyFire() {
     return shooterPIDSubsystem.getController().atSetpoint()
-        && hoodPIDSubsystem.getController().atSetpoint()
-        && driveSteer.atSetpoint();
+        && hoodPIDSubsystem.getController().atSetpoint();
+        
   }
 
   // Returns true when the command should end.

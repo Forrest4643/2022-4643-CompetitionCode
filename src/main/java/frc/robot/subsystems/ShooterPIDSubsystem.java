@@ -27,8 +27,6 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
   /** Creates a new ShooterSubsystem. */
   public ShooterPIDSubsystem() {
 
-    // TODO bangbang instead?
-
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
     getController().setTolerance(ShooterConstants.PIDtolerance);
 

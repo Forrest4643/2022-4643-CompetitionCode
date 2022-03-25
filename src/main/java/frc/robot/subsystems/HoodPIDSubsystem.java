@@ -57,8 +57,7 @@ public class HoodPIDSubsystem extends PIDSubsystem {
   @Override
   protected void useOutput(double output, double setpoint) {
     
-    // TOTO remove after ensured
-   // hoodMotor.set(MathUtil.clamp(output, -.25, .25));
+   hoodMotor.set(MathUtil.clamp(output, -.25, .25));
 
   }
 

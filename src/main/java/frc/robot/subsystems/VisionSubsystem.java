@@ -17,25 +17,27 @@ public class VisionSubsystem extends SubsystemBase {
 
     double m_targetDistanceMeters;
 
-    
-   
+    double m_targetDistanceMetersRAW;
 
     @Override
     public void periodic() {
         var result = camera.getLatestResult();
 
-        
         SmartDashboard.putBoolean("result.hasTargets", result.hasTargets());
 
         if (result.hasTargets()) {
             m_targetYaw = result.getBestTarget().getYaw();
-            m_targetDistanceMeters = PhotonUtils.calculateDistanceToTargetMeters(
+            m_targetDistanceMetersRAW = PhotonUtils.calculateDistanceToTargetMeters(
                     VisionConstants.cameraHeightMETERS,
                     VisionConstants.targetHeightMETERS,
                     VisionConstants.cameraAngleRAD,
                     Units.degreesToRadians(result.getBestTarget().getPitch()));
             SmartDashboard.putBoolean("hasTargets", result.hasTargets());
             SmartDashboard.putNumber("targetDistance", getTargetDistanceFT());
+
+            m_targetDistanceMeters = VisionConstants.distC + 
+            (VisionConstants.distB * m_targetDistanceMetersRAW)
+                    + (Math.pow(m_targetDistanceMetersRAW, 2) * VisionConstants.distA);
 
         } else {
             m_targetYaw = 0;
@@ -51,7 +53,7 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public double getTargetDistanceFT() {
-        return Units.metersToFeet(m_targetDistanceMeters) + VisionConstants.distanceOffset;
+        return Units.metersToFeet(m_targetDistanceMetersRAW) + VisionConstants.distanceOffset;
 
     }
 
