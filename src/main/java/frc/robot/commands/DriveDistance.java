@@ -26,14 +26,14 @@ public class DriveDistance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivePID.setSetpoint(driveSubsystem.getDriveDistanceFT() + distance);
+    drivePID.setSetpoint(driveSubsystem.getDriveDistanceIN() + distance);
     System.out.println("driveDist Start!");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSubsystem.setDrive(drivePID.calculate(driveSubsystem.getDriveDistanceFT()), 0);
+    driveSubsystem.setDrive(-drivePID.calculate(driveSubsystem.getDriveDistanceIN()), 0);
   }
 
   // Called once the command ends or is interrupted.

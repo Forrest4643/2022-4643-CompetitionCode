@@ -16,23 +16,23 @@ public final class Constants {
         public static final double turnPow = 1;
         public static final double speedPow = 1.2;
 
-        public static final double drivekP = 0.05    ;
-        public static final double drivekI = 0;
+        public static final double drivekP = 0.03;
+        public static final double drivekI = 0.004;
         public static final double drivekD = 0;
 
         public static final double bangTol = .25;
 
         public static final double steerkP = 0.05;
-        public static final double steerkI = 0.001;
+        public static final double steerkI = 0.0008;
         public static final double steerkD = 0.005;
 
         public static final double driveSlew = 1;
-        public static final double turnSlew = 3;
+        public static final double turnSlew = 5;
 
         public static final double highGoal = 12 * 6;
         public static final double lowGoal = 12 * 2;
 
-        public static final double autoDist = 3 * 12;
+        public static final double autoDist = -2 * 12;
 
         public static final double driveTickToIN = -22.28169203;
     }
@@ -72,9 +72,9 @@ public final class Constants {
         public static final double highGoal = 5600;
         public static final double ejectCargo = 1000;
 
-        public static final double kP = 0.01;
-        public static final double kI = 0.00;
-        public static final double kD = 0.00005;
+        public static final double kP = 0.015;
+        public static final double kI = 0;
+        public static final double kD = 0.0004;
         public static final double PIDtolerance = 10;
         public static final double kV = 0;
         public static final double kA = 0;
@@ -136,7 +136,7 @@ public final class Constants {
         public static final double distC = -1.3;
         public static final double distD = 0;
 
-        public static final double distanceOffset = 0;
+        public static final double distanceOffset = .5;
         public static final double cameraHeightMETERS = Units.inchesToMeters(37.65);
         public static final double targetHeightMETERS = Units.inchesToMeters(104);
         public static final double cameraAngleRAD = Units.degreesToRadians(30);

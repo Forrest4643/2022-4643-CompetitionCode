@@ -39,7 +39,7 @@ public class DriveSubsystem extends SubsystemBase {
   SlewRateLimiter driveSlew = new SlewRateLimiter(DriveConstants.driveSlew);
   SlewRateLimiter turnSlew = new SlewRateLimiter(DriveConstants.turnSlew);
 
-  public double getDriveDistanceFT() {
+  public double getDriveDistanceIN() {
     // returns the average position of all drive encoders.
     double driveForwardRAW = ((leftFrontEncoder.getPosition() + leftRearEncoder.getPosition()) / 2)
         + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
@@ -63,7 +63,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("DriveDistanceFT", getDriveDistanceFT());
+    SmartDashboard.putNumber("DriveDistanceFT", getDriveDistanceIN());
   }
 
   public void setDrive(double Speed, double turnRate) {
@@ -83,7 +83,7 @@ public class DriveSubsystem extends SubsystemBase {
       SqrTurn = SqrTurn * -1;
     }
 
-    m_robotDrive.arcadeDrive(driveSlew.calculate(SqrSpeed), turnSlew.calculate(SqrTurn));
+    m_robotDrive.arcadeDrive(driveSlew.calculate(SqrSpeed), turnSlew.calculate(SqrTurn) / 1.5);
 
     SmartDashboard.putNumber("sqrturn", SqrTurn);
     SmartDashboard.putNumber("sqrspeed", SqrSpeed);

@@ -26,6 +26,9 @@ public class AutoAim extends CommandBase {
   private HoodPIDSubsystem hoodPIDSubsystem;
   private IndexerSubsystem indexerSubsystem;
 
+  private BangBangController shooterBang = new BangBangController();
+
+
   /** Creates a new driveAim. */
   public AutoAim(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem,
       ShooterPIDSubsystem shooterPIDSubsystem, HoodPIDSubsystem hoodPIDSubsystem, IndexerSubsystem indexerSubsystem) {
@@ -33,6 +36,7 @@ public class AutoAim extends CommandBase {
     this.visionSubsystem = visionSubsystem;
     this.shooterPIDSubsystem = shooterPIDSubsystem;
     this.hoodPIDSubsystem = hoodPIDSubsystem;
+
 
   }
   // Called when the command is initially scheduled.
@@ -62,13 +66,13 @@ public class AutoAim extends CommandBase {
         65, 80));
 
     // setting shooter RPM
-    shooterPIDSubsystem.setSetpoint(
-        ShooterConstants.quadAimD +
-            (ShooterConstants.quadAimC * targetDistance) +
-            (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
-            (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA));
-
-    SmartDashboard.putNumber("shooterRPM", shooterPIDSubsystem.getShooterRPM());
+    shooterPIDSubsystem.setShooterVolts(11.3); 
+    
+    //* shooterBang.calculate(shooterPIDSubsystem.getShooterRPM(), ShooterConstants.quadAimD +
+    // (ShooterConstants.quadAimC * targetDistance) +
+    // (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
+    // (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA)));
+    
 
   }
 
@@ -76,6 +80,7 @@ public class AutoAim extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     shooterPIDSubsystem.disable();
+    shooterPIDSubsystem.setShooterVolts(0);
     hoodPIDSubsystem.disable();
     driveSubsystem.setDrive(0, 0);
     System.out.println("AutoAim Ended!");
