@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -42,13 +43,12 @@ public class StickDrive extends CommandBase {
 
     if (m_autoAim.getAsBoolean()) {
       double turnRate = driveSteer.calculate(m_visionSubsystem.getTargetYaw());
-      m_driveSubsystem.setDrive(0, turnRate);
+      m_driveSubsystem.setDrive(0, MathUtil.clamp(turnRate, -.5, .5));
       SmartDashboard.putNumber("driveSteer", turnRate);
     } else {
       m_driveSubsystem.setDrive(m_Speed.getAsDouble(), m_turnRate.getAsDouble());
     }
     // aiming drivetrain
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
