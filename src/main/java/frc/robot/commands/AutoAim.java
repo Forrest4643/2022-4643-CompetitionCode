@@ -13,7 +13,6 @@ import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
-import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -28,13 +27,14 @@ public class AutoAim extends CommandBase {
 
   /** Creates a new driveAim. */
   public AutoAim(HoodPIDSubsystem m_hoodPIDSubsystem, VisionSubsystem m_visionSubsystem,
-      ShooterPIDSubsystem m_shooterPIDSubsystem, DriveSubsystem m_driveSubsystem, IndexerSubsystem m_indexerSubsystem) {
+      ShooterPIDSubsystem m_shooterPIDSubsystem, DriveSubsystem m_driveSubsystem) {
     this.m_driveSubsystem = m_driveSubsystem;
     this.m_visionSubsystem = m_visionSubsystem;
     this.m_shooterPIDSubsystem = m_shooterPIDSubsystem;
     this.m_hoodPIDSubsystem = m_hoodPIDSubsystem;
 
-    addRequirements(m_hoodPIDSubsystem, m_hoodPIDSubsystem, m_shooterPIDSubsystem);
+
+    addRequirements(m_hoodPIDSubsystem, m_shooterPIDSubsystem, m_driveSubsystem);
   }
 
   // Called when the command is initially scheduled.

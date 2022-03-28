@@ -28,10 +28,10 @@ public class AutoCommand extends SequentialCommandGroup {
     addCommands(
         new DriveDistance(m_driveSubsystem, DriveConstants.autoDist)
             .alongWith(new InstantCommand(m_pneumaticsSubsystem::rearIntakeOpen)),
-        new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem, m_indexerSubsystem)
+        new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem)
             .raceWith(new WaitCommand(2)),
         new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, () -> true, () -> false).alongWith(
-            new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem, m_indexerSubsystem))
+            new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem))
             .raceWith(new WaitCommand(5)), new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
   }
 }
