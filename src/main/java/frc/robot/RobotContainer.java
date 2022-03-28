@@ -33,7 +33,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     DriveSubsystem.setDefaultCommand(new StickDrive(() -> driveController.getRawAxis(2) - driveController.getRawAxis(3),
-        () -> -driveController.getRawAxis(0), () -> driveController.getAButton(), DriveSubsystem, VisionSubsystem));
+        () -> -driveController.getRawAxis(0), DriveSubsystem, VisionSubsystem));
 
     IntakeSubsystem.setDefaultCommand(new AutoIndex(IntakeSubsystem, IndexerSubsystem, PneumaticsSubsystem,
         () -> operateController.getRightBumper(), () -> operateController.getLeftBumper()));
@@ -50,17 +50,6 @@ public class RobotContainer {
 
     new JoystickButton(driveController, 1).whileActiveOnce(
         new AutoAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem, IndexerSubsystem));
-
-    // new JoystickButton(driveController, 1).whenPressed(new
-    // InstantCommand(shooterSubsystem::enable, shooterSubsystem));
-    // new JoystickButton(driveController, 2).whenPressed(new
-    // InstantCommand(shooterSubsystem::disable, shooterSubsystem));
-
-    // new JoystickButton(driveController, 3).whenPressed(new
-    // InstantCommand(hoodSubsystem::enable, hoodSubsystem));
-    // new JoystickButton(driveController, 4).whenPressed(new
-    // InstantCommand(hoodSubsystem::disable, hoodSubsystem));
-
   }
 
   public Command getAutonomousCommand() {
