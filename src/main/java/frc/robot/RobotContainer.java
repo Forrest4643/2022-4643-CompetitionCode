@@ -4,10 +4,8 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,45 +14,46 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
 
-  private final DriveSubsystem DriveSubsystem = new DriveSubsystem();
-  private final IntakeSubsystem IntakeSubsystem = new IntakeSubsystem();
-  private final PneumaticsSubsystem PneumaticsSubsystem = new PneumaticsSubsystem();
+  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
   // private final TurretSubsystem turretSubsystem = new TurretSubsystem();
-  private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
-  private final ShooterPIDSubsystem shooterSubsystem = new ShooterPIDSubsystem();
-  private final HoodPIDSubsystem hoodSubsystem = new HoodPIDSubsystem();
-  private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
-  private final XboxController driveController = new XboxController(0);
-  private final XboxController operateController = new XboxController(1);
+  private final IndexerSubsystem m_indexerSubsystem = new IndexerSubsystem();
+  private final ShooterPIDSubsystem m_shooterPIDSubsystem = new ShooterPIDSubsystem();
+  private final HoodPIDSubsystem m_hoodPIDSubsystem = new HoodPIDSubsystem();
+  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final XboxController m_driveController = new XboxController(0);
+  private final XboxController m_operateController = new XboxController(1);
   
 
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
-    DriveSubsystem.setDefaultCommand(new StickDrive(() -> driveController.getRawAxis(2) - driveController.getRawAxis(3),
-        () -> -driveController.getRawAxis(0), DriveSubsystem, VisionSubsystem));
+    m_driveSubsystem.setDefaultCommand(new StickDrive(() -> m_driveController.getRawAxis(2) - m_driveController.getRawAxis(3),
+        () -> -m_driveController.getRawAxis(0), m_driveSubsystem));
 
-    IntakeSubsystem.setDefaultCommand(new AutoIndex(IntakeSubsystem, IndexerSubsystem, PneumaticsSubsystem,
-        () -> operateController.getRightBumper(), () -> operateController.getLeftBumper()));
+    m_intakeSubsystem.setDefaultCommand(new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem,
+        () -> m_operateController.getRightBumper(), () -> m_operateController.getLeftBumper()));
 
   }
 
   private void configureButtonBindings() {
 
-    new JoystickButton(operateController, 4).whenPressed(new InstantCommand(PneumaticsSubsystem::frontIntakeOpen))
-        .whenReleased(new InstantCommand(PneumaticsSubsystem::frontIntakeClosed));
+    new JoystickButton(m_operateController, 4).whenPressed(new InstantCommand(m_pneumaticsSubsystem::frontIntakeOpen))
+        .whenReleased(new InstantCommand(m_pneumaticsSubsystem::frontIntakeClosed));
 
-    new JoystickButton(operateController, 2).whenPressed(new InstantCommand(PneumaticsSubsystem::rearIntakeOpen))
-        .whenReleased(new InstantCommand(PneumaticsSubsystem::rearIntakeClosed));
+    new JoystickButton(m_operateController, 2).whenPressed(new InstantCommand(m_pneumaticsSubsystem::rearIntakeOpen))
+        .whenReleased(new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
 
-    new JoystickButton(driveController, 1).whileActiveOnce(
-        new AutoAim(DriveSubsystem, VisionSubsystem, shooterSubsystem, hoodSubsystem, IndexerSubsystem));
+    new JoystickButton(m_driveController, 1).whileActiveOnce(
+        new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem, m_indexerSubsystem));
   }
 
   public Command getAutonomousCommand() {
+
     SmartDashboard.putBoolean("autonStart", true);
-    return new DriveDistance(DriveSubsystem, DriveConstants.autoDist);
+    return new AutoCommand(m_driveSubsystem, m_hoodPIDSubsystem, m_visionSubsystem, m_indexerSubsystem, m_shooterPIDSubsystem, m_intakeSubsystem, m_pneumaticsSubsystem);
   }
 
 }

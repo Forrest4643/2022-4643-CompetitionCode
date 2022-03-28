@@ -16,20 +16,20 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 
 public class AutoIndex extends CommandBase {
-  private IntakeSubsystem intakeSubsystem;
-  private IndexerSubsystem indexerSubsystem;
-  private PneumaticsSubsystem pneumaticsSubsystem;
-  private BooleanSupplier forward; 
-  private BooleanSupplier reverse; 
+  private IntakeSubsystem m_intakeSubsystem;
+  private IndexerSubsystem m_indexerSubsystem;
+  private PneumaticsSubsystem m_pneumaticsSubsystem;
+  private BooleanSupplier m_forward; 
+  private BooleanSupplier m_reverse; 
   /** Creates a new AutoIndex. */
-  public AutoIndex(IntakeSubsystem intakeSubsystem, IndexerSubsystem indexerSubsystem,
-      PneumaticsSubsystem pneumaticsSubsystem, BooleanSupplier forward, BooleanSupplier reverse) {
-    this.intakeSubsystem = intakeSubsystem;
-    this.indexerSubsystem = indexerSubsystem;
-    this.pneumaticsSubsystem = pneumaticsSubsystem;
-    this.forward = forward;
-    this.reverse = reverse;
-    addRequirements(intakeSubsystem, indexerSubsystem);
+  public AutoIndex(IntakeSubsystem m_intakeSubsystem, IndexerSubsystem m_indexerSubsystem,
+      PneumaticsSubsystem m_pneumaticsSubsystem, BooleanSupplier m_forward, BooleanSupplier m_reverse) {
+    this.m_intakeSubsystem = m_intakeSubsystem;
+    this.m_indexerSubsystem = m_indexerSubsystem;
+    this.m_pneumaticsSubsystem = m_pneumaticsSubsystem;
+    this.m_forward = m_forward;
+    this.m_reverse = m_reverse;
+    addRequirements(m_intakeSubsystem, m_indexerSubsystem);
   }
 
   BangBangController indexBangController = new BangBangController();
@@ -37,8 +37,8 @@ public class AutoIndex extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    indexerSubsystem.Front.setIdleMode(IdleMode.kBrake);
-    indexerSubsystem.Rear.setIdleMode(IdleMode.kBrake);
+    m_indexerSubsystem.Front.setIdleMode(IdleMode.kBrake);
+    m_indexerSubsystem.Rear.setIdleMode(IdleMode.kBrake);
     indexBangController.setTolerance(IndexerConstants.bangTolerance);
 
   }
@@ -47,26 +47,26 @@ public class AutoIndex extends CommandBase {
   @Override
   public void execute() {
     
-    if (pneumaticsSubsystem.rearStatus()) {
-      intakeSubsystem.rearWheelsOn();
+    if (m_pneumaticsSubsystem.rearStatus()) {
+      m_intakeSubsystem.rearWheelsOn();
     } else {
-      intakeSubsystem.rearWheelsOff();
+      m_intakeSubsystem.rearWheelsOff();
     }
 
-    if (pneumaticsSubsystem.frontStatus()) {
-      intakeSubsystem.frontWheelsOn();
+    if (m_pneumaticsSubsystem.frontStatus()) {
+      m_intakeSubsystem.frontWheelsOn();
     } else {
-      intakeSubsystem.frontWheelsOff();
+      m_intakeSubsystem.frontWheelsOff();
     }
 
-    /* if (pneumaticsSubsystem.rearStatus() || pneumaticsSubsystem.frontStatus()) {
-      indexerSubsystem.wheelsOn();
-    } else */ if (forward.getAsBoolean()) {
-      indexerSubsystem.wheelsOn();
-    } else if (reverse.getAsBoolean()) {
-      indexerSubsystem.wheelsReverse();
+    /* if (m_pneumaticsSubsystem.rearStatus() || m_pneumaticsSubsystem.frontStatus()) {
+      m_indexerSubsystem.wheelsOn();
+    } else */ if (m_forward.getAsBoolean()) {
+      m_indexerSubsystem.wheelsOn();
+    } else if (m_reverse.getAsBoolean()) {
+      m_indexerSubsystem.wheelsReverse();
     } else {
-      indexerSubsystem.wheelsOff();
+      m_indexerSubsystem.wheelsOff();
     }
 
     
@@ -76,9 +76,9 @@ public class AutoIndex extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeSubsystem.frontWheelsOff();
-    //intakeSubsystem.rearWheelsOff();
-    indexerSubsystem.wheelsOff();
+    m_intakeSubsystem.frontWheelsOff();
+    //m_intakeSubsystem.rearWheelsOff();
+    m_indexerSubsystem.wheelsOff();
   }
 
   // Returns true when the command should end.

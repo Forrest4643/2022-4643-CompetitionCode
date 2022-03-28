@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
@@ -11,29 +12,29 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveDistance extends CommandBase {
 
-  private DriveSubsystem driveSubsystem;
-  private double distance;
-  private PIDController drivePID = new PIDController(DriveConstants.drivekP, DriveConstants.drivekI,
+  private DriveSubsystem m_driveSubsystem;
+  private double m_distance;
+  private PIDController m_drivePID = new PIDController(DriveConstants.drivekP, DriveConstants.drivekI,
       DriveConstants.drivekD);
 
   /** Creates a new DriveDistance. */
-  public DriveDistance(DriveSubsystem driveSubsystem, double distance) {
-    this.driveSubsystem = driveSubsystem;
-    this.distance = distance;
-    addRequirements(driveSubsystem);
+  public DriveDistance(DriveSubsystem m_driveSubsystem, double m_distance) {
+    this.m_driveSubsystem = m_driveSubsystem;
+    this.m_distance = m_distance;
+    addRequirements(m_driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivePID.setSetpoint(driveSubsystem.getDriveDistanceIN() + distance);
+    m_drivePID.setSetpoint(m_driveSubsystem.getDriveDistanceIN() + m_distance);
     System.out.println("driveDist Start!");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSubsystem.setDrive(-drivePID.calculate(driveSubsystem.getDriveDistanceIN()), 0);
+    m_driveSubsystem.setDrive(MathUtil.clamp(-m_drivePID.calculate(m_driveSubsystem.getDriveDistanceIN()), -.5, .5), 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +46,6 @@ public class DriveDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return drivePID.atSetpoint();
+    return m_drivePID.atSetpoint();
   }
 }

@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -19,29 +19,19 @@ import frc.robot.subsystems.VisionSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoCommand extends ParallelCommandGroup {
-  private DriveSubsystem driveSubsystem;
-  private VisionSubsystem visionSubsystem;
-  private IndexerSubsystem indexerSubsystem;
-  private HoodPIDSubsystem hoodPIDSubsystem;
-  private ShooterPIDSubsystem shooterPIDSubsystem;
-  private IntakeSubsystem intakeSubsystem;
-  private PneumaticsSubsystem pneumaticsSubsystem;
+public class AutoCommand extends SequentialCommandGroup {
+
 
   /** Creates a new AutoCommand. */
-  public AutoCommand(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem, IndexerSubsystem indexerSubsystem,
-      HoodPIDSubsystem hoodPIDSubsystem, ShooterPIDSubsystem shooterPIDSubsystem, IntakeSubsystem intakeSubsystem) {
-    this.driveSubsystem = driveSubsystem;
-    this.visionSubsystem = visionSubsystem;
-    this.indexerSubsystem = indexerSubsystem;
-    this.hoodPIDSubsystem = hoodPIDSubsystem;
-    this.shooterPIDSubsystem = shooterPIDSubsystem;
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new DriveDistance(driveSubsystem, DriveConstants.autoDist),
-        new AutoIndex(intakeSubsystem, indexerSubsystem, pneumaticsSubsystem, () -> true, () -> false)
-            .alongWith(
-                new AutoAim(driveSubsystem, visionSubsystem, shooterPIDSubsystem, hoodPIDSubsystem, indexerSubsystem))
-            .alongWith(new WaitCommand(3)), new AutoIndex(intakeSubsystem, indexerSubsystem, pneumaticsSubsystem, () -> false, () -> true));
+  public AutoCommand(DriveSubsystem m_driveSubsystem, HoodPIDSubsystem m_hoodPIDSubsystem, VisionSubsystem m_visionSubsystem, IndexerSubsystem m_indexerSubsystem,
+    ShooterPIDSubsystem m_shooterPIDSubsystem, IntakeSubsystem m_intakeSubsystem, PneumaticsSubsystem m_pneumaticsSubsystem) {
+    addCommands(
+        new DriveDistance(m_driveSubsystem, DriveConstants.autoDist)
+            .alongWith(new InstantCommand(m_pneumaticsSubsystem::rearIntakeOpen)),
+        new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem, m_indexerSubsystem)
+            .raceWith(new WaitCommand(2)),
+        new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, () -> true, () -> false).alongWith(
+            new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem, m_indexerSubsystem))
+            .raceWith(new WaitCommand(5)), new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
   }
 }
