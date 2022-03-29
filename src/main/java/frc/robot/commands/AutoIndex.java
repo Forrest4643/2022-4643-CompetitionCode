@@ -32,14 +32,14 @@ public class AutoIndex extends CommandBase {
     addRequirements(m_intakeSubsystem, m_indexerSubsystem);
   }
 
-  BangBangController indexBangController = new BangBangController();
+  BangBangController m_indexBangController = new BangBangController();
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     m_indexerSubsystem.Front.setIdleMode(IdleMode.kBrake);
     m_indexerSubsystem.Rear.setIdleMode(IdleMode.kBrake);
-    indexBangController.setTolerance(IndexerConstants.bangTolerance);
+    m_indexBangController.setTolerance(IndexerConstants.bangTolerance);
 
   }
 
@@ -47,6 +47,12 @@ public class AutoIndex extends CommandBase {
   @Override
   public void execute() {
     
+    
+    manual();
+   
+  }
+
+  private void manual() {
     if (m_pneumaticsSubsystem.rearStatus()) {
       m_intakeSubsystem.rearWheelsOn();
     } else {
@@ -59,25 +65,19 @@ public class AutoIndex extends CommandBase {
       m_intakeSubsystem.frontWheelsOff();
     }
 
-    /* if (m_pneumaticsSubsystem.rearStatus() || m_pneumaticsSubsystem.frontStatus()) {
-      m_indexerSubsystem.wheelsOn();
-    } else */ if (m_forward.getAsBoolean()) {
+    if (m_forward.getAsBoolean()) {
       m_indexerSubsystem.wheelsOn();
     } else if (m_reverse.getAsBoolean()) {
       m_indexerSubsystem.wheelsReverse();
     } else {
       m_indexerSubsystem.wheelsOff();
     }
-
-    
-
   }
-
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_intakeSubsystem.frontWheelsOff();
-    //m_intakeSubsystem.rearWheelsOff();
+    m_intakeSubsystem.rearWheelsOff();
     m_indexerSubsystem.wheelsOff();
   }
 

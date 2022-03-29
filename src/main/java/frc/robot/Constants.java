@@ -38,7 +38,13 @@ public final class Constants {
     }
 
     public static final class IndexerConstants {
-        public static final double sensorThresh = 150;
+
+        public static final double thresh0 = 1;
+        public static final double thresh1a = 1;
+        public static final double thresh1b = 1;
+        public static final double thresh2a = 1;
+        public static final double thresh2b = 1;
+        public static final double colorProxThresh = 150;
         public static final double blueThresh = .33;
         public static final double redThresh = .33;
         public static final double oneBall = 20;
