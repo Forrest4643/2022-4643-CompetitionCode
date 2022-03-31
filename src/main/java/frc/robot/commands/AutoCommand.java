@@ -15,6 +15,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.IndexSensors;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -24,13 +25,13 @@ public class AutoCommand extends SequentialCommandGroup {
 
   /** Creates a new AutoCommand. */
   public AutoCommand(DriveSubsystem m_driveSubsystem, HoodPIDSubsystem m_hoodPIDSubsystem, VisionSubsystem m_visionSubsystem, IndexerSubsystem m_indexerSubsystem,
-    ShooterPIDSubsystem m_shooterPIDSubsystem, IntakeSubsystem m_intakeSubsystem, PneumaticsSubsystem m_pneumaticsSubsystem) {
+    ShooterPIDSubsystem m_shooterPIDSubsystem, IndexSensors m_indexsensors, IntakeSubsystem m_intakeSubsystem, PneumaticsSubsystem m_pneumaticsSubsystem) {
     addCommands(
         new DriveDistance(m_driveSubsystem, DriveConstants.autoDist)
             .alongWith(new InstantCommand(m_pneumaticsSubsystem::rearIntakeOpen)),
         new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem)
             .raceWith(new WaitCommand(2)),
-        new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, () -> true, () -> false).alongWith(
+        new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_indexsensors, () -> true, () -> false, () -> -1).alongWith(
             new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem))
             .raceWith(new WaitCommand(5)), new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
   }

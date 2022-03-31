@@ -16,6 +16,7 @@ public class RobotContainer {
 
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final IndexSensors m_indexsensors = new IndexSensors();
   private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
   // private final TurretSubsystem turretSubsystem = new TurretSubsystem();
   private final IndexerSubsystem m_indexerSubsystem = new IndexerSubsystem();
@@ -33,8 +34,8 @@ public class RobotContainer {
     m_driveSubsystem.setDefaultCommand(new StickDrive(() -> m_driveController.getRawAxis(2) - m_driveController.getRawAxis(3),
         () -> -m_driveController.getRawAxis(0), m_driveSubsystem));
 
-    m_intakeSubsystem.setDefaultCommand(new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem,
-        () -> m_operateController.getRightBumper(), () -> m_operateController.getLeftBumper()));
+    m_intakeSubsystem.setDefaultCommand(new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_indexsensors,
+        () -> m_operateController.getRightBumper(), () -> m_operateController.getLeftBumper(), () -> m_operateController.getPOV()));
 
   }
 
@@ -53,7 +54,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     SmartDashboard.putBoolean("autonStart", true);
-    return new AutoCommand(m_driveSubsystem, m_hoodPIDSubsystem, m_visionSubsystem, m_indexerSubsystem, m_shooterPIDSubsystem, m_intakeSubsystem, m_pneumaticsSubsystem);
+    return new AutoCommand(m_driveSubsystem, m_hoodPIDSubsystem, m_visionSubsystem, m_indexerSubsystem, m_shooterPIDSubsystem, m_indexsensors, m_intakeSubsystem, m_pneumaticsSubsystem);
   }
 
 }
