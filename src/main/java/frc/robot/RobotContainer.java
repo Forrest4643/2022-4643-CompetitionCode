@@ -22,6 +22,7 @@ public class RobotContainer {
   private final ShooterPIDSubsystem m_shooterPIDSubsystem = new ShooterPIDSubsystem();
   private final HoodPIDSubsystem m_hoodPIDSubsystem = new HoodPIDSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final TurretPIDSubsystem m_turretSubsystem = new TurretPIDSubsystem();
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operateController = new XboxController(1);
   
@@ -47,13 +48,13 @@ public class RobotContainer {
         .whenReleased(new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
 
     new JoystickButton(m_driveController, 1).whileActiveOnce(
-        new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem));
+        new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem, m_turretSubsystem));
   }
 
   public Command getAutonomousCommand() {
 
     SmartDashboard.putBoolean("autonStart", true);
-    return new AutoCommand(m_driveSubsystem, m_hoodPIDSubsystem, m_visionSubsystem, m_indexerSubsystem, m_shooterPIDSubsystem, m_sensors, m_intakeSubsystem, m_pneumaticsSubsystem);
+    return new AutoCommand(m_driveSubsystem, m_hoodPIDSubsystem, m_visionSubsystem, m_indexerSubsystem, m_shooterPIDSubsystem, m_sensors, m_intakeSubsystem, m_pneumaticsSubsystem, m_turretSubsystem);
   }
 
 }

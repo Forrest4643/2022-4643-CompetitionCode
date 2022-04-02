@@ -22,6 +22,8 @@ public class TurretPIDSubsystem extends PIDSubsystem {
     super(
         // The PIDController used by the subsystem
         new PIDController(TurretConstants.turretkP, TurretConstants.turretkI, TurretConstants.turretkD));
+
+        getController().setTolerance(TurretConstants.tolerance);
   }
 
   @Override

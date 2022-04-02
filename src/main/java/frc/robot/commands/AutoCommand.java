@@ -14,6 +14,7 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
+import frc.robot.subsystems.TurretPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.Sensors;
 
@@ -25,14 +26,14 @@ public class AutoCommand extends SequentialCommandGroup {
 
   /** Creates a new AutoCommand. */
   public AutoCommand(DriveSubsystem m_driveSubsystem, HoodPIDSubsystem m_hoodPIDSubsystem, VisionSubsystem m_visionSubsystem, IndexerSubsystem m_indexerSubsystem,
-    ShooterPIDSubsystem m_shooterPIDSubsystem, Sensors m_indexsensors, IntakeSubsystem m_intakeSubsystem, PneumaticsSubsystem m_pneumaticsSubsystem) {
+    ShooterPIDSubsystem m_shooterPIDSubsystem, Sensors m_indexsensors, IntakeSubsystem m_intakeSubsystem, PneumaticsSubsystem m_pneumaticsSubsystem, TurretPIDSubsystem m_turretSubsystem) {
     addCommands(
         new DriveDistance(m_driveSubsystem, DriveConstants.autoDist)
             .alongWith(new InstantCommand(m_pneumaticsSubsystem::rearIntakeOpen)),
-        new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem)
+        new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem, m_turretSubsystem)
             .raceWith(new WaitCommand(2)),
         new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_indexsensors, () -> true, () -> false, () -> -1).alongWith(
-            new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem))
+            new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem, m_turretSubsystem))
             .raceWith(new WaitCommand(5)), new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
   }
 }

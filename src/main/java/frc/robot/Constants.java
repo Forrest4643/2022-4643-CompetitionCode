@@ -131,6 +131,7 @@ public final class Constants {
         public static final double turretkP = 0.16;
         public static final double turretkI = 0;
         public static final double turretkD = 0.00105;
+        public static final double tolerance = .5;
 
     }
 

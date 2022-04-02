@@ -19,6 +19,11 @@ public class VisionSubsystem extends SubsystemBase {
 
     double m_targetDistanceMetersRAW;
 
+    public VisionSubsystem() {
+        camera.setDriverMode(false);
+        camera.setLED(VisionLEDMode.kOff);
+    }
+
     @Override
     public void periodic() {
         var result = camera.getLatestResult();

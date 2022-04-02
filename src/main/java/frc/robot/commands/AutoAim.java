@@ -14,6 +14,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
+import frc.robot.subsystems.TurretPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 public class AutoAim extends CommandBase {
@@ -21,20 +22,23 @@ public class AutoAim extends CommandBase {
   private VisionSubsystem m_visionSubsystem;
   private ShooterPIDSubsystem m_shooterPIDSubsystem;
   private HoodPIDSubsystem m_hoodPIDSubsystem;
+  private TurretPIDSubsystem m_turretSubsystem;
 
   private PIDController driveSteer = new PIDController(DriveConstants.drivekP, DriveConstants.drivekI,
       DriveConstants.drivekD);
 
   /** Creates a new driveAim. */
   public AutoAim(HoodPIDSubsystem m_hoodPIDSubsystem, VisionSubsystem m_visionSubsystem,
-      ShooterPIDSubsystem m_shooterPIDSubsystem, DriveSubsystem m_driveSubsystem) {
+      ShooterPIDSubsystem m_shooterPIDSubsystem, DriveSubsystem m_driveSubsystem, TurretPIDSubsystem m_turretSubsystem) {
     this.m_driveSubsystem = m_driveSubsystem;
     this.m_visionSubsystem = m_visionSubsystem;
     this.m_shooterPIDSubsystem = m_shooterPIDSubsystem;
     this.m_hoodPIDSubsystem = m_hoodPIDSubsystem;
+    this.m_turretSubsystem = m_turretSubsystem;
 
 
-    addRequirements(m_hoodPIDSubsystem, m_shooterPIDSubsystem, m_driveSubsystem);
+
+    addRequirements(m_hoodPIDSubsystem, m_shooterPIDSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -45,6 +49,8 @@ public class AutoAim extends CommandBase {
     
     m_shooterPIDSubsystem.enable();
     m_hoodPIDSubsystem.enable();
+
+    m_visionSubsystem.setLED(true);
 
   }
 
@@ -70,10 +76,9 @@ public class AutoAim extends CommandBase {
         (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
         (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA));
 
-    double turnRate = driveSteer.calculate(targetYaw);
-    m_driveSubsystem.setDrive(0, MathUtil.clamp(turnRate, -.5, .5));
+    m_turretSubsystem.setSetpoint(m_turretSubsystem.turretPositionDEG() + targetYaw);
 
-    SmartDashboard.putNumber("driveSteer", turnRate);
+    
 
   }
 
@@ -82,7 +87,8 @@ public class AutoAim extends CommandBase {
   public void end(boolean interrupted) {
     m_shooterPIDSubsystem.disable();
     m_hoodPIDSubsystem.disable();
-    m_driveSubsystem.setDrive(0, 0);
+    m_visionSubsystem.setLED(false);
+
     System.out.println("AutoAim Ended!");
   }
 
