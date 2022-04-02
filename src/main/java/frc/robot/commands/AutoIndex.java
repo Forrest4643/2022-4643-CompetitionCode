@@ -99,65 +99,7 @@ public class AutoIndex extends CommandBase {
   }
 
   private void auto() {
-    // sets intake direction to inwards if there is nothing at index 0
-    if (!m_indexsensors.index0()) {
-      m_intakeOverride = false;
-    }
-
-    // turns intake wheels on if the intake solonoid is open, and the override
-    // condition is false.
-    if (m_pneumaticsSubsystem.frontStatus() && !m_intakeOverride) {
-      m_intakeSubsystem.frontWheelsOn();
-    } else {
-      m_intakeSubsystem.frontWheelsOff();
-    }
-
-    if (m_pneumaticsSubsystem.rearStatus() && !m_intakeOverride) {
-      m_intakeSubsystem.rearWheelsOn();
-    } else {
-      m_intakeSubsystem.rearWheelsOff();
-    }
-
-    if (m_indexsensors.index0()) {
-      // if 0
-      if (m_indexsensors.index2()) {
-        // if 2 and 0
-        if (m_indexsensors.index1()) {
-          // if 2, 1, and 0.
-
-          // this override overrides the intakes automatically spinning inwards when the-
-          // solenoid is open
-
-          // this prevents us from carrying more than 2 balls.
-          m_intakeOverride = true;
-          m_intakeSubsystem.frontWheelsReverse();
-        } else if (!m_indexsensors.index1()) {
-          // if 2 and 0 but !1
-          while (!m_indexsensors.index1()) {
-            m_indexerSubsystem.wheelsReverse();
-          }
-          // turn off wheels after ball reaches 1
-          m_indexerSubsystem.wheelsOff();
-        }
-      } else if (!m_indexsensors.index2()) {
-        // if !2
-        if (m_indexsensors.index1()) {
-          // if !2 and 1
-          while (!m_indexsensors.index2()) {
-            m_indexerSubsystem.wheelsOn();
-          }
-          // turn off wheels after ball reaches 2
-          m_indexerSubsystem.wheelsOff();
-        } else if (!m_indexsensors.index1()) {
-          // if !1 and !2 and 0, index in
-          m_indexerSubsystem.wheelsOn();
-        }
-      }
-    } else {
-      // if theres no balls at 0, indexer wheels off.
-      m_indexerSubsystem.wheelsOff();
-    }
-
+    
   }
 
   // Called once the command ends or is interrupted.
