@@ -10,6 +10,7 @@ import java.util.function.IntSupplier;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.subsystems.Sensors;
@@ -26,7 +27,6 @@ public class AutoIndex extends CommandBase {
   private BooleanSupplier m_reverse;
   private IntSupplier m_POV;
   private boolean m_toggled;
-  private boolean m_intakeOverride;
 
   /** Creates a new AutoIndex. */
   public AutoIndex(IntakeSubsystem m_intakeSubsystem, IndexerSubsystem m_indexerSubsystem,
@@ -52,27 +52,31 @@ public class AutoIndex extends CommandBase {
     m_indexerSubsystem.Rear.setIdleMode(IdleMode.kBrake);
     m_indexBangController.setTolerance(IndexerConstants.bangTolerance);
     m_toggled = false;
-    m_intakeOverride = false;
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (m_sensors.pitch() < 10 || m_sensors.pitch() > -10) {
+      if (m_POV.getAsInt() == 90) {
+        m_toggled = true;
+      }
+      if (m_POV.getAsInt() == 270) {
+        m_toggled = false;
 
-    if (m_POV.getAsInt() == 90) {
-      m_toggled = true;
-    }
-    if (m_POV.getAsInt() == 270) {
-      m_toggled = false;
+      }
 
-    }
-
-    if (m_toggled) {
-      manual();
+      if (m_toggled) {
+        manual();
+      } else {
+        auto();
+      }
     } else {
-      auto();
+      dontDie();
     }
+
+    SmartDashboard.putBoolean("manual indexing", m_toggled);
   }
 
   private void manual() {
@@ -99,8 +103,29 @@ public class AutoIndex extends CommandBase {
   }
 
   private void auto() {
-    
+    if (m_pneumaticsSubsystem.rearStatus()) {
+      m_intakeSubsystem.rearWheelsOn();
+    } else {
+      m_intakeSubsystem.rearWheelsOff();
+    }
+
+    if (m_pneumaticsSubsystem.frontStatus()) {
+      m_intakeSubsystem.frontWheelsOn();
+    } else {
+      m_intakeSubsystem.frontWheelsOff();
+    }
   }
+
+  private void dontDie() {
+    if (m_sensors.pitch() < -10) {
+      m_pneumaticsSubsystem.rearIntakeOpen();
+    }
+
+    if (m_sensors.pitch() > 10) {
+      m_pneumaticsSubsystem.frontIntakeOpen();
+    }
+  }
+
 
   // Called once the command ends or is interrupted.
   @Override

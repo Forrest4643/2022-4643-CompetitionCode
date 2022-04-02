@@ -83,6 +83,7 @@ public final class Constants {
         public static final double kV = 0;
         public static final double kA = 0;
         public static final double kS = 8.85;
+        public static final double acc = 3746;
         public static final double responseTimeS = 0.04;
 
         public static final double quadAimA = 1.79;

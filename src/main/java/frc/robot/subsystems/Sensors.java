@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -11,27 +12,35 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.SerialPort;
 
 public class Sensors extends SubsystemBase {
+
+  AHRS ahrs;
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final I2C.Port mXpPorti2c = I2C.Port.kMXP;
   private final ColorSensorV3 m_frontSense = new ColorSensorV3(i2cPort);
   private final ColorSensorV3 m_rearSense = new ColorSensorV3(mXpPorti2c); 
-
   private final AnalogInput m_index1 = new AnalogInput(1);
-
 
   Color m_frontColor;
 
   Color m_rearColor;
 
+ 
 
   /** Creates a new IndexSensors. */
   public Sensors() {
+    //instantiate navx over USB
+    try {
+      ahrs = new AHRS(SerialPort.Port.kUSB);
+    } catch (RuntimeException ex) {
+      DriverStation.reportError("Error instantiating navX-USB: " + ex.getMessage(), true);
+    }
+
   }
 
   @Override
@@ -49,9 +58,6 @@ public class Sensors extends SubsystemBase {
 
     SmartDashboard.putNumber("rearProx", rearProx);
 
-
-    
-
     SmartDashboard.putNumber("frontRedValue", m_frontColor.red);
     SmartDashboard.putNumber("frontBlueValue", m_frontColor.blue);
 
@@ -60,6 +66,15 @@ public class Sensors extends SubsystemBase {
 
   }
 
+  public double yaw() {
+    return ahrs.getYaw();
+  }
+  public double pitch() {
+    return ahrs.getPitch();
+  }
+  public double roll() {
+    return ahrs.getRoll();
+  }
 
   public boolean index1() {
     return (m_index1.getVoltage() > IndexerConstants.thresh1);
