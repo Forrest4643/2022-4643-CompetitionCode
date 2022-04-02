@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
-public class IndexSensors extends SubsystemBase {
+public class Sensors extends SubsystemBase {
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final I2C.Port mXpPorti2c = I2C.Port.kMXP;
@@ -31,7 +31,7 @@ public class IndexSensors extends SubsystemBase {
 
 
   /** Creates a new IndexSensors. */
-  public IndexSensors() {
+  public Sensors() {
   }
 
   @Override

@@ -12,7 +12,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.IndexerConstants;
-import frc.robot.subsystems.IndexSensors;
+import frc.robot.subsystems.Sensors;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
@@ -21,7 +21,7 @@ public class AutoIndex extends CommandBase {
   private IntakeSubsystem m_intakeSubsystem;
   private IndexerSubsystem m_indexerSubsystem;
   private PneumaticsSubsystem m_pneumaticsSubsystem;
-  private IndexSensors m_indexsensors;
+  private Sensors m_sensors;
   private BooleanSupplier m_forward;
   private BooleanSupplier m_reverse;
   private IntSupplier m_POV;
@@ -30,13 +30,13 @@ public class AutoIndex extends CommandBase {
 
   /** Creates a new AutoIndex. */
   public AutoIndex(IntakeSubsystem m_intakeSubsystem, IndexerSubsystem m_indexerSubsystem,
-      PneumaticsSubsystem m_pneumaticsSubsystem, IndexSensors m_indexsensors, BooleanSupplier m_forward,
+      PneumaticsSubsystem m_pneumaticsSubsystem, Sensors m_sensors, BooleanSupplier m_forward,
       BooleanSupplier m_reverse,
       IntSupplier m_POV) {
     this.m_intakeSubsystem = m_intakeSubsystem;
     this.m_indexerSubsystem = m_indexerSubsystem;
     this.m_pneumaticsSubsystem = m_pneumaticsSubsystem;
-    this.m_indexsensors = m_indexsensors;
+    this.m_sensors = m_sensors;
     this.m_forward = m_forward;
     this.m_reverse = m_reverse;
     this.m_POV = m_POV;
