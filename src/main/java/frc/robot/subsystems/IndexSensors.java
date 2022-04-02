@@ -6,19 +6,29 @@ package frc.robot.subsystems;
 
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class IndexSensors extends SubsystemBase {
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  private final ColorSensorV3 towerColor = new ColorSensorV3(i2cPort);
+  private final I2C.Port mXpPorti2c = I2C.Port.kMXP;
+  private final ColorSensorV3 m_frontSense = new ColorSensorV3(i2cPort);
+  private final ColorSensorV3 m_rearSense = new ColorSensorV3(mXpPorti2c); 
 
-  Color detectedColor;
+  private final AnalogInput m_index1 = new AnalogInput(1);
+
+
+  Color m_frontColor;
+
+  Color m_rearColor;
+
 
   /** Creates a new IndexSensors. */
   public IndexSensors() {
@@ -27,27 +37,63 @@ public class IndexSensors extends SubsystemBase {
   @Override
   public void periodic() {
 
-    double proximity = towerColor.getProximity();
+    double frontProx = m_frontSense.getProximity();
 
-    SmartDashboard.putNumber("Proximity", proximity);
+    double rearProx = m_rearSense.getProximity();
 
-    detectedColor = towerColor.getColor();
+    m_frontColor = m_frontSense.getColor();
 
-    SmartDashboard.putNumber("redValue", detectedColor.red);
-    SmartDashboard.putNumber("blueValue", detectedColor.blue);
-    SmartDashboard.putBoolean("correctCargo", correctCargo());
+    m_rearColor = m_rearSense.getColor();
+
+    SmartDashboard.putNumber("frontProx", frontProx);
+
+    SmartDashboard.putNumber("rearProx", rearProx);
+
+
+    
+
+    SmartDashboard.putNumber("frontRedValue", m_frontColor.red);
+    SmartDashboard.putNumber("frontBlueValue", m_frontColor.blue);
+
+    SmartDashboard.putNumber("rearRedValue", m_rearColor.red);
+    SmartDashboard.putNumber("rearBlueValue", m_rearColor.blue);
 
   }
 
-  public boolean towerPres() {
-    return (towerColor.getProximity() > IndexerConstants.sensorThresh);
+
+  public boolean index1() {
+    return (m_index1.getVoltage() > IndexerConstants.thresh1);
   }
 
-  public boolean correctCargo() {
-    if (detectedColor.blue >= IndexerConstants.blueThresh
+  public boolean frontBall() {
+    return(m_frontSense.getProximity() > IndexerConstants.frontThresh);
+  }
+
+  public boolean rearBall() {
+    return(m_rearSense.getProximity() > IndexerConstants.rearThresh);
+  }
+
+
+
+ 
+
+  public boolean correctFrontCargo() {
+    if (m_frontColor.blue >= IndexerConstants.blueThresh
         && DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
       return true;
-    } else if ((detectedColor.red >= IndexerConstants.redThresh
+    } else if ((m_frontColor.red >= IndexerConstants.redThresh
+        && DriverStation.getAlliance() == DriverStation.Alliance.Red)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean correctRearCargo() {
+    if (m_rearColor.blue >= IndexerConstants.blueThresh
+        && DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+      return true;
+    } else if ((m_rearColor.red >= IndexerConstants.redThresh
         && DriverStation.getAlliance() == DriverStation.Alliance.Red)) {
       return true;
     } else {

@@ -5,60 +5,58 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.HoodConstants;
-import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
-import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 public class AutoAim extends CommandBase {
-  private DriveSubsystem driveSubsystem;
-  private VisionSubsystem visionSubsystem;
-  private ShooterPIDSubsystem shooterPIDSubsystem;
-  private HoodPIDSubsystem hoodPIDSubsystem;
-  private IndexerSubsystem indexerSubsystem;
+  private DriveSubsystem m_driveSubsystem;
+  private VisionSubsystem m_visionSubsystem;
+  private ShooterPIDSubsystem m_shooterPIDSubsystem;
+  private HoodPIDSubsystem m_hoodPIDSubsystem;
 
-  private BangBangController shooterBang = new BangBangController();
-
+  private PIDController driveSteer = new PIDController(DriveConstants.drivekP, DriveConstants.drivekI,
+      DriveConstants.drivekD);
 
   /** Creates a new driveAim. */
-  public AutoAim(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem,
-      ShooterPIDSubsystem shooterPIDSubsystem, HoodPIDSubsystem hoodPIDSubsystem, IndexerSubsystem indexerSubsystem) {
-    this.driveSubsystem = driveSubsystem;
-    this.visionSubsystem = visionSubsystem;
-    this.shooterPIDSubsystem = shooterPIDSubsystem;
-    this.hoodPIDSubsystem = hoodPIDSubsystem;
+  public AutoAim(HoodPIDSubsystem m_hoodPIDSubsystem, VisionSubsystem m_visionSubsystem,
+      ShooterPIDSubsystem m_shooterPIDSubsystem, DriveSubsystem m_driveSubsystem) {
+    this.m_driveSubsystem = m_driveSubsystem;
+    this.m_visionSubsystem = m_visionSubsystem;
+    this.m_shooterPIDSubsystem = m_shooterPIDSubsystem;
+    this.m_hoodPIDSubsystem = m_hoodPIDSubsystem;
 
 
+    addRequirements(m_hoodPIDSubsystem, m_shooterPIDSubsystem, m_driveSubsystem);
   }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+
     System.out.println("AutoAim Started!");
-    addRequirements(driveSubsystem, hoodPIDSubsystem, shooterPIDSubsystem);
-    shooterPIDSubsystem.enable();
-    hoodPIDSubsystem.enable();
     
+    m_shooterPIDSubsystem.enable();
+    m_hoodPIDSubsystem.enable();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    double targetDistance = visionSubsystem.getTargetDistanceFT();
-    double targetYaw = visionSubsystem.getTargetYaw();
+    double targetDistance = m_visionSubsystem.getTargetDistanceFT();
+    double targetYaw = m_visionSubsystem.getTargetYaw();
 
     // aiming hood
-    hoodPIDSubsystem.setSetpoint(MathUtil.clamp(
+    m_hoodPIDSubsystem.setSetpoint(MathUtil.clamp(
         HoodConstants.quadAimC +
             (HoodConstants.quadAimB * targetDistance) +
             (Math.pow(targetDistance, 2) * HoodConstants.quadAimA),
@@ -66,35 +64,31 @@ public class AutoAim extends CommandBase {
         65, 80));
 
     // setting shooter RPM
-    shooterPIDSubsystem.setShooterVolts(11.3); 
-    
-    //* shooterBang.calculate(shooterPIDSubsystem.getShooterRPM(), ShooterConstants.quadAimD +
-    // (ShooterConstants.quadAimC * targetDistance) +
-    // (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
-    // (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA)));
-    
+
+    m_shooterPIDSubsystem.setSetpoint(ShooterConstants.quadAimD +
+        (ShooterConstants.quadAimC * targetDistance) +
+        (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
+        (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA));
+
+    double turnRate = driveSteer.calculate(targetYaw);
+    m_driveSubsystem.setDrive(0, MathUtil.clamp(turnRate, -.5, .5));
+
+    SmartDashboard.putNumber("driveSteer", turnRate);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterPIDSubsystem.disable();
-    shooterPIDSubsystem.setShooterVolts(0);
-    hoodPIDSubsystem.disable();
-    driveSubsystem.setDrive(0, 0);
+    m_shooterPIDSubsystem.disable();
+    m_hoodPIDSubsystem.disable();
+    m_driveSubsystem.setDrive(0, 0);
     System.out.println("AutoAim Ended!");
   }
 
   public boolean readyFire() {
-    return shooterPIDSubsystem.getController().atSetpoint()
-        && hoodPIDSubsystem.getController().atSetpoint();
-        
-  }
+    return m_shooterPIDSubsystem.getController().atSetpoint()
+        && m_hoodPIDSubsystem.getController().atSetpoint() && driveSteer.atSetpoint();
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }

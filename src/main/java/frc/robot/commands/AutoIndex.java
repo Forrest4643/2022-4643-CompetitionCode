@@ -5,80 +5,109 @@
 package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.IntSupplier;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.IndexerConstants;
+import frc.robot.subsystems.IndexSensors;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 
 public class AutoIndex extends CommandBase {
-  private IntakeSubsystem intakeSubsystem;
-  private IndexerSubsystem indexerSubsystem;
-  private PneumaticsSubsystem pneumaticsSubsystem;
-  private BooleanSupplier forward; 
-  private BooleanSupplier reverse; 
+  private IntakeSubsystem m_intakeSubsystem;
+  private IndexerSubsystem m_indexerSubsystem;
+  private PneumaticsSubsystem m_pneumaticsSubsystem;
+  private IndexSensors m_indexsensors;
+  private BooleanSupplier m_forward;
+  private BooleanSupplier m_reverse;
+  private IntSupplier m_POV;
+  private boolean m_toggled;
+  private boolean m_intakeOverride;
+
   /** Creates a new AutoIndex. */
-  public AutoIndex(IntakeSubsystem intakeSubsystem, IndexerSubsystem indexerSubsystem,
-      PneumaticsSubsystem pneumaticsSubsystem, BooleanSupplier forward, BooleanSupplier reverse) {
-    this.intakeSubsystem = intakeSubsystem;
-    this.indexerSubsystem = indexerSubsystem;
-    this.pneumaticsSubsystem = pneumaticsSubsystem;
-    this.forward = forward;
-    this.reverse = reverse;
-    addRequirements(intakeSubsystem, indexerSubsystem);
+  public AutoIndex(IntakeSubsystem m_intakeSubsystem, IndexerSubsystem m_indexerSubsystem,
+      PneumaticsSubsystem m_pneumaticsSubsystem, IndexSensors m_indexsensors, BooleanSupplier m_forward,
+      BooleanSupplier m_reverse,
+      IntSupplier m_POV) {
+    this.m_intakeSubsystem = m_intakeSubsystem;
+    this.m_indexerSubsystem = m_indexerSubsystem;
+    this.m_pneumaticsSubsystem = m_pneumaticsSubsystem;
+    this.m_indexsensors = m_indexsensors;
+    this.m_forward = m_forward;
+    this.m_reverse = m_reverse;
+    this.m_POV = m_POV;
+    addRequirements(m_intakeSubsystem, m_indexerSubsystem);
   }
 
-  BangBangController indexBangController = new BangBangController();
+  BangBangController m_indexBangController = new BangBangController();
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    indexerSubsystem.Front.setIdleMode(IdleMode.kBrake);
-    indexerSubsystem.Rear.setIdleMode(IdleMode.kBrake);
-    indexBangController.setTolerance(IndexerConstants.bangTolerance);
+    m_indexerSubsystem.Front.setIdleMode(IdleMode.kBrake);
+    m_indexerSubsystem.Rear.setIdleMode(IdleMode.kBrake);
+    m_indexBangController.setTolerance(IndexerConstants.bangTolerance);
+    m_toggled = false;
+    m_intakeOverride = false;
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    if (m_POV.getAsInt() == 90) {
+      m_toggled = true;
+    }
+    if (m_POV.getAsInt() == 270) {
+      m_toggled = false;
+
+    }
+
+    if (m_toggled) {
+      manual();
+    } else {
+      auto();
+    }
+  }
+
+  private void manual() {
+
+    if (m_pneumaticsSubsystem.rearStatus()) {
+      m_intakeSubsystem.rearWheelsOn();
+    } else {
+      m_intakeSubsystem.rearWheelsOff();
+    }
+
+    if (m_pneumaticsSubsystem.frontStatus()) {
+      m_intakeSubsystem.frontWheelsOn();
+    } else {
+      m_intakeSubsystem.frontWheelsOff();
+    }
+
+    if (m_forward.getAsBoolean()) {
+      m_indexerSubsystem.wheelsOn();
+    } else if (m_reverse.getAsBoolean()) {
+      m_indexerSubsystem.wheelsReverse();
+    } else {
+      m_indexerSubsystem.wheelsOff();
+    }
+  }
+
+  private void auto() {
     
-    if (pneumaticsSubsystem.rearStatus()) {
-      intakeSubsystem.rearWheelsOn();
-    } else {
-      intakeSubsystem.rearWheelsOff();
-    }
-
-    if (pneumaticsSubsystem.frontStatus()) {
-      intakeSubsystem.frontWheelsOn();
-    } else {
-      intakeSubsystem.frontWheelsOff();
-    }
-
-    /* if (pneumaticsSubsystem.rearStatus() || pneumaticsSubsystem.frontStatus()) {
-      indexerSubsystem.wheelsOn();
-    } else */ if (forward.getAsBoolean()) {
-      indexerSubsystem.wheelsOn();
-    } else if (reverse.getAsBoolean()) {
-      indexerSubsystem.wheelsReverse();
-    } else {
-      indexerSubsystem.wheelsOff();
-    }
-
-    
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeSubsystem.frontWheelsOff();
-    //intakeSubsystem.rearWheelsOff();
-    indexerSubsystem.wheelsOff();
+    m_intakeSubsystem.frontWheelsOff();
+    m_intakeSubsystem.rearWheelsOff();
+    m_indexerSubsystem.wheelsOff();
   }
 
   // Returns true when the command should end.
