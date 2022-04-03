@@ -29,16 +29,15 @@ public class AutoAim extends CommandBase {
 
   /** Creates a new driveAim. */
   public AutoAim(HoodPIDSubsystem m_hoodPIDSubsystem, VisionSubsystem m_visionSubsystem,
-      ShooterPIDSubsystem m_shooterPIDSubsystem, DriveSubsystem m_driveSubsystem, TurretPIDSubsystem m_turretSubsystem) {
+      ShooterPIDSubsystem m_shooterPIDSubsystem, DriveSubsystem m_driveSubsystem,
+      TurretPIDSubsystem m_turretSubsystem) {
     this.m_driveSubsystem = m_driveSubsystem;
     this.m_visionSubsystem = m_visionSubsystem;
     this.m_shooterPIDSubsystem = m_shooterPIDSubsystem;
     this.m_hoodPIDSubsystem = m_hoodPIDSubsystem;
     this.m_turretSubsystem = m_turretSubsystem;
 
-
-
-    addRequirements(m_hoodPIDSubsystem, m_shooterPIDSubsystem);
+    addRequirements(m_hoodPIDSubsystem, m_shooterPIDSubsystem, m_turretSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -46,7 +45,7 @@ public class AutoAim extends CommandBase {
   public void initialize() {
 
     System.out.println("AutoAim Started!");
-    
+
     m_shooterPIDSubsystem.enable();
     m_hoodPIDSubsystem.enable();
 
@@ -58,6 +57,19 @@ public class AutoAim extends CommandBase {
   @Override
   public void execute() {
 
+    if (m_visionSubsystem.hasTargets()) {
+      aim();
+    } else {
+      lookForTargets();
+    }
+
+  }
+
+  private void lookForTargets() {
+
+  }
+
+  private void aim() {
     double targetDistance = m_visionSubsystem.getTargetDistanceFT();
     double targetYaw = m_visionSubsystem.getTargetYaw();
 
@@ -76,9 +88,7 @@ public class AutoAim extends CommandBase {
         (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
         (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA));
 
-    m_turretSubsystem.setSetpoint(m_turretSubsystem.turretPositionDEG() + targetYaw);
-
-    
+    m_turretSubsystem.setSetpoint(MathUtil.clamp(m_turretSubsystem.turretPositionDEG() + targetYaw, 0, 270));
 
   }
 

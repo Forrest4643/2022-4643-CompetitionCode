@@ -19,6 +19,8 @@ public class VisionSubsystem extends SubsystemBase {
 
     double m_targetDistanceMetersRAW;
 
+    boolean m_hasTargets;
+
     public VisionSubsystem() {
         camera.setDriverMode(false);
         camera.setLED(VisionLEDMode.kOff);
@@ -29,6 +31,8 @@ public class VisionSubsystem extends SubsystemBase {
         var result = camera.getLatestResult();
 
         SmartDashboard.putBoolean("result.hasTargets", result.hasTargets());
+
+        m_hasTargets = result.hasTargets();
 
         if (result.hasTargets()) {
             m_targetYaw = result.getBestTarget().getYaw();
@@ -50,13 +54,18 @@ public class VisionSubsystem extends SubsystemBase {
             SmartDashboard.putBoolean("hasTargets", result.hasTargets());
         }
 
+        
     }
 
+    public boolean hasTargets() {
+        return m_hasTargets;
+    }
     public double getTargetYaw() {
         return m_targetYaw;
 
     }
 
+    
     public double getTargetDistanceFT() {
         return Units.metersToFeet(m_targetDistanceMetersRAW) + VisionConstants.distanceOffset;
 

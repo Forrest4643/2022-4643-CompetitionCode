@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -24,6 +25,11 @@ public class TurretPIDSubsystem extends PIDSubsystem {
         new PIDController(TurretConstants.turretkP, TurretConstants.turretkI, TurretConstants.turretkD));
 
         getController().setTolerance(TurretConstants.tolerance);
+
+        turretEncoder.setPositionConversionFactor(TurretConstants.turretTicksToDegrees);
+
+        turretMotor.setSoftLimit(SoftLimitDirection.kForward, TurretConstants.turretForwardLimit);
+        turretMotor.setSoftLimit(SoftLimitDirection.kReverse, TurretConstants.turretReverseLimit);
   }
 
   @Override
@@ -38,7 +44,9 @@ public class TurretPIDSubsystem extends PIDSubsystem {
   }
 
   public double turretPositionDEG() {
-    return turretEncoder.getPosition() * TurretConstants.turretTicksToDegrees;
+    return turretEncoder.getPosition();
   }
 
 }
+
+//21645387

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
+import frc.robot.Constants.TurretConstants;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -25,6 +26,7 @@ public class Sensors extends SubsystemBase {
   private final ColorSensorV3 m_frontSense = new ColorSensorV3(i2cPort);
   private final ColorSensorV3 m_rearSense = new ColorSensorV3(mXpPorti2c); 
   private final AnalogInput m_index1 = new AnalogInput(1);
+  private final AnalogInput m_turret0 = new AnalogInput(0);
 
   Color m_frontColor;
 
@@ -86,6 +88,10 @@ public class Sensors extends SubsystemBase {
 
   public boolean rearBall() {
     return(m_rearSense.getProximity() > IndexerConstants.rearThresh);
+  }
+
+  public boolean turretZero() {
+    return (m_turret0.getVoltage() > TurretConstants.zeroThresh);
   }
 
 
