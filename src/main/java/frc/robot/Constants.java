@@ -86,10 +86,10 @@ public final class Constants {
         public static final double acc = 3746;
         public static final double responseTimeS = 0.04;
 
-        public static final double quadAimA = 1.79;
-        public static final double quadAimB = -18.3;
-        public static final double quadAimC = 117;
-        public static final double quadAimD = 3566;
+        public static final double quadAimA = -0.223;
+        public static final double quadAimB = 10.5;
+        public static final double quadAimC = -70.2;
+        public static final double quadAimD = 1432;
         public static final double efficiencyConversion = .84;
 
     }
@@ -116,9 +116,9 @@ public final class Constants {
         public static final double lowGoal = 3;
         public static final double highGoal = 0;
 
-        public static final double quadAimA = -0.0467;
-        public static final double quadAimB = 3.64;
-        public static final double quadAimC = 54.4;
+        public static final double quadAimA = -0.167;
+        public static final double quadAimB = 5.11;
+        public static final double quadAimC = 44;
 
     }
 
