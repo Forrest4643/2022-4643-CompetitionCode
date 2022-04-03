@@ -22,7 +22,7 @@ public class RobotContainer {
   private final ShooterPIDSubsystem m_shooterPIDSubsystem = new ShooterPIDSubsystem();
   private final HoodPIDSubsystem m_hoodPIDSubsystem = new HoodPIDSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  private final TurretPIDSubsystem m_turretSubsystem = new TurretPIDSubsystem();
+  private final TurretPIDSubsystem m_turretSubsystem = new TurretPIDSubsystem(m_visionSubsystem);
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operateController = new XboxController(1);
   

@@ -76,21 +76,20 @@ public final class Constants {
         public static final double highGoal = 5600;
         public static final double ejectCargo = 1000;
 
-        public static final double kP = 0.015;
+        public static final double kP = 0.0;
         public static final double kI = 0;
-        public static final double kD = 0.0004;
+        public static final double kD = 0.0;
         public static final double PIDtolerance = 10;
         public static final double kV = 0;
         public static final double kA = 0;
-        public static final double kS = 8.85;
+        public static final double kS = 4.5;
         public static final double acc = 3746;
-        public static final double responseTimeS = 0.04;
 
         public static final double quadAimA = -0.223;
         public static final double quadAimB = 10.5;
         public static final double quadAimC = -70.2;
         public static final double quadAimD = 1432;
-        public static final double efficiencyConversion = .84;
+        public static final double efficiencyConversion = 1;
 
     }
 
@@ -126,11 +125,11 @@ public final class Constants {
         public static final int turretID = 11;
         // tickstodeg = turret pulley GR * 360/ticks per rev
         public static final double turretTicksToDegrees = 1.72193877551;
-        public static final float turretForwardLimit = 270;
-        public static final float turretReverseLimit = 0;
-        public static final double turretkP = 0.16;
+        public static final float turretForwardLimit = 0;
+        public static final float turretReverseLimit = -270;
+        public static final double turretkP = 0.06;
         public static final double turretkI = 0;
-        public static final double turretkD = 0.00105;
+        public static final double turretkD = 0;
         public static final double tolerance = .5;
         public static final double zeroThresh = 1;
 

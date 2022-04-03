@@ -117,11 +117,11 @@ public class AutoIndex extends CommandBase {
   }
 
   private void dontDie() {
-    if (m_sensors.pitch() < -10) {
+    if (m_sensors.pitch() < 0) {
       m_pneumaticsSubsystem.rearIntakeOpen();
     }
 
-    if (m_sensors.pitch() > 10) {
+    if (m_sensors.pitch() > 0) {
       m_pneumaticsSubsystem.frontIntakeOpen();
     }
   }

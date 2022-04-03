@@ -66,6 +66,11 @@ public class Sensors extends SubsystemBase {
     SmartDashboard.putNumber("rearRedValue", m_rearColor.red);
     SmartDashboard.putNumber("rearBlueValue", m_rearColor.blue);
 
+    SmartDashboard.putNumber("Yaw", yaw());
+    SmartDashboard.putNumber("Pitch", pitch());
+    SmartDashboard.putNumber("Roll", roll());
+
+
   }
 
   public double yaw() {

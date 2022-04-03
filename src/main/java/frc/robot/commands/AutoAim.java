@@ -46,8 +46,9 @@ public class AutoAim extends CommandBase {
 
     System.out.println("AutoAim Started!");
 
-    m_shooterPIDSubsystem.enable();
-    m_hoodPIDSubsystem.enable();
+    // m_shooterPIDSubsystem.enable();
+    // m_hoodPIDSubsystem.enable();
+    // m_turretSubsystem.enable();
 
     m_visionSubsystem.setLED(true);
   }
@@ -87,8 +88,12 @@ public class AutoAim extends CommandBase {
         (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
         (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA));
 
-    m_turretSubsystem.setSetpoint(MathUtil.clamp(m_turretSubsystem.turretPositionDEG() + targetYaw, 0, 270));
+    m_turretSubsystem.setSetpoint(0);
+    SmartDashboard.putNumber("leftAmps", m_shooterPIDSubsystem.leftAmps());
+    SmartDashboard.putNumber("rightAmps", m_shooterPIDSubsystem.rightAmps());
 
+    SmartDashboard.putNumber("shooterRPM", m_shooterPIDSubsystem.getShooterRPM());
+    SmartDashboard.putNumber("turretPositionDEG", m_turretSubsystem.turretPositionDEG());
   }
 
   // Called once the command ends or is interrupted.
@@ -97,6 +102,7 @@ public class AutoAim extends CommandBase {
     m_shooterPIDSubsystem.disable();
     m_hoodPIDSubsystem.disable();
     m_visionSubsystem.setLED(false);
+    m_turretSubsystem.disable();
 
     System.out.println("AutoAim Ended!");
   }

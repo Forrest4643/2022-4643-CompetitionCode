@@ -18,8 +18,9 @@ public class TurretPIDSubsystem extends PIDSubsystem {
   private final CANSparkMax turretMotor = new CANSparkMax(TurretConstants.turretID, MotorType.kBrushless);
   private final RelativeEncoder turretEncoder = turretMotor.getEncoder();
   
+  private final VisionSubsystem m_visionsubsystem;
   /** Creates a new TurretPIDSubsystem. */
-  public TurretPIDSubsystem() {
+  public TurretPIDSubsystem(VisionSubsystem m_visionsubsystem) {
     super(
         // The PIDController used by the subsystem
         new PIDController(TurretConstants.turretkP, TurretConstants.turretkI, TurretConstants.turretkD));
@@ -30,6 +31,8 @@ public class TurretPIDSubsystem extends PIDSubsystem {
 
         turretMotor.setSoftLimit(SoftLimitDirection.kForward, TurretConstants.turretForwardLimit);
         turretMotor.setSoftLimit(SoftLimitDirection.kReverse, TurretConstants.turretReverseLimit);
+
+        this.m_visionsubsystem = m_visionsubsystem;
   }
 
   @Override
@@ -40,7 +43,7 @@ public class TurretPIDSubsystem extends PIDSubsystem {
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    return turretPositionDEG();
+    return m_visionsubsystem.getTargetYaw();
   }
 
   public double turretPositionDEG() {

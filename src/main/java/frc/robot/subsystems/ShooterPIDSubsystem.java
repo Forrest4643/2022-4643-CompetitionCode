@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,9 +43,18 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
     rightMotor.set(0);
   }
 
+  public double leftAmps() {
+    return leftMotor.getOutputCurrent();
+  }
+
+  public double rightAmps() {
+    return rightMotor.getOutputCurrent();
+  }
+
   public void setShooterVolts(double volts) {
-    leftMotor.setVoltage(volts);
-    rightMotor.setVoltage(volts);
+
+    leftMotor.setVoltage(MathUtil.clamp(volts, -11, 11));
+    rightMotor.setVoltage(MathUtil.clamp(volts, -11, 11));
   }
 
   public double getShooterRPM() {
