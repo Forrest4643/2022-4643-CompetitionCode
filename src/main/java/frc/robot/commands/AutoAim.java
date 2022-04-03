@@ -50,7 +50,6 @@ public class AutoAim extends CommandBase {
     m_hoodPIDSubsystem.enable();
 
     m_visionSubsystem.setLED(true);
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.

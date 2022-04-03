@@ -22,7 +22,6 @@ public class VisionSubsystem extends SubsystemBase {
     boolean m_hasTargets;
 
     public VisionSubsystem() {
-        camera.setDriverMode(false);
         camera.setLED(VisionLEDMode.kOff);
     }
 
