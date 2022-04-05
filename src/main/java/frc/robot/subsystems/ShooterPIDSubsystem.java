@@ -70,7 +70,7 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
 
   @Override
   protected void useOutput(double output, double setpoint) {
-      setShooterVolts(output + shooterFeedforward.calculate(setpoint, ShooterConstants.acc));
+      setShooterVolts(output + shooterFeedforward.calculate(setpoint));
       SmartDashboard.putNumber("shooterOutput", output);
       SmartDashboard.putNumber("shooterSetpoint", setpoint);
 

@@ -77,19 +77,19 @@ public final class Constants {
         public static final double ejectCargo = 1000;
 
         public static final double voltsSlew = 3;
-        public static final double kP = 0.003;
-        public static final double kI = 0.0008;
-        public static final double kD = 0.0005;
+        public static final double kP = 0.0008;
+        public static final double kI = 0.0001;
+        public static final double kD = 0.0;
         public static final double PIDtolerance = 10;
-        public static final double kV = 0;
+        public static final double kV = 0.00215;
         public static final double kA = 0;
-        public static final double kS = 5.45;
+        public static final double kS = 0;
         public static final double acc = 3746;
 
         public static final double quadAimA = -0.223;
         public static final double quadAimB = 10.5;
         public static final double quadAimC = -70.2;
-        public static final double quadAimD = 2300;
+        public static final double quadAimD = 2500;
         public static final double efficiencyConversion = 1;
 
     }
@@ -98,8 +98,8 @@ public final class Constants {
         public static final int hoodID = 4;
 
         public static final double conversionFactor = 2.513274123;
-        public static final float ForwardLimit = 3;
-        public static final float ReverseLimit = 0;
+        public static final double ForwardLimit = -2.98;
+        public static final double ReverseLimit = -0.02;
         public static final double PIDtolerance = 0.05;
 
         public static final double kP = .2;
@@ -145,7 +145,7 @@ public final class Constants {
         public static final double distC = -1.3;
         public static final double distD = 0;
 
-        public static final double distanceOffset = .5;
+        public static final double distanceOffset = 2.5;
         public static final double cameraHeightMETERS = Units.inchesToMeters(37.65);
         public static final double targetHeightMETERS = Units.inchesToMeters(104);
         public static final double cameraAngleRAD = Units.degreesToRadians(30);

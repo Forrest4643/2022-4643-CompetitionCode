@@ -78,7 +78,10 @@ public class AutoAim extends CommandBase {
             (HoodConstants.quadAimB * targetDistance) +
             (Math.pow(targetDistance, 2) * HoodConstants.quadAimA),
 
-        65.2, 80));
+        65, 80));
+
+    SmartDashboard.putNumber("hoodPositionDEG", m_hoodPIDSubsystem.getHoodPositionDEG());
+    SmartDashboard.putNumber("hoodSetpoint", m_hoodPIDSubsystem.getSetpoint());
 
     // setting shooter RPM
 

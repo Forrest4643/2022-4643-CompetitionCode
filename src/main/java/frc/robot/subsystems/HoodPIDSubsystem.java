@@ -32,8 +32,6 @@ public class HoodPIDSubsystem extends PIDSubsystem {
     hoodMotor.setInverted(true);
     hoodEncoder.setPositionConversionFactor(HoodConstants.conversionFactor);
 
-    hoodMotor.setSoftLimit(SoftLimitDirection.kForward, HoodConstants.ForwardLimit);
-    hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, HoodConstants.ReverseLimit);
   }
 
 
@@ -55,8 +53,17 @@ public class HoodPIDSubsystem extends PIDSubsystem {
 
   @Override
   protected void useOutput(double output, double setpoint) {
-    
-   hoodMotor.set(MathUtil.clamp(output, -.25, .25));
+    double limitedOutput;
+    if (getHoodPositionIN() < HoodConstants.ForwardLimit) {
+      limitedOutput = MathUtil.clamp(output, -1, 0);
+      System.out.println("FWDLIMIT");
+    } else if (getHoodPositionIN() > HoodConstants.ReverseLimit) {
+      limitedOutput = MathUtil.clamp(output, 0, 1);
+      System.out.println("REVLIMIT");
+    } else {
+      limitedOutput = output;
+    }
+   hoodMotor.set(MathUtil.clamp(limitedOutput, -.5, .5));
 
   }
 
