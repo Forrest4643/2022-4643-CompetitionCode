@@ -4,88 +4,61 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.HoodConstants;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.StickDrive;
-import frc.robot.commands.driveAim;
-import frc.robot.commands.hoodPID;
-import frc.robot.commands.shooterPID;
-import frc.robot.commands.FrontIntake.FrontIntakeEnable;
-import frc.robot.commands.Indexer.indexerWheelsOn;
-import frc.robot.commands.Indexer.indexerWheelsReverse;
-import frc.robot.commands.RearIntake.RearIntakeEnable;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.HoodSubsystem;
-import frc.robot.subsystems.IndexSensors;
-import frc.robot.subsystems.IndexerSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PneumaticsSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.TurretSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
 
-  private final DriveSubsystem DriveSubsystem = new DriveSubsystem();
-  private final IntakeSubsystem IntakeSubsystem = new IntakeSubsystem();
-  private final PneumaticsSubsystem PneumaticsSubsystem = new PneumaticsSubsystem();
-  private final TurretSubsystem turretSubsystem = new TurretSubsystem();
-  private final IndexSensors indexSensors = new IndexSensors();
-  private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
-  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-  private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
-  private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
-  private final XboxController driveController = new XboxController(0);
-  private final XboxController operateController = new XboxController(1);
+  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final Sensors m_sensors = new Sensors();
+  private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
+  private final IndexerSubsystem m_indexerSubsystem = new IndexerSubsystem();
+  private final ShooterPIDSubsystem m_shooterPIDsubsystem = new ShooterPIDSubsystem();
+  private final HoodPIDSubsystem m_hoodPIDsubsystem = new HoodPIDSubsystem();
+  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final TurretPIDSubsystem m_turretPIDsubsystem = new TurretPIDSubsystem(m_visionSubsystem, m_sensors);
+  private final XboxController m_driveController = new XboxController(0);
+  private final XboxController m_operateController = new XboxController(1);
+
+  private final LookForTarget m_lookfortarget = new LookForTarget(m_turretPIDsubsystem);
+  private final TrackTarget m_tracktarget = new TrackTarget(m_turretPIDsubsystem);
   
 
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
-    DriveSubsystem.setDefaultCommand(
+    m_driveSubsystem.setDefaultCommand(new StickDrive(m_driveSubsystem, m_driveController, m_turretPIDsubsystem));
 
-        new StickDrive(() -> driveController.getRawAxis(2) - driveController.getRawAxis(3),
-            () -> -driveController.getRawAxis(0), DriveSubsystem));
+    m_intakeSubsystem.setDefaultCommand(new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_sensors, m_operateController));
 
   }
 
   private void configureButtonBindings() {
-    // operate a button = front intake enable
-    new JoystickButton(operateController, 4)
-        .whileActiveOnce(new FrontIntakeEnable(IntakeSubsystem, PneumaticsSubsystem,
-            IndexerSubsystem));
 
-    // operate y button = rear intake enable
-    new JoystickButton(operateController, 2)
-        .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem,
-            IndexerSubsystem));
+    new JoystickButton(m_operateController, 4).whenPressed(new InstantCommand(m_pneumaticsSubsystem::frontIntakeOpen))
+        .whenReleased(new InstantCommand(m_pneumaticsSubsystem::frontIntakeClosed));
 
-    // TESTING
-    // new JoystickButton(operateController, 3).whenPressed(new
-    // hoodPID(hoodSubsystem, () -> 1.25));
-    // new JoystickButton(operateController, 1).whenPressed(new
-    // hoodPID(hoodSubsystem, () -> 1.75));
+    new JoystickButton(m_operateController, 2).whenPressed(new InstantCommand(m_pneumaticsSubsystem::rearIntakeOpen))
+        .whenReleased(new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
 
-    //x high goal aim
-    new JoystickButton(driveController, 3).whileActiveOnce(new driveAim(DriveSubsystem, VisionSubsystem, true));
-    new JoystickButton(driveController, 3).whileActiveOnce(new hoodPID(hoodSubsystem, () -> HoodConstants.highGoal));
-    new JoystickButton(driveController, 3).whileActiveOnce(new shooterPID(shooterSubsystem, () -> ShooterConstants.highGoal));
+    new JoystickButton(m_operateController, 1).toggleWhenPressed(
+        new AutoAim(m_hoodPIDsubsystem, m_visionSubsystem, m_shooterPIDsubsystem));
 
-    //b low goal aim
-    new JoystickButton(driveController, 2).whileActiveOnce(new driveAim(DriveSubsystem, VisionSubsystem, false));
-    new JoystickButton(driveController, 2).whileActiveOnce(new hoodPID(hoodSubsystem, () -> HoodConstants.lowGoal));
-    new JoystickButton(driveController, 2).whileActiveOnce(new shooterPID(shooterSubsystem, () -> ShooterConstants.lowGoal));
-    
-    //l bump index rev
-    new JoystickButton(operateController, 5).whileActiveOnce(new indexerWheelsReverse(IndexerSubsystem));
+    new JoystickButton(m_operateController, 3).toggleWhenPressed(new ActivateTurret(m_tracktarget, m_lookfortarget, m_visionSubsystem));
+  }
 
-    //r bump index fwd
-    new JoystickButton(operateController, 6).whileActiveOnce(new indexerWheelsOn(IndexerSubsystem));
+  public Command getAutonomousCommand() {
+
+    SmartDashboard.putBoolean("autonStart", true);
+    return new DriveDistance(m_driveSubsystem, DriveConstants.autoDist);
   }
 
 }

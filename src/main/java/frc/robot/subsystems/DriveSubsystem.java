@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -35,12 +36,26 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(leftDrive, rightDrive);
 
+  SlewRateLimiter driveSlew = new SlewRateLimiter(DriveConstants.driveSlew);
+  SlewRateLimiter turnSlew = new SlewRateLimiter(DriveConstants.turnSlew);
+
+  
+  /** Creates a new ExampleSubsystem. */
+  public DriveSubsystem() {
+    leftDrive.setInverted(false);
+    rightDrive.setInverted(true);
+    leftFrontEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
+    leftRearEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
+    rightFrontEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
+    rightRearEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
+  }
+
   public double getDriveDistanceIN() {
     // returns the average position of all drive encoders.
     double driveForwardRAW = ((leftFrontEncoder.getPosition() + leftRearEncoder.getPosition()) / 2)
         + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
 
-    return driveForwardRAW * DriveConstants.driveTickToIN;
+    return (driveForwardRAW / 360) * 18.84955592;
   }
 
   public void resetDriveEncoders() {
@@ -50,24 +65,21 @@ public class DriveSubsystem extends SubsystemBase {
     rightRearEncoder.setPosition(0);
   }
 
-  /** Creates a new ExampleSubsystem. */
-  public DriveSubsystem() {
-    leftDrive.setInverted(false);
-    rightDrive.setInverted(true);
-  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("DriveDistanceIN", getDriveDistanceIN());
+    SmartDashboard.putNumber("DriveDistanceFT", getDriveDistanceIN());
   }
 
   public void setDrive(double Speed, double turnRate) {
 
     // inputs to a power for a nice response curve
 
-    double SqrSpeed = Math.pow(MathUtil.applyDeadband(Math.abs(Speed), DriveConstants.stickDB), DriveConstants.speedPow);
-    double SqrTurn = Math.pow(MathUtil.applyDeadband(Math.abs(turnRate), DriveConstants.stickDB), DriveConstants.turnPow);
+    double SqrSpeed = Math.pow(MathUtil.applyDeadband(Math.abs(Speed), DriveConstants.stickDB),
+        DriveConstants.speedPow);
+    double SqrTurn = Math.pow(MathUtil.applyDeadband(Math.abs(turnRate), DriveConstants.stickDB),
+        DriveConstants.turnPow);
 
     if (Speed < 0) {
       SqrSpeed = SqrSpeed * -1;
@@ -77,7 +89,7 @@ public class DriveSubsystem extends SubsystemBase {
       SqrTurn = SqrTurn * -1;
     }
 
-    m_robotDrive.arcadeDrive(SqrSpeed, SqrTurn);
+    m_robotDrive.arcadeDrive(driveSlew.calculate(SqrSpeed), turnSlew.calculate(SqrTurn) / 1.5);
 
     SmartDashboard.putNumber("sqrturn", SqrTurn);
     SmartDashboard.putNumber("sqrspeed", SqrSpeed);
