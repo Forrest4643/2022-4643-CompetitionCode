@@ -47,13 +47,13 @@ public class RobotContainer {
         .whenReleased(new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
 
     new JoystickButton(m_driveController, 1).whileActiveOnce(
-        new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_driveSubsystem, m_turretSubsystem));
+        new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_turretSubsystem));
   }
 
   public Command getAutonomousCommand() {
 
     SmartDashboard.putBoolean("autonStart", true);
-    return new AutoCommand(m_driveSubsystem, m_hoodPIDSubsystem, m_visionSubsystem, m_indexerSubsystem, m_shooterPIDSubsystem, m_sensors, m_intakeSubsystem, m_pneumaticsSubsystem, m_turretSubsystem);
+    return new InstantCommand();
   }
 
 }

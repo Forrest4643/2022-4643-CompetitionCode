@@ -103,19 +103,19 @@ public class AutoIndex extends CommandBase {
     }
   }
 
-  private void auto() {
-    if (m_pneumaticsSubsystem.rearStatus()) {
-      m_intakeSubsystem.rearWheelsOn();
-    } else {
-      m_intakeSubsystem.rearWheelsOff();
-    }
+  // private void auto() {
+  //   if (m_pneumaticsSubsystem.rearStatus()) {
+  //     m_intakeSubsystem.rearWheelsOn();
+  //   } else {
+  //     m_intakeSubsystem.rearWheelsOff();
+  //   }
 
-    if (m_pneumaticsSubsystem.frontStatus()) {
-      m_intakeSubsystem.frontWheelsOn();
-    } else {
-      m_intakeSubsystem.frontWheelsOff();
-    }
-  }
+  //   if (m_pneumaticsSubsystem.frontStatus()) {
+  //     m_intakeSubsystem.frontWheelsOn();
+  //   } else {
+  //     m_intakeSubsystem.frontWheelsOff();
+  //   }
+  // }
 
   private void dontDie() {
       while(Math.abs(m_sensors.pitch()) > 20) {

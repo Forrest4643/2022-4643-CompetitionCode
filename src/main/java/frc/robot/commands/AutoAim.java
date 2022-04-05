@@ -11,14 +11,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
 import frc.robot.subsystems.TurretPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 public class AutoAim extends CommandBase {
-  private DriveSubsystem m_driveSubsystem;
   private VisionSubsystem m_visionSubsystem;
   private ShooterPIDSubsystem m_shooterPIDSubsystem;
   private HoodPIDSubsystem m_hoodPIDSubsystem;
@@ -29,9 +27,7 @@ public class AutoAim extends CommandBase {
 
   /** Creates a new driveAim. */
   public AutoAim(HoodPIDSubsystem m_hoodPIDSubsystem, VisionSubsystem m_visionSubsystem,
-      ShooterPIDSubsystem m_shooterPIDSubsystem, DriveSubsystem m_driveSubsystem,
-      TurretPIDSubsystem m_turretSubsystem) {
-    this.m_driveSubsystem = m_driveSubsystem;
+      ShooterPIDSubsystem m_shooterPIDSubsystem, TurretPIDSubsystem m_turretSubsystem) {
     this.m_visionSubsystem = m_visionSubsystem;
     this.m_shooterPIDSubsystem = m_shooterPIDSubsystem;
     this.m_hoodPIDSubsystem = m_hoodPIDSubsystem;
@@ -70,7 +66,6 @@ public class AutoAim extends CommandBase {
 
   private void aim() {
     double targetDistance = m_visionSubsystem.getTargetDistanceFT();
-    double targetYaw = m_visionSubsystem.getTargetYaw();
 
     // aiming hood
     m_hoodPIDSubsystem.setSetpoint(MathUtil.clamp(
