@@ -22,7 +22,7 @@ public class RobotContainer {
   private final ShooterPIDSubsystem m_shooterPIDSubsystem = new ShooterPIDSubsystem();
   private final HoodPIDSubsystem m_hoodPIDSubsystem = new HoodPIDSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  private final TurretPIDSubsystem m_turretSubsystem = new TurretPIDSubsystem(m_visionSubsystem);
+  private final TurretPIDSubsystem m_turretSubsystem = new TurretPIDSubsystem(m_visionSubsystem, m_sensors);
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operateController = new XboxController(1);
   
@@ -31,8 +31,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    m_driveSubsystem.setDefaultCommand(new StickDrive(() -> m_driveController.getRawAxis(2) - m_driveController.getRawAxis(3),
-        () -> -m_driveController.getRawAxis(0), m_driveSubsystem));
+    m_driveSubsystem.setDefaultCommand(new StickDrive(m_driveSubsystem, m_driveController, m_turretSubsystem));
 
     m_intakeSubsystem.setDefaultCommand(new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_sensors,
         () -> m_operateController.getRightBumper(), () -> m_operateController.getLeftBumper(), () -> m_operateController.getPOV()));

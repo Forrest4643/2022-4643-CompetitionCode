@@ -76,19 +76,20 @@ public final class Constants {
         public static final double highGoal = 5600;
         public static final double ejectCargo = 1000;
 
-        public static final double kP = 0.0;
-        public static final double kI = 0;
-        public static final double kD = 0.0;
+        public static final double voltsSlew = 3;
+        public static final double kP = 0.003;
+        public static final double kI = 0.0008;
+        public static final double kD = 0.0005;
         public static final double PIDtolerance = 10;
         public static final double kV = 0;
         public static final double kA = 0;
-        public static final double kS = 4.5;
+        public static final double kS = 5.45;
         public static final double acc = 3746;
 
         public static final double quadAimA = -0.223;
         public static final double quadAimB = 10.5;
         public static final double quadAimC = -70.2;
-        public static final double quadAimD = 1432;
+        public static final double quadAimD = 2300;
         public static final double efficiencyConversion = 1;
 
     }
@@ -123,11 +124,12 @@ public final class Constants {
 
     public static final class TurretConstants {
         public static final int turretID = 11;
-        // tickstodeg = turret pulley GR * 360/ticks per rev
         public static final double turretTicksToDegrees = 1.72193877551;
-        public static final float turretForwardLimit = 0;
-        public static final float turretReverseLimit = -270;
-        public static final double turretkP = 0.06;
+        public static final double turretForwardLimit = 0;
+        public static final double turretReverseLimit = -330;
+        public static final double turretLeftWarning = turretForwardLimit - 5;
+        public static final double turretRightWarning = turretReverseLimit + 5;
+        public static final double turretkP = 0.05;
         public static final double turretkI = 0;
         public static final double turretkD = 0;
         public static final double tolerance = .5;

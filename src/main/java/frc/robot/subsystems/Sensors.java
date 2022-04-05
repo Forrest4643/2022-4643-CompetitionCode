@@ -70,6 +70,9 @@ public class Sensors extends SubsystemBase {
     SmartDashboard.putNumber("Pitch", pitch());
     SmartDashboard.putNumber("Roll", roll());
 
+    SmartDashboard.putBoolean("turretZero", turretZero());
+    SmartDashboard.putNumber("turretZeroVolt", m_turret0.getVoltage());
+
 
   }
 
@@ -96,7 +99,7 @@ public class Sensors extends SubsystemBase {
   }
 
   public boolean turretZero() {
-    return (m_turret0.getVoltage() > TurretConstants.zeroThresh);
+    return (m_turret0.getVoltage() < TurretConstants.zeroThresh);
   }
 
 

@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ShooterConstants;
@@ -24,6 +25,8 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
 
   private final SimpleMotorFeedforward shooterFeedforward = new SimpleMotorFeedforward(ShooterConstants.kS,
       ShooterConstants.kV);
+
+  SlewRateLimiter voltSlew = new SlewRateLimiter(ShooterConstants.voltsSlew);
 
   /** Creates a new ShooterSubsystem. */
   public ShooterPIDSubsystem() {
@@ -52,7 +55,7 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
   }
 
   public void setShooterVolts(double volts) {
-
+    double slewVolts = voltSlew.calculate(volts);
     leftMotor.setVoltage(MathUtil.clamp(volts, -11, 11));
     rightMotor.setVoltage(MathUtil.clamp(volts, -11, 11));
   }

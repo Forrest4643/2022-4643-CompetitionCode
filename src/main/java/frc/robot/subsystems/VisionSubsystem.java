@@ -43,8 +43,8 @@ public class VisionSubsystem extends SubsystemBase {
             SmartDashboard.putBoolean("hasTargets", result.hasTargets());
             SmartDashboard.putNumber("targetDistance", getTargetDistanceFT());
 
-            m_targetDistanceMeters = VisionConstants.distC + 
-            (VisionConstants.distB * m_targetDistanceMetersRAW)
+            m_targetDistanceMeters = VisionConstants.distC +
+                    (VisionConstants.distB * m_targetDistanceMetersRAW)
                     + (Math.pow(m_targetDistanceMetersRAW, 2) * VisionConstants.distA);
 
         } else {
@@ -53,30 +53,29 @@ public class VisionSubsystem extends SubsystemBase {
             SmartDashboard.putBoolean("hasTargets", result.hasTargets());
         }
 
-        
     }
 
     public boolean hasTargets() {
         return m_hasTargets;
     }
+
     public double getTargetYaw() {
         return m_targetYaw;
 
     }
 
-    
     public double getTargetDistanceFT() {
         return Units.metersToFeet(m_targetDistanceMetersRAW) + VisionConstants.distanceOffset;
 
     }
 
-    public void setLED(boolean ON) {
-        if (ON = true) {
-            camera.setLED(VisionLEDMode.kOn);
-        }
+    public void LEDon() {
 
-        if (ON = false) {
-            camera.setLED(VisionLEDMode.kOff);
-        }
+        camera.setLED(VisionLEDMode.kOn);
+    }
+
+    public void LEDoff() {
+        camera.setLED(VisionLEDMode.kOff);
+
     }
 }

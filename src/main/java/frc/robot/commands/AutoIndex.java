@@ -58,7 +58,7 @@ public class AutoIndex extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_sensors.pitch() < 10 || m_sensors.pitch() > -10) {
+    if (m_sensors.pitch() < 10 && m_sensors.pitch() > -10) {
       if (m_POV.getAsInt() == 90) {
         m_toggled = true;
       }
@@ -70,7 +70,8 @@ public class AutoIndex extends CommandBase {
       if (m_toggled) {
         manual();
       } else {
-        auto();
+        manual();
+        //auto();
       }
     } else {
       dontDie();
@@ -117,13 +118,12 @@ public class AutoIndex extends CommandBase {
   }
 
   private void dontDie() {
-    if (m_sensors.pitch() < 0) {
+      while(Math.abs(m_sensors.pitch()) > 20) {
       m_pneumaticsSubsystem.rearIntakeOpen();
-    }
-
-    if (m_sensors.pitch() > 0) {
       m_pneumaticsSubsystem.frontIntakeOpen();
-    }
+      }
+      m_pneumaticsSubsystem.frontIntakeClosed();
+      m_pneumaticsSubsystem.rearIntakeClosed();
   }
 
 

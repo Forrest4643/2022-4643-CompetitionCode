@@ -9,18 +9,23 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.subsystems.Sensors;
 
 public class TurretPIDSubsystem extends PIDSubsystem {
 
   private final CANSparkMax turretMotor = new CANSparkMax(TurretConstants.turretID, MotorType.kBrushless);
   private final RelativeEncoder turretEncoder = turretMotor.getEncoder();
+  private final Sensors m_sensors;
   
   private final VisionSubsystem m_visionsubsystem;
   /** Creates a new TurretPIDSubsystem. */
-  public TurretPIDSubsystem(VisionSubsystem m_visionsubsystem) {
+  public TurretPIDSubsystem(VisionSubsystem m_visionsubsystem, Sensors m_sensors) {
     super(
         // The PIDController used by the subsystem
         new PIDController(TurretConstants.turretkP, TurretConstants.turretkI, TurretConstants.turretkD));
@@ -29,15 +34,33 @@ public class TurretPIDSubsystem extends PIDSubsystem {
 
         turretEncoder.setPositionConversionFactor(TurretConstants.turretTicksToDegrees);
 
-        turretMotor.setSoftLimit(SoftLimitDirection.kForward, TurretConstants.turretForwardLimit);
-        turretMotor.setSoftLimit(SoftLimitDirection.kReverse, TurretConstants.turretReverseLimit);
-
         this.m_visionsubsystem = m_visionsubsystem;
+        this.m_sensors = m_sensors;
+  }
+
+  public void zeroTurret() {
+    while (!m_sensors.turretZero()) {
+      turretMotor.set(.1);
+    }
+      turretMotor.set(0);
+    if (m_sensors.turretZero()) {
+      turretEncoder.setPosition(0);
+    }
   }
 
   @Override
   public void useOutput(double output, double setpoint) {
-    turretMotor.set(output);
+    double limitedOutput;
+    if (turretPositionDEG() > TurretConstants.turretForwardLimit) {
+      limitedOutput = MathUtil.clamp(output, -11, 0);
+      //System.out.println("FWDLIMIT");
+    } else if (turretPositionDEG() < TurretConstants.turretReverseLimit) {
+      limitedOutput = MathUtil.clamp(output, 0, 11);
+      //System.out.println("REVLIMIT");
+    } else {
+      limitedOutput = output;
+    }
+    turretMotor.set(limitedOutput);
   }
 
   @Override

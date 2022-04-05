@@ -46,11 +46,10 @@ public class AutoAim extends CommandBase {
 
     System.out.println("AutoAim Started!");
 
-    // m_shooterPIDSubsystem.enable();
-    // m_hoodPIDSubsystem.enable();
-    // m_turretSubsystem.enable();
-
-    m_visionSubsystem.setLED(true);
+    m_shooterPIDSubsystem.enable();
+    m_hoodPIDSubsystem.enable();
+    m_turretSubsystem.enable();
+    m_visionSubsystem.LEDon();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -79,7 +78,7 @@ public class AutoAim extends CommandBase {
             (HoodConstants.quadAimB * targetDistance) +
             (Math.pow(targetDistance, 2) * HoodConstants.quadAimA),
 
-        65, 80));
+        65.2, 80));
 
     // setting shooter RPM
 
@@ -101,7 +100,7 @@ public class AutoAim extends CommandBase {
   public void end(boolean interrupted) {
     m_shooterPIDSubsystem.disable();
     m_hoodPIDSubsystem.disable();
-    m_visionSubsystem.setLED(false);
+    m_visionSubsystem.LEDoff();
     m_turretSubsystem.disable();
 
     System.out.println("AutoAim Ended!");
