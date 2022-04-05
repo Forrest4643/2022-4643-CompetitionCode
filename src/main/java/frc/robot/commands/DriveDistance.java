@@ -13,21 +13,21 @@ import frc.robot.subsystems.DriveSubsystem;
 public class DriveDistance extends CommandBase {
 
   private DriveSubsystem m_driveSubsystem;
-  private double m_distance;
+  private double m_inches;
   private PIDController m_drivePID = new PIDController(DriveConstants.drivekP, DriveConstants.drivekI,
       DriveConstants.drivekD);
 
   /** Creates a new DriveDistance. */
-  public DriveDistance(DriveSubsystem m_driveSubsystem, double m_distance) {
+  public DriveDistance(DriveSubsystem m_driveSubsystem, double m_inches) {
     this.m_driveSubsystem = m_driveSubsystem;
-    this.m_distance = m_distance;
+    this.m_inches = m_inches;
     addRequirements(m_driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivePID.setSetpoint(m_driveSubsystem.getDriveDistanceIN() + m_distance);
+    m_drivePID.setSetpoint(m_driveSubsystem.getDriveDistanceIN() + m_inches);
     System.out.println("driveDist Start!");
   }
 

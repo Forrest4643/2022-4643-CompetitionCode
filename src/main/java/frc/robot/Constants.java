@@ -34,7 +34,7 @@ public final class Constants {
 
         public static final double autoDist = -2 * 12;
 
-        public static final double driveTickToIN = -22.28169203;
+        public static final double driveConversion = 0.1;
     }
 
     public static final class IndexerConstants {
@@ -149,5 +149,10 @@ public final class Constants {
         public static final double cameraHeightMETERS = Units.inchesToMeters(37.65);
         public static final double targetHeightMETERS = Units.inchesToMeters(104);
         public static final double cameraAngleRAD = Units.degreesToRadians(30);
+    }
+
+    public static final class ClimberConstants {
+        public static final int climbID = 14;
+        public static final double conversionFactor = 0.0625;
     }
 }

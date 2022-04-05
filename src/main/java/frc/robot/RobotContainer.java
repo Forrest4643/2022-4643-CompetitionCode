@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,22 +20,24 @@ public class RobotContainer {
   private final Sensors m_sensors = new Sensors();
   private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
   private final IndexerSubsystem m_indexerSubsystem = new IndexerSubsystem();
-  private final ShooterPIDSubsystem m_shooterPIDSubsystem = new ShooterPIDSubsystem();
-  private final HoodPIDSubsystem m_hoodPIDSubsystem = new HoodPIDSubsystem();
+  private final ShooterPIDSubsystem m_shooterPIDsubsystem = new ShooterPIDSubsystem();
+  private final HoodPIDSubsystem m_hoodPIDsubsystem = new HoodPIDSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  private final TurretPIDSubsystem m_turretSubsystem = new TurretPIDSubsystem(m_visionSubsystem, m_sensors);
+  private final TurretPIDSubsystem m_turretPIDsubsystem = new TurretPIDSubsystem(m_visionSubsystem, m_sensors);
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operateController = new XboxController(1);
+
+  private final LookForTarget m_lookfortarget = new LookForTarget(m_turretPIDsubsystem);
+  private final TrackTarget m_tracktarget = new TrackTarget(m_turretPIDsubsystem);
   
 
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
-    m_driveSubsystem.setDefaultCommand(new StickDrive(m_driveSubsystem, m_driveController, m_turretSubsystem));
+    m_driveSubsystem.setDefaultCommand(new StickDrive(m_driveSubsystem, m_driveController, m_turretPIDsubsystem));
 
-    m_intakeSubsystem.setDefaultCommand(new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_sensors,
-        () -> m_operateController.getRightBumper(), () -> m_operateController.getLeftBumper(), () -> m_operateController.getPOV()));
+    m_intakeSubsystem.setDefaultCommand(new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_sensors, m_operateController));
 
   }
 
@@ -46,14 +49,16 @@ public class RobotContainer {
     new JoystickButton(m_operateController, 2).whenPressed(new InstantCommand(m_pneumaticsSubsystem::rearIntakeOpen))
         .whenReleased(new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
 
-    new JoystickButton(m_driveController, 1).whileActiveOnce(
-        new AutoAim(m_hoodPIDSubsystem, m_visionSubsystem, m_shooterPIDSubsystem, m_turretSubsystem));
+    new JoystickButton(m_operateController, 1).toggleWhenPressed(
+        new AutoAim(m_hoodPIDsubsystem, m_visionSubsystem, m_shooterPIDsubsystem));
+
+    new JoystickButton(m_operateController, 3).toggleWhenPressed(new ActivateTurret(m_tracktarget, m_lookfortarget, m_visionSubsystem));
   }
 
   public Command getAutonomousCommand() {
 
     SmartDashboard.putBoolean("autonStart", true);
-    return new InstantCommand();
+    return new DriveDistance(m_driveSubsystem, DriveConstants.autoDist);
   }
 
 }

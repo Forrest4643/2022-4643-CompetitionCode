@@ -10,6 +10,7 @@ import java.util.function.IntSupplier;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.IndexerConstants;
@@ -30,16 +31,17 @@ public class AutoIndex extends CommandBase {
 
   /** Creates a new AutoIndex. */
   public AutoIndex(IntakeSubsystem m_intakeSubsystem, IndexerSubsystem m_indexerSubsystem,
-      PneumaticsSubsystem m_pneumaticsSubsystem, Sensors m_sensors, BooleanSupplier m_forward,
-      BooleanSupplier m_reverse,
-      IntSupplier m_POV) {
+      PneumaticsSubsystem m_pneumaticsSubsystem, Sensors m_sensors, XboxController m_operateController) {
     this.m_intakeSubsystem = m_intakeSubsystem;
     this.m_indexerSubsystem = m_indexerSubsystem;
     this.m_pneumaticsSubsystem = m_pneumaticsSubsystem;
     this.m_sensors = m_sensors;
-    this.m_forward = m_forward;
-    this.m_reverse = m_reverse;
-    this.m_POV = m_POV;
+
+    m_POV = () -> m_operateController.getPOV();
+
+    m_forward = () -> m_operateController.getRightBumper();
+    m_reverse = () -> m_operateController.getLeftBumper();
+
     addRequirements(m_intakeSubsystem, m_indexerSubsystem);
   }
 

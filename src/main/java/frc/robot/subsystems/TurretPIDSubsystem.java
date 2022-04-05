@@ -44,19 +44,31 @@ public class TurretPIDSubsystem extends PIDSubsystem {
     }
   }
 
-  @Override
-  public void useOutput(double output, double setpoint) {
+  public void setMotor(double speed) {
     double limitedOutput;
-    if (turretPositionDEG() > TurretConstants.turretForwardLimit) {
-      limitedOutput = MathUtil.clamp(output, -11, 0);
+    if (turretPositionDEG() >= TurretConstants.turretForwardLimit) {
+      limitedOutput = MathUtil.clamp(speed, -1, 0);
       //System.out.println("FWDLIMIT");
-    } else if (turretPositionDEG() < TurretConstants.turretReverseLimit) {
-      limitedOutput = MathUtil.clamp(output, 0, 11);
+    } else if (turretPositionDEG() <= TurretConstants.turretReverseLimit) {
+      limitedOutput = MathUtil.clamp(speed, 0, 1);
       //System.out.println("REVLIMIT");
     } else {
-      limitedOutput = output;
+      limitedOutput = speed;
     }
-    turretMotor.set(limitedOutput);
+    turretMotor.set(limitedOutput);;
+  }
+
+  public void neg() {
+    setMotor(-.5);
+  }
+
+  public void pos() {
+    setMotor(.5);
+  }
+  
+  @Override
+  public void useOutput(double output, double setpoint) {
+    setMotor(output);
   }
 
   @Override
@@ -71,4 +83,3 @@ public class TurretPIDSubsystem extends PIDSubsystem {
 
 }
 
-//21645387

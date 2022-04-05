@@ -39,12 +39,23 @@ public class DriveSubsystem extends SubsystemBase {
   SlewRateLimiter driveSlew = new SlewRateLimiter(DriveConstants.driveSlew);
   SlewRateLimiter turnSlew = new SlewRateLimiter(DriveConstants.turnSlew);
 
+  
+  /** Creates a new ExampleSubsystem. */
+  public DriveSubsystem() {
+    leftDrive.setInverted(false);
+    rightDrive.setInverted(true);
+    leftFrontEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
+    leftRearEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
+    rightFrontEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
+    rightRearEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
+  }
+
   public double getDriveDistanceIN() {
     // returns the average position of all drive encoders.
     double driveForwardRAW = ((leftFrontEncoder.getPosition() + leftRearEncoder.getPosition()) / 2)
         + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
 
-    return (driveForwardRAW * DriveConstants.driveTickToIN) / 12;
+    return (driveForwardRAW / 360) * 18.84955592;
   }
 
   public void resetDriveEncoders() {
@@ -54,11 +65,6 @@ public class DriveSubsystem extends SubsystemBase {
     rightRearEncoder.setPosition(0);
   }
 
-  /** Creates a new ExampleSubsystem. */
-  public DriveSubsystem() {
-    leftDrive.setInverted(false);
-    rightDrive.setInverted(true);
-  }
 
   @Override
   public void periodic() {
