@@ -51,6 +51,7 @@
       "/LiveWindow/ShooterPIDSubsystem": "Subsystem",
       "/LiveWindow/ShooterPIDSubsystem/PID Controller": "PIDController",
       "/LiveWindow/ShooterSubsystem": "Subsystem",
+      "/LiveWindow/TurretPIDSubsystem": "Subsystem",
       "/LiveWindow/TurretPIDSubsystem/PID Controller": "PIDController",
       "/LiveWindow/TurretSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",

@@ -55,10 +55,10 @@ public class HoodPIDSubsystem extends PIDSubsystem {
     double limitedOutput;
     if (getHoodPositionIN() < HoodConstants.ForwardLimit) {
       limitedOutput = MathUtil.clamp(output, -1, 0);
-      System.out.println("FWDLIMIT");
+      //System.out.println("FWDLIMIT");
     } else if (getHoodPositionIN() > HoodConstants.ReverseLimit) {
       limitedOutput = MathUtil.clamp(output, 0, 1);
-      System.out.println("REVLIMIT");
+      //System.out.println("REVLIMIT");
     } else {
       limitedOutput = output;
     }
