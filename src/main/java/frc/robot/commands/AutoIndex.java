@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.IndexerConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.Sensors;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -86,12 +87,18 @@ public class AutoIndex extends CommandBase {
 
     if (m_pneumaticsSubsystem.rearStatus()) {
       m_intakeSubsystem.rearWheelsOn();
+      if (m_intakeSubsystem.rearIntakeCurrent() > IntakeConstants.rearRevCurrent) {
+        m_intakeSubsystem.rearWheelsReverse();
+      }
     } else {
       m_intakeSubsystem.rearWheelsOff();
     }
 
     if (m_pneumaticsSubsystem.frontStatus()) {
       m_intakeSubsystem.frontWheelsOn();
+      if (m_intakeSubsystem.frontIntakeCurrent() > IntakeConstants.frontRevCurrent) {
+        m_intakeSubsystem.frontWheelsReverse();
+      }
     } else {
       m_intakeSubsystem.frontWheelsOff();
     }

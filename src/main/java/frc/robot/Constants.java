@@ -57,6 +57,10 @@ public final class Constants {
         public static final int frontID = 7;
         public static final int rearID = 9;
 
+        public static final double frontRevCurrent = 15;
+        public static final double rearRevCurrent = 15;
+
+
     }
 
     public static final class PNConstants {
