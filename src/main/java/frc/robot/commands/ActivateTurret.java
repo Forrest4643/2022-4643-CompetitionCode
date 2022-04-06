@@ -16,6 +16,7 @@ public class ActivateTurret extends CommandBase {
     this.m_visionsubsystem = m_visionsubsystem;
     this.m_tracktarget = m_tracktarget;
     this.m_lookfortarget = m_lookfortarget;
+    
   }
 
   // Called when the command is initially scheduled.
