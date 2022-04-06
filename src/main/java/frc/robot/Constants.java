@@ -140,13 +140,13 @@ public final class Constants {
 
     public static final class VisionConstants {
 
-        public static final double distA = 0.055;
-        public static final double distB = 0.765;
-        public static final double distC = -1.3;
+        public static final double distA = 0.000979;
+        public static final double distB = 1.14;
+        public static final double distC = 40.3;
         public static final double distD = 0;
 
-        public static final double distanceOffset = 2.5;
-        public static final double cameraHeightMETERS = Units.inchesToMeters(37.65);
+        public static final double distanceOffset = 0;
+        public static final double cameraHeightMETERS = Units.inchesToMeters(38.5);
         public static final double targetHeightMETERS = Units.inchesToMeters(104);
         public static final double cameraAngleRAD = Units.degreesToRadians(30);
     }

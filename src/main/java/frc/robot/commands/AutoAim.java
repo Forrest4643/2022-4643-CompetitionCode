@@ -55,21 +55,21 @@ public class AutoAim extends CommandBase {
 
   //sets shooter RPM and hood angle based on distance
   private void aim() {
-    double targetDistance = m_visionsubsystem.getTargetDistanceFT();
+    double targetDistanceFT = m_visionsubsystem.getTargetDistanceIN() / 12;
 
     // setting hood launch angle based off of 2nd degree polynomial
     m_hoodPIDsubsystem.setSetpoint(MathUtil.clamp(
         HoodConstants.quadAimC +
-            (HoodConstants.quadAimB * targetDistance) +
-            (Math.pow(targetDistance, 2) * HoodConstants.quadAimA),
+            (HoodConstants.quadAimB * targetDistanceFT) +
+            (Math.pow(targetDistanceFT, 2) * HoodConstants.quadAimA),
 
         65, 80));
 
     // setting shooter RPM based off of 3rd degree polynomial
     m_shooterPIDsubsystem.setSetpoint(ShooterConstants.quadAimD +
-        (ShooterConstants.quadAimC * targetDistance) +
-        (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
-        (Math.pow(targetDistance, 3) * ShooterConstants.quadAimA));
+        (ShooterConstants.quadAimC * targetDistanceFT) +
+        (Math.pow((targetDistanceFT), 2) * ShooterConstants.quadAimB) +
+        (Math.pow(targetDistanceFT, 3) * ShooterConstants.quadAimA));
 
     // debug info
     SmartDashboard.putNumber("hoodPositionDEG", m_hoodPIDsubsystem.getHoodPositionDEG());
@@ -96,8 +96,6 @@ public class AutoAim extends CommandBase {
     // disable PID outputs to prevent unnecessary movement
     m_shooterPIDsubsystem.disable();
     m_hoodPIDsubsystem.disable();
-    // turn off vision LEDS
-    m_visionsubsystem.LEDoff();
 
     // debug info
     System.out.println("AutoAim Ended!");

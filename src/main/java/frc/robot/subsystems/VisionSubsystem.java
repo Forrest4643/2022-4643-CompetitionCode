@@ -15,9 +15,9 @@ public class VisionSubsystem extends SubsystemBase {
 
     double m_targetYaw;
 
-    double m_targetDistanceMeters;
+    double m_targetDistanceIN;
 
-    double m_targetDistanceMetersRAW;
+    double m_targetDistanceINRAW;
 
     boolean m_hasTargets;
 
@@ -35,22 +35,22 @@ public class VisionSubsystem extends SubsystemBase {
 
         if (result.hasTargets()) {
             m_targetYaw = result.getBestTarget().getYaw();
-            m_targetDistanceMetersRAW = PhotonUtils.calculateDistanceToTargetMeters(
+            m_targetDistanceINRAW = Units.metersToInches(PhotonUtils.calculateDistanceToTargetMeters(
                     VisionConstants.cameraHeightMETERS,
                     VisionConstants.targetHeightMETERS,
                     VisionConstants.cameraAngleRAD,
-                    Units.degreesToRadians(result.getBestTarget().getPitch()));
+                    Units.degreesToRadians(result.getBestTarget().getPitch())));
             SmartDashboard.putBoolean("hasTargets", result.hasTargets());
-            SmartDashboard.putNumber("targetDistance", getTargetDistanceFT());
+            SmartDashboard.putNumber("targetDistanceIN", getTargetDistanceIN());
 
-            m_targetDistanceMeters = VisionConstants.distC +
-                    (VisionConstants.distB * m_targetDistanceMetersRAW)
-                    + (Math.pow(m_targetDistanceMetersRAW, 2) * VisionConstants.distA);
+            m_targetDistanceIN = VisionConstants.distC +
+                    (VisionConstants.distB * m_targetDistanceINRAW)
+                    + (Math.pow(m_targetDistanceINRAW, 2) * VisionConstants.distA);
 
         } else {
             m_targetYaw = 0;
-            m_targetDistanceMeters = 0;
-            SmartDashboard.putBoolean("hasTargets", result.hasTargets());
+            m_targetDistanceIN = 0;
+            m_targetDistanceINRAW = 0;
         }
 
     }
@@ -64,9 +64,8 @@ public class VisionSubsystem extends SubsystemBase {
 
     }
 
-    public double getTargetDistanceFT() {
-        return Units.metersToFeet(m_targetDistanceMetersRAW) + VisionConstants.distanceOffset;
-
+    public double getTargetDistanceIN() {
+        return m_targetDistanceIN;
     }
 
     public void LEDon() {

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
@@ -11,6 +12,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
@@ -29,6 +31,7 @@ public class RobotContainer {
 
   private final LookForTarget m_lookfortarget = new LookForTarget(m_turretPIDsubsystem);
   private final TrackTarget m_tracktarget = new TrackTarget(m_turretPIDsubsystem);
+  private final TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, -160);
   
 
   public RobotContainer() {
@@ -53,7 +56,9 @@ public class RobotContainer {
         new AutoAim(m_hoodPIDsubsystem, m_visionSubsystem, m_shooterPIDsubsystem));
 
     new JoystickButton(m_operateController, 3).toggleWhenPressed(new ActivateTurret(m_tracktarget, m_lookfortarget, m_visionSubsystem));
-  }
+
+    new JoystickButton(m_operateController, 12).toggleWhenPressed(new HUB(m_turretposition, m_shooterPIDsubsystem, m_hoodPIDsubsystem, m_turretPIDsubsystem));
+     }
 
   public Command getAutonomousCommand() {
 

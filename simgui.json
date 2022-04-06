@@ -28,6 +28,9 @@
       }
     },
     "RoboRIO": {
+      "RoboRIO Input": {
+        "open": true
+      },
       "window": {
         "visible": true
       }
@@ -44,9 +47,11 @@
       "/LiveWindow/IndexerSubsystem": "Subsystem",
       "/LiveWindow/IntakeSubsystem": "Subsystem",
       "/LiveWindow/PneumaticsSubsystem": "Subsystem",
+      "/LiveWindow/Sensors": "Subsystem",
       "/LiveWindow/ShooterPIDSubsystem": "Subsystem",
       "/LiveWindow/ShooterPIDSubsystem/PID Controller": "PIDController",
       "/LiveWindow/ShooterSubsystem": "Subsystem",
+      "/LiveWindow/TurretPIDSubsystem/PID Controller": "PIDController",
       "/LiveWindow/TurretSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
       "/LiveWindow/Ungrouped/MotorControllerGroup[3]": "Motor Controller",
@@ -60,6 +65,7 @@
       "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[9]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/navX-Sensor[2]": "Gyro",
       "/LiveWindow/VisionSubsystem": "Subsystem"
     }
   },

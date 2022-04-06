@@ -20,7 +20,9 @@ public class ActivateTurret extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_visionsubsystem.LEDon();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -49,6 +51,8 @@ public class ActivateTurret extends CommandBase {
     if(m_lookfortarget.isScheduled()) {
       m_lookfortarget.cancel();
     }
+
+    m_visionsubsystem.LEDoff();
   }
 
   // Returns true when the command should end.
