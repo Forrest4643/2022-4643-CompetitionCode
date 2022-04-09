@@ -14,14 +14,13 @@ public class TrackTarget extends CommandBase {
   /** Creates a new TrackTarget. */
   public TrackTarget(TurretPIDSubsystem m_turretPIDsubsystem) {
     this.m_turretPIDsubsystem = m_turretPIDsubsystem;
-    addRequirements(m_turretPIDsubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     m_turretPIDsubsystem.enable();
-    m_turretPIDsubsystem.setSetpoint(0);
+    m_turretPIDsubsystem.setSetpoint(6);
     System.out.println("TrackTarget Started!");
   }
 

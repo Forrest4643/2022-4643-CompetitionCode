@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
@@ -29,13 +30,23 @@ public class HUB extends CommandBase {
   public void initialize() {
     m_hoodPIDsubsystem.enable();
     m_shooterPIDsubsystem.enable();
+    SmartDashboard.putBoolean("Shooter", true);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooterPIDsubsystem.setSetpoint(2200);
-    m_hoodPIDsubsystem.setSetpoint(65);
+    if(!m_shooterPIDsubsystem.isEnabled()) {
+      m_shooterPIDsubsystem.enable();
+    }
+
+    if(!m_hoodPIDsubsystem.isEnabled()) {
+      m_hoodPIDsubsystem.enable();
+    }
+
+    m_shooterPIDsubsystem.setSetpoint(2000);
+    m_hoodPIDsubsystem.setSetpoint(67);
     if (!m_turretposition.isScheduled()) {
       m_turretposition.schedule();
     }
@@ -50,6 +61,8 @@ public class HUB extends CommandBase {
     if(m_turretposition.isScheduled()){
     m_turretposition.cancel();
     }
+    SmartDashboard.putBoolean("Shooter", false);
+
   }
 
   // Returns true when the command should end.

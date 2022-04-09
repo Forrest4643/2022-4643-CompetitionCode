@@ -9,6 +9,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
@@ -23,15 +25,39 @@ public class ClimberSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("climberInches", climberInches());
     // This method will be called once per scheduler run
   }
 
-  public void setMotor(double volts) {
-    m_cMotor.setVoltage(volts);
+  public void setMotor(double speed) {
+    double limitedOutput;
+    if (climberInches() < ClimberConstants.maxTicks) {
+      limitedOutput = MathUtil.clamp(speed, -1, 0);
+      //System.out.println("FWDLIMIT");
+    } else if (climberInches()> ClimberConstants.maxTicks) {
+      limitedOutput = MathUtil.clamp(speed, 0, 1);
+      //System.out.println("REVLIMIT");
+    } else {
+      limitedOutput = speed;
+    }
+    m_cMotor.set(speed);
+  }
+
+  public void up() {
+    setMotor(-1);
+  }
+
+  public void down() {
+    setMotor(1);
+  }
+
+  public void idle() {
+    setMotor(0);
   }
 
   public double climberInches() {
-    //(degrees rotated / 360) * 2pi * spool radius
-    return (m_cEncoder.getPosition() / 360) * 2.35619449;
+    return (m_cEncoder.getPosition());
   }
 }
+
+//-14840 = max height

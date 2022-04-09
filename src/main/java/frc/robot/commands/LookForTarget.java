@@ -13,7 +13,6 @@ public class LookForTarget extends CommandBase {
   /** Creates a new LookForTarget. */
   public LookForTarget(TurretPIDSubsystem m_turretPIDsubsystem) {
     this.m_turretPIDsubsystem = m_turretPIDsubsystem;
-    addRequirements(m_turretPIDsubsystem);
   }
 
   // Called when the command is initially scheduled.

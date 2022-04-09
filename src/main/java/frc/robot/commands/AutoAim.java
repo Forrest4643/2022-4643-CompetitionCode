@@ -33,7 +33,7 @@ public class AutoAim extends CommandBase {
   public void initialize() {
 
     System.out.println("AutoAim Started!");
-
+    SmartDashboard.putBoolean("Shooter", true);
     // enable PID outputs
     m_shooterPIDsubsystem.enable();
     m_hoodPIDsubsystem.enable();
@@ -96,6 +96,8 @@ public class AutoAim extends CommandBase {
     // disable PID outputs to prevent unnecessary movement
     m_shooterPIDsubsystem.disable();
     m_hoodPIDsubsystem.disable();
+
+    SmartDashboard.putBoolean("Shooter", false);
 
     // debug info
     System.out.println("AutoAim Ended!");

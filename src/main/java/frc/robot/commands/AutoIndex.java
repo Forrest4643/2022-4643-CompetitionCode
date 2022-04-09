@@ -27,6 +27,7 @@ public class AutoIndex extends CommandBase {
   private Sensors m_sensors;
   private BooleanSupplier m_forward;
   private BooleanSupplier m_reverse;
+  private BooleanSupplier m_intakereverse;
   private IntSupplier m_POV;
   private boolean m_toggled;
 
@@ -42,6 +43,8 @@ public class AutoIndex extends CommandBase {
 
     m_forward = () -> m_operateController.getRightBumper();
     m_reverse = () -> m_operateController.getLeftBumper();
+
+    m_intakereverse = () -> m_operateController.getBackButton();
 
     addRequirements(m_intakeSubsystem, m_indexerSubsystem);
   }
@@ -86,18 +89,20 @@ public class AutoIndex extends CommandBase {
   private void manual() {
 
     if (m_pneumaticsSubsystem.rearStatus()) {
-      m_intakeSubsystem.rearWheelsOn();
-      if (m_intakeSubsystem.rearIntakeCurrent() > IntakeConstants.rearRevCurrent) {
+      if (m_POV.getAsInt() == 180) {
         m_intakeSubsystem.rearWheelsReverse();
+      } else if (m_POV.getAsInt() != 180){
+        m_intakeSubsystem.rearWheelsOn();
       }
     } else {
       m_intakeSubsystem.rearWheelsOff();
     }
 
     if (m_pneumaticsSubsystem.frontStatus()) {
-      m_intakeSubsystem.frontWheelsOn();
-      if (m_intakeSubsystem.frontIntakeCurrent() > IntakeConstants.frontRevCurrent) {
+      if (m_POV.getAsInt() == 180) {
         m_intakeSubsystem.frontWheelsReverse();
+      } else if (m_POV.getAsInt() != 180){
+        m_intakeSubsystem.frontWheelsOn();
       }
     } else {
       m_intakeSubsystem.frontWheelsOff();

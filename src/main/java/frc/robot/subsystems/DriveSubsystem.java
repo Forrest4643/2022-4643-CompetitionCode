@@ -44,10 +44,10 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     leftDrive.setInverted(false);
     rightDrive.setInverted(true);
-    leftFrontEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
-    leftRearEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
-    rightFrontEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
-    rightRearEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
+    leftFrontEncoder.setPositionConversionFactor(1);
+    leftRearEncoder.setPositionConversionFactor(1);
+    rightFrontEncoder.setPositionConversionFactor(1);
+    rightRearEncoder.setPositionConversionFactor(1);
   }
 
   public double getDriveDistanceIN() {
@@ -55,7 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
     double driveForwardRAW = ((leftFrontEncoder.getPosition() + leftRearEncoder.getPosition()) / 2)
         + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
 
-    return (driveForwardRAW / 360) * 18.84955592;
+    return -((driveForwardRAW / 360) * 10) * (6.283185*3);
   }
 
   public void resetDriveEncoders() {
@@ -69,7 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("DriveDistanceFT", getDriveDistanceIN());
+    SmartDashboard.putNumber("DriveDistanceIN", getDriveDistanceIN());
   }
 
   public void setDrive(double Speed, double turnRate) {

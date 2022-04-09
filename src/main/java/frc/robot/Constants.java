@@ -16,9 +16,9 @@ public final class Constants {
         public static final double turnPow = 1;
         public static final double speedPow = 1.2;
 
-        public static final double drivekP = 0.03;
+        public static final double drivekP = 0.5;
         public static final double drivekI = 0.004;
-        public static final double drivekD = 0;
+        public static final double drivekD = .001;
 
         public static final double bangTol = .25;
 
@@ -26,13 +26,13 @@ public final class Constants {
         public static final double steerkI = 0.0008;
         public static final double steerkD = 0.005;
 
-        public static final double driveSlew = 1;
+        public static final double driveSlew = 1.1;
         public static final double turnSlew = 5;
 
         public static final double highGoal = 12 * 6;
         public static final double lowGoal = 12 * 2;
 
-        public static final double autoDist = -2 * 12;
+        public static final double autoDist = -7.5;
 
         public static final double driveConversion = 0.1;
     }
@@ -57,8 +57,8 @@ public final class Constants {
         public static final int frontID = 7;
         public static final int rearID = 9;
 
-        public static final double frontRevCurrent = 15;
-        public static final double rearRevCurrent = 15;
+        public static final double frontRevCurrent = 25;
+        public static final double rearRevCurrent = 25;
 
 
     }
@@ -93,7 +93,7 @@ public final class Constants {
         public static final double quadAimA = -0.223;
         public static final double quadAimB = 10.5;
         public static final double quadAimC = -70.2;
-        public static final double quadAimD = 2500;
+        public static final double quadAimD = 2050;
         public static final double efficiencyConversion = 1;
 
     }
@@ -130,12 +130,12 @@ public final class Constants {
         public static final int turretID = 11;
         public static final double turretTicksToDegrees = 1.72193877551;
         public static final double turretForwardLimit = 0;
-        public static final double turretReverseLimit = -330;
+        public static final double turretReverseLimit = -325;
         public static final double turretLeftWarning = turretForwardLimit - 5;
         public static final double turretRightWarning = turretReverseLimit + 5;
-        public static final double turretkP = 0.05;
+        public static final double turretkP = 0.08;
         public static final double turretkI = 0;
-        public static final double turretkD = 0;
+        public static final double turretkD = 0.001;
         public static final double tolerance = .5;
         public static final double zeroThresh = 1;
 
@@ -157,6 +157,7 @@ public final class Constants {
 
     public static final class ClimberConstants {
         public static final int climbID = 14;
-        public static final double conversionFactor = 0.0625;
+        public static final double conversionFactor = 42;
+        public static final double maxTicks = -14840;
     }
 }

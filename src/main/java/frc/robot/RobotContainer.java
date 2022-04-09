@@ -16,59 +16,74 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
 
-  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
-  private final Sensors m_sensors = new Sensors();
-  private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
-  private final IndexerSubsystem m_indexerSubsystem = new IndexerSubsystem();
-  private final ShooterPIDSubsystem m_shooterPIDsubsystem = new ShooterPIDSubsystem();
-  private final HoodPIDSubsystem m_hoodPIDsubsystem = new HoodPIDSubsystem();
-  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  private final TurretPIDSubsystem m_turretPIDsubsystem = new TurretPIDSubsystem(m_visionSubsystem, m_sensors);
-  private final XboxController m_driveController = new XboxController(0);
-  private final XboxController m_operateController = new XboxController(1);
+    private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
+    private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+    private final Sensors m_sensors = new Sensors();
+    private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
+    private final IndexerSubsystem m_indexerSubsystem = new IndexerSubsystem();
+    private final ShooterPIDSubsystem m_shooterPIDsubsystem = new ShooterPIDSubsystem();
+    private final HoodPIDSubsystem m_hoodPIDsubsystem = new HoodPIDSubsystem();
+    private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+    private final ClimberSubsystem m_climbersubsystem = new ClimberSubsystem();
+    private final TurretPIDSubsystem m_turretPIDsubsystem = new TurretPIDSubsystem(m_visionSubsystem, m_sensors);
+    private final XboxController m_driveController = new XboxController(0);
+    private final XboxController m_operateController = new XboxController(1);
 
-  private final LookForTarget m_lookfortarget = new LookForTarget(m_turretPIDsubsystem);
-  private final TrackTarget m_tracktarget = new TrackTarget(m_turretPIDsubsystem);
-  private final TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, -160);
+    private final LookForTarget m_lookfortarget = new LookForTarget(m_turretPIDsubsystem);
+    private final TrackTarget m_tracktarget = new TrackTarget(m_turretPIDsubsystem);
+    private final TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, -160);
 
-  public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
+    public RobotContainer() {
+        // Configure the button bindings
+        configureButtonBindings();
 
-    m_driveSubsystem.setDefaultCommand(new StickDrive(m_driveSubsystem, m_driveController, m_turretPIDsubsystem));
+        m_driveSubsystem.setDefaultCommand(new StickDrive(m_driveSubsystem, m_driveController, m_turretPIDsubsystem));
 
-    m_intakeSubsystem.setDefaultCommand(
-        new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_sensors, m_operateController));
+        m_intakeSubsystem.setDefaultCommand(
+                new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_sensors,
+                        m_operateController));
 
-  }
+    }
 
-  private void configureButtonBindings() {
+    private void configureButtonBindings() {
 
-    new JoystickButton(m_operateController, 4).whenPressed(new InstantCommand(m_pneumaticsSubsystem::frontIntakeOpen))
-        .whenReleased(new InstantCommand(m_pneumaticsSubsystem::frontIntakeClosed));
+        new JoystickButton(m_driveController, 6).whenPressed(new InstantCommand(m_climbersubsystem::up))
+                .whenReleased(new InstantCommand(m_climbersubsystem::idle));
 
-    new JoystickButton(m_operateController, 2).whenPressed(new InstantCommand(m_pneumaticsSubsystem::rearIntakeOpen))
-        .whenReleased(new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
+        new JoystickButton(m_driveController, 5).whenPressed(new InstantCommand(m_climbersubsystem::down))
+                .whenReleased(new InstantCommand(m_climbersubsystem::idle));
 
-    new JoystickButton(m_operateController, 1).toggleWhenPressed(
-        new AutoAim(m_hoodPIDsubsystem, m_visionSubsystem, m_shooterPIDsubsystem), true);
+        new JoystickButton(m_operateController, 4)
+                .whenPressed(new InstantCommand(m_pneumaticsSubsystem::frontIntakeOpen))
+                .whenReleased(new InstantCommand(m_pneumaticsSubsystem::frontIntakeClosed));
 
-    new JoystickButton(m_operateController, 3)
-        .toggleWhenPressed(new ActivateTurret(m_tracktarget, m_lookfortarget, m_visionSubsystem), true);
+        new JoystickButton(m_operateController, 2)
+                .whenPressed(new InstantCommand(m_pneumaticsSubsystem::rearIntakeOpen))
+                .whenReleased(new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
 
-    new JoystickButton(m_operateController, 12).toggleWhenPressed(
-        new HUB(m_turretposition, m_shooterPIDsubsystem, m_hoodPIDsubsystem, m_turretPIDsubsystem), true);
-  }
+        new JoystickButton(m_operateController, 1).whileActiveOnce(
+                new AutoAim(m_hoodPIDsubsystem, m_visionSubsystem, m_shooterPIDsubsystem), true);
 
-  public Command getAutonomousCommand() {
+        new JoystickButton(m_operateController, 1).whenPressed(new InstantCommand(m_pneumaticsSubsystem::compOff))
+                .whenReleased(new InstantCommand(m_pneumaticsSubsystem::compOn));
 
-    SmartDashboard.putBoolean("autonStart", true);
-    return new HUB(m_turretposition, m_shooterPIDsubsystem, m_hoodPIDsubsystem, m_turretPIDsubsystem)
-        .andThen(new WaitCommand(2)
-            .alongWith(new HUB(m_turretposition, m_shooterPIDsubsystem, m_hoodPIDsubsystem, m_turretPIDsubsystem),
-                new InstantCommand(m_indexerSubsystem::wheelsOn))
-            .raceWith(new WaitCommand(3))).andThen(m_indexerSubsystem::wheelsOff).alongWith(new DriveDistance(m_driveSubsystem, DriveConstants.autoDist));
-  }
+        new JoystickButton(m_operateController, 3)
+                .toggleWhenPressed(
+                        new ActivateTurret(m_tracktarget, m_lookfortarget, m_visionSubsystem, m_turretPIDsubsystem),
+                        true);
+
+        new JoystickButton(m_operateController, 12).toggleWhenPressed(
+                new HUB(m_turretposition, m_shooterPIDsubsystem, m_hoodPIDsubsystem, m_turretPIDsubsystem), true);
+
+        new JoystickButton(m_operateController, 11).whenPressed(new InstantCommand(m_shooterPIDsubsystem::backDrive))
+                .whenReleased(new InstantCommand(m_shooterPIDsubsystem::idleShooter));
+    }
+
+    public Command getAutonomousCommand() {
+
+        SmartDashboard.putBoolean("autonStart", true);
+        return new DriveDistance(m_driveSubsystem, DriveConstants.autoDist);
+
+    }
 
 }

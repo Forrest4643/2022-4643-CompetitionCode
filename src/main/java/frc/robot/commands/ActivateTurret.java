@@ -4,7 +4,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.TurretPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 public class ActivateTurret extends CommandBase {
@@ -12,11 +14,11 @@ public class ActivateTurret extends CommandBase {
   private LookForTarget m_lookfortarget;
   private VisionSubsystem m_visionsubsystem;
   /** Creates a new ActivateTurret. */
-  public ActivateTurret(TrackTarget m_tracktarget, LookForTarget m_lookfortarget, VisionSubsystem m_visionsubsystem) {
+  public ActivateTurret(TrackTarget m_tracktarget, LookForTarget m_lookfortarget, VisionSubsystem m_visionsubsystem, TurretPIDSubsystem m_turretPIDsubsystem) {
     this.m_visionsubsystem = m_visionsubsystem;
     this.m_tracktarget = m_tracktarget;
     this.m_lookfortarget = m_lookfortarget;
-    
+    addRequirements(m_turretPIDsubsystem);
   }
 
   // Called when the command is initially scheduled.
