@@ -32,7 +32,7 @@ public final class Constants {
         public static final double highGoal = 12 * 6;
         public static final double lowGoal = 12 * 2;
 
-        public static final double autoDist = -7.5;
+        public static final double autoDist = -13;
 
         public static final double driveConversion = 0.1;
     }

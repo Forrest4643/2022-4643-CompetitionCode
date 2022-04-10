@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.management.InstanceAlreadyExistsException;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
@@ -11,6 +13,10 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -38,10 +44,6 @@ public class RobotContainer {
         configureButtonBindings();
 
         m_driveSubsystem.setDefaultCommand(new StickDrive(m_driveSubsystem, m_driveController, m_turretPIDsubsystem));
-
-        m_intakeSubsystem.setDefaultCommand(
-                new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_sensors,
-                        m_operateController));
 
     }
 
@@ -81,9 +83,29 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
 
-        SmartDashboard.putBoolean("autonStart", true);
-        return new DriveDistance(m_driveSubsystem, DriveConstants.autoDist);
+        //SmartDashboard.putBoolean("autonStart", true);
+        //return new DriveDistance(m_driveSubsystem, DriveConstants.autoDist);
 
+        return new SequentialCommandGroup(
+            new ParallelDeadlineGroup(
+                new WaitCommand(3),
+                new HUB(m_turretposition, m_shooterPIDsubsystem, m_hoodPIDsubsystem, m_turretPIDsubsystem),
+                new SequentialCommandGroup(
+                    new WaitCommand(1.75),
+                    new InstantCommand(m_indexerSubsystem::wheelsOn),
+                    new WaitCommand(1),
+                    new InstantCommand(m_indexerSubsystem::wheelsOff)
+                )
+            ),
+            new DriveDistance(m_driveSubsystem, DriveConstants.autoDist)
+        );
+
+    }
+
+    public void teleInit() {
+        m_intakeSubsystem.setDefaultCommand(
+                new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_sensors,
+                        m_operateController));
     }
 
 }
