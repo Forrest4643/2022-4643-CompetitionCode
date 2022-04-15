@@ -55,7 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
     double driveForwardRAW = ((leftFrontEncoder.getPosition() + leftRearEncoder.getPosition()) / 2)
         + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
 
-    return (driveForwardRAW / 360) * 18.84955592;
+    return (driveForwardRAW * DriveConstants.driveInchConv);
   }
 
   public void resetDriveEncoders() {
@@ -69,7 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("DriveDistanceFT", getDriveDistanceIN());
+    SmartDashboard.putNumber("DriveDistanceIN", getDriveDistanceIN());
   }
 
   public void setDrive(double Speed, double turnRate) {

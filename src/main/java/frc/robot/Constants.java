@@ -35,6 +35,7 @@ public final class Constants {
         public static final double autoDist = -2 * 12;
 
         public static final double driveConversion = 0.1;
+        public static final double driveInchConv = 0.0523598775598;
     }
 
     public static final class IndexerConstants {
