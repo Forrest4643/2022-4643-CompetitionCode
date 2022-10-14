@@ -58,7 +58,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     SmartDashboard.putBoolean("autonStart", true);
-    return new DriveDistance(m_driveSubsystem, DriveConstants.autoDist);
+    return new
+    DriveDistance(m_driveSubsystem, DriveConstants.autoDist);
   }
 
 }

@@ -39,7 +39,6 @@ public class DriveSubsystem extends SubsystemBase {
   SlewRateLimiter driveSlew = new SlewRateLimiter(DriveConstants.driveSlew);
   SlewRateLimiter turnSlew = new SlewRateLimiter(DriveConstants.turnSlew);
 
-  
   /** Creates a new ExampleSubsystem. */
   public DriveSubsystem() {
     leftDrive.setInverted(false);
@@ -65,7 +64,6 @@ public class DriveSubsystem extends SubsystemBase {
     rightRearEncoder.setPosition(0);
   }
 
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -76,11 +74,15 @@ public class DriveSubsystem extends SubsystemBase {
 
     // inputs to a power for a nice response curve
 
-    // TODO Does the robot actually drive better with a power of 1.2 applied to it? -F.L
-    double SqrSpeed = Math.pow(MathUtil.applyDeadband(Math.abs(Speed), DriveConstants.stickDB),
-        DriveConstants.speedPow);
+    //TODO added "speedSin"
+    // double SqrSpeed = Math.pow(MathUtil.applyDeadband(Math.abs(Speed),
+    // DriveConstants.stickDB),
+    // DriveConstants.speedPow);
+
     double SqrTurn = Math.pow(MathUtil.applyDeadband(Math.abs(turnRate), DriveConstants.stickDB),
         DriveConstants.turnPow);
+
+    double SqrSpeed = DriveConstants.speedSin * (Math.sin(Speed));
 
     if (Speed < 0) {
       SqrSpeed = SqrSpeed * -1;

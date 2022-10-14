@@ -15,6 +15,8 @@ public final class Constants {
         public static final double stickDB = 0.05;
         public static final double turnPow = 1;
         public static final double speedPow = 1.2;
+        public static final double speedSin = 1.5;
+        public static final double turnSin = 1;
 
         public static final double drivekP = 0.03;
         public static final double drivekI = 0.004;
@@ -26,8 +28,8 @@ public final class Constants {
         public static final double steerkI = 0.0008;
         public static final double steerkD = 0.005;
 
-        public static final double driveSlew = 1;
-        public static final double turnSlew = 5;
+        public static final double driveSlew = 1.25; //TODO test.
+        public static final double turnSlew = 5; //TODO test.
 
         public static final double highGoal = 12 * 6;
         public static final double lowGoal = 12 * 2;
@@ -87,10 +89,10 @@ public final class Constants {
         public static final double kS = 0;
         public static final double acc = 3746;
 
-        public static final double quadAimA = -0.223;
-        public static final double quadAimB = 10.5;
-        public static final double quadAimC = -70.2;
-        public static final double quadAimD = 2500;
+        public static final double quadAimA = -10.5;
+        public static final double quadAimB = 4.1;
+        public static final double quadAimC = -0.061;
+        public static final double quadAimD = 1072;
         public static final double efficiencyConversion = 1;
 
     }
@@ -99,9 +101,11 @@ public final class Constants {
         public static final int hoodID = 4;
 
         public static final double conversionFactor = 2.513274123;
-        public static final double ForwardLimit = -2.98;
-        public static final double ReverseLimit = -0.02;
+        public static final double ForwardLimit = 4.723; //TODO test.
+        public static final double ReverseLimit = 0.1; //TODO test.
         public static final double PIDtolerance = 0.05;
+        public static final double lowAngleLimit = 74.429; //TODO test.
+        public static final double highAngleLimit = 52.429; //TODO test.
 
         public static final double kP = .2;
         public static final double kI = 0.02;
@@ -117,17 +121,17 @@ public final class Constants {
         public static final double lowGoal = 3;
         public static final double highGoal = 0;
 
-        public static final double quadAimA = -0.167;
-        public static final double quadAimB = 5.11;
-        public static final double quadAimC = 44;
+        public static final double quadAimA = -4.57;
+        public static final double quadAimB = 0.0865;
+        public static final double quadAimC = 96.9;
 
     }
 
     public static final class TurretConstants {
         public static final int turretID = 11;
         public static final double turretTicksToDegrees = 1.72193877551;
-        public static final double turretForwardLimit = 0;
-        public static final double turretReverseLimit = -330;
+        public static final double turretForwardLimit = 135; //TODO test.
+        public static final double turretReverseLimit = -135; //TODO test.
         public static final double turretLeftWarning = turretForwardLimit - 5;
         public static final double turretRightWarning = turretReverseLimit + 5;
         public static final double turretkP = 0.05;
@@ -147,13 +151,13 @@ public final class Constants {
         public static final double distD = 0;
 
         public static final double distanceOffset = 2.5;
-        public static final double cameraHeightMETERS = Units.inchesToMeters(37.65);
+        public static final double cameraHeightMETERS = Units.inchesToMeters(37.849256);
         public static final double targetHeightMETERS = Units.inchesToMeters(104);
-        public static final double cameraAngleRAD = Units.degreesToRadians(30);
+        public static final double cameraAngleRAD = Units.degreesToRadians(55); //TODO test.
     }
 
     public static final class ClimberConstants {
         public static final int climbID = 14;
-        public static final double conversionFactor = 0.0625;
+        public static final double conversionFactor = (1/48); //TODO test.
     }
 }

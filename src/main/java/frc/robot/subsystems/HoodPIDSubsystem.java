@@ -30,8 +30,9 @@ public class HoodPIDSubsystem extends PIDSubsystem {
     getController().setTolerance(HoodConstants.PIDtolerance);
 
     hoodMotor.setInverted(true);
+    hoodEncoder.setInverted(true);
     hoodEncoder.setPositionConversionFactor(HoodConstants.conversionFactor);
-
+   
   }
 
   public double getHoodVelocity() {
@@ -39,7 +40,8 @@ public class HoodPIDSubsystem extends PIDSubsystem {
   }
 
   public double getHoodPositionDEG() {
-    return (-hoodEncoder.getPosition() * 5) + 65;
+    //encoder * hoodtravelIN/hoodtravelDEG + hood lowest position
+    return (hoodEncoder.getPosition() * 4.65805632013) + 72;
   }
 
   public double getHoodPositionIN() {

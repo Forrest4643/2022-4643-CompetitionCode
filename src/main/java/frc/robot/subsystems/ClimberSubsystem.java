@@ -15,10 +15,12 @@ import frc.robot.Constants.ClimberConstants;
 public class ClimberSubsystem extends SubsystemBase {
   private final CANSparkMax m_cMotor = new CANSparkMax(ClimberConstants.climbID, MotorType.kBrushless);
   private final RelativeEncoder m_cEncoder = m_cMotor.getEncoder();
+  
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
     m_cMotor.setIdleMode(IdleMode.kBrake);
     m_cEncoder.setPositionConversionFactor(ClimberConstants.conversionFactor);
+    
   }
 
   @Override
