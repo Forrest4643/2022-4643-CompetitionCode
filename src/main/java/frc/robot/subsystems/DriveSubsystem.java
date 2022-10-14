@@ -76,6 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // inputs to a power for a nice response curve
 
+    // TODO Does the robot actually drive better with a power of 1.2 applied to it? -F.L
     double SqrSpeed = Math.pow(MathUtil.applyDeadband(Math.abs(Speed), DriveConstants.stickDB),
         DriveConstants.speedPow);
     double SqrTurn = Math.pow(MathUtil.applyDeadband(Math.abs(turnRate), DriveConstants.stickDB),
@@ -89,6 +90,7 @@ public class DriveSubsystem extends SubsystemBase {
       SqrTurn = SqrTurn * -1;
     }
 
+    // TODO Update turnSlew to match the lower COM of the robot -F.L
     m_robotDrive.arcadeDrive(driveSlew.calculate(SqrSpeed), turnSlew.calculate(SqrTurn) / 1.5);
 
     SmartDashboard.putNumber("sqrturn", SqrTurn);
