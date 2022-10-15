@@ -18,9 +18,9 @@ public final class Constants {
         public static final double speedSin = 1.5;
         public static final double turnSin = 1;
 
-        public static final double drivekP = 0.03;
+        public static final double drivekP = 0.5;
         public static final double drivekI = 0.004;
-        public static final double drivekD = 0;
+        public static final double drivekD = .001;
 
         public static final double bangTol = .25;
 
@@ -34,7 +34,7 @@ public final class Constants {
         public static final double highGoal = 12 * 6;
         public static final double lowGoal = 12 * 2;
 
-        public static final double autoDist = -2 * 12;
+        public static final double autoDist = -13;
 
         public static final double driveConversion = 0.1;
         public static final double driveInchConv = 0.0523598775598;
@@ -59,6 +59,10 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int frontID = 7;
         public static final int rearID = 9;
+
+        public static final double frontRevCurrent = 25;
+        public static final double rearRevCurrent = 25;
+
 
     }
 
@@ -134,9 +138,9 @@ public final class Constants {
         public static final double turretReverseLimit = -135; //TODO test.
         public static final double turretLeftWarning = turretForwardLimit - 5;
         public static final double turretRightWarning = turretReverseLimit + 5;
-        public static final double turretkP = 0.05;
+        public static final double turretkP = 0.08;
         public static final double turretkI = 0;
-        public static final double turretkD = 0;
+        public static final double turretkD = 0.001;
         public static final double tolerance = .5;
         public static final double zeroThresh = 1;
 
@@ -145,9 +149,9 @@ public final class Constants {
 
     public static final class VisionConstants {
 
-        public static final double distA = 0.055;
-        public static final double distB = 0.765;
-        public static final double distC = -1.3;
+        public static final double distA = 0.000979;
+        public static final double distB = 1.14;
+        public static final double distC = 40.3;
         public static final double distD = 0;
 
         public static final double distanceOffset = 2.5;
@@ -158,6 +162,8 @@ public final class Constants {
 
     public static final class ClimberConstants {
         public static final int climbID = 14;
+        public static final double maxLimit = 5.25; //TODO review value
+        public static final double minLimit = .1;
         public static final double conversionFactor = (1/48); //TODO test.
     }
 }

@@ -43,10 +43,10 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     leftDrive.setInverted(false);
     rightDrive.setInverted(true);
-    leftFrontEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
-    leftRearEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
-    rightFrontEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
-    rightRearEncoder.setPositionConversionFactor(DriveConstants.driveConversion);
+    leftFrontEncoder.setPositionConversionFactor(1);
+    leftRearEncoder.setPositionConversionFactor(1);
+    rightFrontEncoder.setPositionConversionFactor(1);
+    rightRearEncoder.setPositionConversionFactor(1);
   }
 
   public double getDriveDistanceIN() {
@@ -54,7 +54,7 @@ public class DriveSubsystem extends SubsystemBase {
     double driveForwardRAW = ((leftFrontEncoder.getPosition() + leftRearEncoder.getPosition()) / 2)
         + ((rightFrontEncoder.getPosition() + rightRearEncoder.getPosition()) / 2) / 2;
 
-    return (driveForwardRAW * DriveConstants.driveInchConv);
+    return -((driveForwardRAW / 360) * 10) * (6.283185*3);
   }
 
   public void resetDriveEncoders() {

@@ -33,7 +33,7 @@ public class AutoAim extends CommandBase {
   public void initialize() {
 
     System.out.println("AutoAim Started!");
-
+    SmartDashboard.putBoolean("Shooter", true);
     // enable PID outputs
     m_shooterPIDsubsystem.enable();
     m_hoodPIDsubsystem.enable();
@@ -55,7 +55,7 @@ public class AutoAim extends CommandBase {
 
   //sets shooter RPM and hood angle based on distance
   private void aim() {
-    double targetDistance = m_visionsubsystem.getTargetDistanceFT();
+    double targetDistance = m_visionsubsystem.getTargetDistanceIN() / 12;
 
     // setting hood launch angle based off of 2nd degree polynomial
     m_hoodPIDsubsystem.setSetpoint(MathUtil.clamp(
@@ -95,8 +95,8 @@ public class AutoAim extends CommandBase {
     // disable PID outputs to prevent unnecessary movement
     m_shooterPIDsubsystem.disable();
     m_hoodPIDsubsystem.disable();
-    // turn off vision LEDS
-    m_visionsubsystem.LEDoff();
+
+    SmartDashboard.putBoolean("Shooter", false);
 
     // debug info
     System.out.println("AutoAim Ended!");

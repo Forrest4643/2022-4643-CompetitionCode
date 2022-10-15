@@ -66,4 +66,12 @@ public class PneumaticsSubsystem extends SubsystemBase {
     public void rearIntakeClosed() {
         rearIntake.set(Value.kReverse);
     }
+
+    public void compOff() {
+        pcmCompressor.disable();
+    }
+
+    public void compOn() {
+        pcmCompressor.enableDigital();
+    }
 }
