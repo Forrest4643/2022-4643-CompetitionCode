@@ -26,6 +26,8 @@ public class TurretPosition extends PIDCommand {
         output -> {
           m_turretPIDsubsystem.setMotor(output);
         });
+
+        System.out.println("TurretPos Setpoint: " + position);
   }
 
   // Returns true when the command should end.

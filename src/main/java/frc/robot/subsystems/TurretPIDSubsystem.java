@@ -64,8 +64,7 @@ public class TurretPIDSubsystem extends PIDSubsystem {
     //System.out.println("Spd: " + limitedOutput);
 
     turretMotor.set(limitedOutput);
-    SmartDashboard.putNumber("turretOutput", limitedOutput);
-
+    System.out.println("turretLimOutput: " + limitedOutput);
   }
 
   public void neg() {
@@ -88,7 +87,7 @@ public class TurretPIDSubsystem extends PIDSubsystem {
   }
 
   public double turretPositionDEG() {
-    SmartDashboard.putNumber("turretPosition", turretEncoder.getPosition());
+    SmartDashboard.putNumber("turretPositionDEG", turretEncoder.getPosition());
     return turretEncoder.getPosition();
   }
 

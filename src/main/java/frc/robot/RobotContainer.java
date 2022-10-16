@@ -48,39 +48,48 @@ public class RobotContainer {
 
         private void configureButtonBindings() {
 
+                //climber up
                 new JoystickButton(m_driveController, 6).whenPressed(new InstantCommand(m_climbersubsystem::up))
                                 .whenReleased(new InstantCommand(m_climbersubsystem::idle));
 
+                //climber down
                 new JoystickButton(m_driveController, 5).whenPressed(new InstantCommand(m_climbersubsystem::down))
                                 .whenReleased(new InstantCommand(m_climbersubsystem::idle));
 
+                //Front intake
                 new JoystickButton(m_operateController, 4)
                                 .whenPressed(new InstantCommand(m_pneumaticsSubsystem::frontIntakeOpen))
                                 .whenReleased(new InstantCommand(m_pneumaticsSubsystem::frontIntakeClosed));
 
+                //Rear intake
                 new JoystickButton(m_operateController, 2)
                                 .whenPressed(new InstantCommand(m_pneumaticsSubsystem::rearIntakeOpen))
                                 .whenReleased(new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
 
+                //shooter+hood activate
                 new JoystickButton(m_operateController, 1).whileActiveOnce(
                                 new AutoAim(m_hoodPIDsubsystem, m_visionSubsystem, m_shooterPIDsubsystem),
                                 true);
 
+                //compressor toggle
                 new JoystickButton(m_operateController, 1)
                                 .whenPressed(new InstantCommand(m_pneumaticsSubsystem::compOff))
                                 .whenReleased(new InstantCommand(m_pneumaticsSubsystem::compOn));
 
+                //activate turret
                 new JoystickButton(m_operateController, 3)
                                 .toggleWhenPressed(
                                                 new ActivateTurret(m_tracktarget, m_lookfortarget, m_visionSubsystem,
                                                                 m_turretPIDsubsystem),
                                                 true);
 
+                //hub shot
                 new JoystickButton(m_operateController, 12).toggleWhenPressed(
                                 new HUB(m_turretposition, m_shooterPIDsubsystem, m_hoodPIDsubsystem,
                                                 m_turretPIDsubsystem),
                                 true);
 
+                //shooter reverse
                 new JoystickButton(m_operateController, 11)
                                 .whenPressed(new InstantCommand(m_shooterPIDsubsystem::backDrive))
                                 .whenReleased(new InstantCommand(m_shooterPIDsubsystem::idleShooter));
@@ -97,7 +106,7 @@ public class RobotContainer {
                 // InstantCommand(m_hoodPIDsubsystem::hoodOpen),
                 // new InstantCommand(m_hoodPIDsubsystem::enable)))
                 // .whenReleased(new InstantCommand(m_hoodPIDsubsystem::disable));
-                
+
                 new JoystickButton(m_driveController, 1)
                                 .whenPressed(new InstantCommand(m_hoodPIDsubsystem::positionUpdate)
                                                 .alongWith(new InstantCommand(m_turretPIDsubsystem::updatePosition)));

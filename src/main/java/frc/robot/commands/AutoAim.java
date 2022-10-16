@@ -48,7 +48,7 @@ public class AutoAim extends CommandBase {
     if (m_visionsubsystem.hasTargets()) {
       aim();
     } else {
-      m_hoodPIDsubsystem.setSetpoint(74.429);
+      m_hoodPIDsubsystem.setSetpoint(65);
       m_shooterPIDsubsystem.setSetpoint(0);
     }
   }
