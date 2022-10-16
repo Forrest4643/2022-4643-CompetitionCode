@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.HoodConstants;
 
@@ -29,11 +30,29 @@ public class HoodPIDSubsystem extends PIDSubsystem {
 
     getController().setTolerance(HoodConstants.PIDtolerance);
 
-    hoodMotor.setInverted(true);
-    hoodEncoder.setInverted(true);
+    hoodMotor.setInverted(false);
+    hoodEncoder.setInverted(false);
     hoodEncoder.setPositionConversionFactor(HoodConstants.conversionFactor);
+    getController().disableContinuousInput();
    
-  }
+    }
+
+    public void hoodClosed() {
+    getController().setSetpoint(74);  
+    }
+
+    public void hoodOpen() {
+    getController().setSetpoint(52.5);  
+    }
+    public void positionUpdate() {
+      SmartDashboard.putNumber("HoodPosition", getHoodPositionDEG());
+    }
+
+    public void zeroHood() {
+      hoodEncoder.setPosition(0);
+    }
+
+
 
   public double getHoodVelocity() {
     return hoodEncoder.getVelocity();
@@ -41,7 +60,8 @@ public class HoodPIDSubsystem extends PIDSubsystem {
 
   public double getHoodPositionDEG() {
     //encoder * hoodtravelIN/hoodtravelDEG + hood lowest position
-    return (hoodEncoder.getPosition() * 4.65805632013) + 72;
+    double DEG = (hoodEncoder.getPosition() * 4.65805632013) + 74.429;
+    return DEG;
   }
 
   public double getHoodPositionIN() {
@@ -55,12 +75,12 @@ public class HoodPIDSubsystem extends PIDSubsystem {
   @Override
   protected void useOutput(double output, double setpoint) {
     double limitedOutput;
-    if (getHoodPositionIN() < HoodConstants.ForwardLimit) {
-      limitedOutput = MathUtil.clamp(output, -1, 0);
-      //System.out.println("FWDLIMIT");
-    } else if (getHoodPositionIN() > HoodConstants.ReverseLimit) {
+    if (getHoodPositionDEG() <= HoodConstants.highAngleLimit) {
       limitedOutput = MathUtil.clamp(output, 0, 1);
-      //System.out.println("REVLIMIT");
+      System.out.println("FWDLIMIT");
+    } else if (getHoodPositionIN() >= HoodConstants.lowAngleLimit) {
+      limitedOutput = MathUtil.clamp(output, -1, 0);
+      System.out.println("REVLIMIT");
     } else {
       limitedOutput = output;
     }
@@ -72,4 +92,6 @@ public class HoodPIDSubsystem extends PIDSubsystem {
   protected double getMeasurement() {
     return getHoodPositionDEG();
   }
+
+  
 }

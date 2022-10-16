@@ -84,7 +84,7 @@ public final class Constants {
         public static final double ejectCargo = 1000;
 
         public static final double voltsSlew = 3;
-        public static final double kP = 0.0008;
+        public static final double kP = 0.001;
         public static final double kI = 0.0001;
         public static final double kD = 0.0;
         public static final double PIDtolerance = 10;
@@ -96,7 +96,7 @@ public final class Constants {
         public static final double quadAimA = -10.5;
         public static final double quadAimB = 4.1;
         public static final double quadAimC = -0.061;
-        public static final double quadAimD = 1072;
+        public static final double quadAimD = 1515;
         public static final double efficiencyConversion = 1;
 
     }
@@ -127,15 +127,15 @@ public final class Constants {
 
         public static final double quadAimA = -4.57;
         public static final double quadAimB = 0.0865;
-        public static final double quadAimC = 96.9;
+        public static final double quadAimC = 92.4;
 
     }
 
     public static final class TurretConstants {
         public static final int turretID = 11;
         public static final double turretTicksToDegrees = 1.72193877551;
-        public static final double turretForwardLimit = 135; //TODO test.
-        public static final double turretReverseLimit = -135; //TODO test.
+        public static final double turretForwardLimit = 95; //TODO test.
+        public static final double turretReverseLimit = -95; //TODO test.
         public static final double turretLeftWarning = turretForwardLimit - 5;
         public static final double turretRightWarning = turretReverseLimit + 5;
         public static final double turretkP = 0.08;

@@ -82,14 +82,14 @@ public class DriveSubsystem extends SubsystemBase {
     double SqrTurn = Math.pow(MathUtil.applyDeadband(Math.abs(turnRate), DriveConstants.stickDB),
         DriveConstants.turnPow);
 
-    double SqrSpeed = DriveConstants.speedSin * (Math.sin(Speed));
+    double SqrSpeed = (Math.sin(Speed));
 
     if (Speed < 0) {
-      SqrSpeed = SqrSpeed * -1;
+      SqrSpeed = Math.abs(SqrSpeed) * -1;
     }
 
     if (turnRate < 0) {
-      SqrTurn = SqrTurn * -1;
+      SqrTurn = Math.abs(SqrTurn) * -1;
     }
 
     // TODO Update turnSlew to match the lower COM of the robot -F.L

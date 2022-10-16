@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.TurretConstants;
 
@@ -27,11 +28,15 @@ public class TurretPIDSubsystem extends PIDSubsystem {
         new PIDController(TurretConstants.turretkP, TurretConstants.turretkI, TurretConstants.turretkD));
 
         getController().setTolerance(TurretConstants.tolerance);
-
+        turretMotor.setInverted(true);
         turretEncoder.setPositionConversionFactor(TurretConstants.turretTicksToDegrees);
 
         this.m_visionsubsystem = m_visionsubsystem;
         this.m_sensors = m_sensors;
+  }
+
+  public void updatePosition() {
+    SmartDashboard.putNumber("turretPosition", turretPositionDEG());
   }
 
   public void zeroTurret() {
@@ -46,16 +51,21 @@ public class TurretPIDSubsystem extends PIDSubsystem {
 
   public void setMotor(double speed) {
     double limitedOutput;
+    //System.out.println("Pos: " + turretPositionDEG());
     if (turretPositionDEG() >= TurretConstants.turretForwardLimit) {
       limitedOutput = MathUtil.clamp(speed, -1, 0);
-      //System.out.println("FWDLIMIT");
+      System.out.println("TRT-FWD-LIMIT");
     } else if (turretPositionDEG() <= TurretConstants.turretReverseLimit) {
       limitedOutput = MathUtil.clamp(speed, 0, 1);
-      //System.out.println("REVLIMIT");
+      System.out.println("TRT-REV-LIMIT");
     } else {
       limitedOutput = speed;
-    }
-    turretMotor.set(limitedOutput);;
+    }    
+    //System.out.println("Spd: " + limitedOutput);
+
+    turretMotor.set(limitedOutput);
+    SmartDashboard.putNumber("turretOutput", limitedOutput);
+
   }
 
   public void neg() {
@@ -78,6 +88,7 @@ public class TurretPIDSubsystem extends PIDSubsystem {
   }
 
   public double turretPositionDEG() {
+    SmartDashboard.putNumber("turretPosition", turretEncoder.getPosition());
     return turretEncoder.getPosition();
   }
 
