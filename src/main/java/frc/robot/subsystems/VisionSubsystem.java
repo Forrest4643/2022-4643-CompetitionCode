@@ -22,7 +22,7 @@ public class VisionSubsystem extends SubsystemBase {
     boolean m_hasTargets;
 
     public VisionSubsystem() {
-        camera.setLED(VisionLEDMode.kOff);
+        camera.setLED(VisionLEDMode.kOn);
     }
 
     @Override

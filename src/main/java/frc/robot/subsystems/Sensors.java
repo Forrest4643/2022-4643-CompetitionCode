@@ -23,14 +23,14 @@ public class Sensors extends SubsystemBase {
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final I2C.Port mXpPorti2c = I2C.Port.kMXP;
-  private final ColorSensorV3 m_frontSense = new ColorSensorV3(i2cPort);
-  private final ColorSensorV3 m_rearSense = new ColorSensorV3(mXpPorti2c); 
+  private final ColorSensorV3 m_topSense = new ColorSensorV3(i2cPort);
+  private final ColorSensorV3 m_bottomSense = new ColorSensorV3(mXpPorti2c); 
   private final AnalogInput m_index1 = new AnalogInput(1);
   private final AnalogInput m_turret0 = new AnalogInput(0);
 
-  Color m_frontColor;
+  Color m_topColor;
 
-  Color m_rearColor;
+  Color m_bottomColor;
 
  
 
@@ -48,23 +48,23 @@ public class Sensors extends SubsystemBase {
   @Override
   public void periodic() {
 
-    double frontProx = m_frontSense.getProximity();
+    double topProx = m_topSense.getProximity();
 
-    double rearProx = m_rearSense.getProximity();
+    double bottomProx = m_bottomSense.getProximity();
 
-    m_frontColor = m_frontSense.getColor();
+    m_topColor = m_topSense.getColor();
 
-    m_rearColor = m_rearSense.getColor();
+    m_bottomColor = m_bottomSense.getColor();
 
-    SmartDashboard.putNumber("frontProx", frontProx);
+    SmartDashboard.putNumber("topProx", topProx);
 
-    SmartDashboard.putNumber("rearProx", rearProx);
+    SmartDashboard.putNumber("bottomProx", bottomProx);
 
-    SmartDashboard.putNumber("frontRedValue", m_frontColor.red);
-    SmartDashboard.putNumber("frontBlueValue", m_frontColor.blue);
+    SmartDashboard.putNumber("topRedValue", m_topColor.red);
+    SmartDashboard.putNumber("topBlueValue", m_topColor.blue);
 
-    SmartDashboard.putNumber("rearRedValue", m_rearColor.red);
-    SmartDashboard.putNumber("rearBlueValue", m_rearColor.blue);
+    SmartDashboard.putNumber("bottomRedValue", m_bottomColor.red);
+    SmartDashboard.putNumber("bottomBlueValue", m_bottomColor.blue);
 
     SmartDashboard.putNumber("Yaw", yaw());
     SmartDashboard.putNumber("Pitch", pitch());
@@ -90,12 +90,12 @@ public class Sensors extends SubsystemBase {
     return (m_index1.getVoltage() > IndexerConstants.thresh1);
   }
 
-  public boolean frontBall() {
-    return(m_frontSense.getProximity() > IndexerConstants.frontThresh);
+  public boolean topBall() {
+    return(m_topSense.getProximity() > IndexerConstants.topThresh);
   }
 
-  public boolean rearBall() {
-    return(m_rearSense.getProximity() > IndexerConstants.rearThresh);
+  public boolean bottomBall() {
+    return(m_bottomSense.getProximity() > IndexerConstants.bottomThresh);
   }
 
   public boolean turretZero() {
@@ -106,24 +106,17 @@ public class Sensors extends SubsystemBase {
 
  
 
-  public boolean correctFrontCargo() {
-    if (m_frontColor.blue >= IndexerConstants.blueThresh
-        && DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-      return true;
-    } else if ((m_frontColor.red >= IndexerConstants.redThresh
-        && DriverStation.getAlliance() == DriverStation.Alliance.Red)) {
+  public boolean topCargoBlue() {
+    if (m_topColor.blue >= IndexerConstants.blueThresh) {
       return true;
     } else {
       return false;
     }
   }
+  
 
-  public boolean correctRearCargo() {
-    if (m_rearColor.blue >= IndexerConstants.blueThresh
-        && DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-      return true;
-    } else if ((m_rearColor.red >= IndexerConstants.redThresh
-        && DriverStation.getAlliance() == DriverStation.Alliance.Red)) {
+  public boolean bottomCargoBlue() {
+    if (m_bottomColor.blue >= IndexerConstants.blueThresh) {
       return true;
     } else {
       return false;

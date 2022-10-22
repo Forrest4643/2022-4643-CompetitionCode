@@ -17,10 +17,12 @@ import frc.robot.Constants.ClimberConstants;
 public class ClimberSubsystem extends SubsystemBase {
   private final CANSparkMax m_cMotor = new CANSparkMax(ClimberConstants.climbID, MotorType.kBrushless);
   private final RelativeEncoder m_cEncoder = m_cMotor.getEncoder();
+  
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
     m_cMotor.setIdleMode(IdleMode.kBrake);
     m_cEncoder.setPositionConversionFactor(ClimberConstants.conversionFactor);
+    
   }
 
   @Override
@@ -31,10 +33,10 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void setMotor(double speed) {
     double limitedOutput;
-    if (climberInches() < ClimberConstants.maxTicks) {
+    if (climberInches() < ClimberConstants.minLimit) {
       limitedOutput = MathUtil.clamp(speed, -1, 0);
       //System.out.println("FWDLIMIT");
-    } else if (climberInches()> ClimberConstants.maxTicks) {
+    } else if (climberInches()> ClimberConstants.maxLimit) {
       limitedOutput = MathUtil.clamp(speed, 0, 1);
       //System.out.println("REVLIMIT");
     } else {

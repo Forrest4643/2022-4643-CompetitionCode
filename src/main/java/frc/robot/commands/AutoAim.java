@@ -55,21 +55,20 @@ public class AutoAim extends CommandBase {
 
   //sets shooter RPM and hood angle based on distance
   private void aim() {
-    double targetDistanceFT = m_visionsubsystem.getTargetDistanceIN() / 12;
+    double targetDistance = m_visionsubsystem.getTargetDistanceIN() / 12;
 
     // setting hood launch angle based off of 2nd degree polynomial
     m_hoodPIDsubsystem.setSetpoint(MathUtil.clamp(
         HoodConstants.quadAimC +
-            (HoodConstants.quadAimB * targetDistanceFT) +
-            (Math.pow(targetDistanceFT, 2) * HoodConstants.quadAimA),
-
-        65, 80));
+            (HoodConstants.quadAimA * targetDistance) +
+            (Math.pow(targetDistance, 2) * HoodConstants.quadAimB),
+        HoodConstants.highAngleLimit, HoodConstants.lowAngleLimit));
 
     // setting shooter RPM based off of 3rd degree polynomial
     m_shooterPIDsubsystem.setSetpoint(ShooterConstants.quadAimD +
-        (ShooterConstants.quadAimC * targetDistanceFT) +
-        (Math.pow((targetDistanceFT), 2) * ShooterConstants.quadAimB) +
-        (Math.pow(targetDistanceFT, 3) * ShooterConstants.quadAimA));
+        (ShooterConstants.quadAimA * targetDistance) +
+        (Math.pow((targetDistance), 2) * ShooterConstants.quadAimB) +
+        (Math.pow(targetDistance, 3) * ShooterConstants.quadAimC));
 
     // debug info
     SmartDashboard.putNumber("hoodPositionDEG", m_hoodPIDsubsystem.getHoodPositionDEG());

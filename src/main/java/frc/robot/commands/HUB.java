@@ -14,7 +14,7 @@ public class HUB extends CommandBase {
   private ShooterPIDSubsystem m_shooterPIDsubsystem;
   private HoodPIDSubsystem m_hoodPIDsubsystem;
   private TurretPIDSubsystem m_turretPIDsubsystem;
-  private TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, -160);
+  private TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, -20); //TODO
   
   /** Creates a new HUB. */
   public HUB(TurretPosition m_turretposition, ShooterPIDSubsystem m_shooterPIDsubsystem, HoodPIDSubsystem m_hoodPIDsubsystem, TurretPIDSubsystem m_turretPIDsubsystem) {
@@ -46,7 +46,7 @@ public class HUB extends CommandBase {
     }
 
     m_shooterPIDsubsystem.setSetpoint(2000);
-    m_hoodPIDsubsystem.setSetpoint(67);
+    m_hoodPIDsubsystem.setSetpoint(74.5);
     if (!m_turretposition.isScheduled()) {
       m_turretposition.schedule();
     }
