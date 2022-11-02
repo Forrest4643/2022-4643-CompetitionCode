@@ -4,9 +4,18 @@
 
 package frc.robot;
 
+import javax.management.InstanceAlreadyExistsException;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVPhysicsSim;
+
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.DriveSubsystem;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -95,8 +104,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
-
+  public void simulationInit() {
+    () -> DriveSubsystem.
+  }
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
