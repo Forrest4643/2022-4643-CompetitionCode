@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj.util.Color;
 
 public class IndexSensors extends SubsystemBase {
 
-  private final AnalogInput indexFront = new AnalogInput(1);
-  private final AnalogInput indexRear = new AnalogInput(2);
+  // private final AnalogInput indexFront = new AnalogInput(1);
+  // private final AnalogInput indexRear = new AnalogInput(2);
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 towerColor = new ColorSensorV3(i2cPort);
@@ -45,11 +45,13 @@ public class IndexSensors extends SubsystemBase {
   }
 
   public boolean indexFrontPres() {
-    return (indexFront.getVoltage() < IndexerConstants.sensorThresh);
+    return false;
+    //(indexFront.getVoltage() < IndexerConstants.sensorThresh);
   }
 
   public boolean indexRearPres() {
-    return (indexRear.getVoltage() < IndexerConstants.sensorThresh);
+    return false;
+    //(indexRear.getVoltage() < IndexerConstants.sensorThresh);
   }
 
   public boolean correctCargo() {

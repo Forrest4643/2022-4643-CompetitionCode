@@ -11,15 +11,21 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -42,7 +48,16 @@ public class DriveSubsystem extends SubsystemBase {
   private RelativeEncoder m_rightFrontEncoder = rightFront.getEncoder();
   private RelativeEncoder m_rightRearEncoder = rightRear.getEncoder();
 
+
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(leftDrive, rightDrive);
+
+  private AnalogGyro m_gyro = new AnalogGyro(1);
+  private AnalogGyroSim m_gyroSim = new AnalogGyroSim(m_gyro);
+
+  private Field2d m_field = new Field2d();
+
+  DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(
+    new Rotation2d(m_gyro.getAngle()), new Pose2d(5.0, 13.5, new Rotation2d()));
 
   // Create the simulation model of our drivetrain.
   DifferentialDrivetrainSim m_driveSim = new DifferentialDrivetrainSim(
@@ -85,16 +100,22 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     leftDrive.setInverted(false);
     rightDrive.setInverted(true);
+    SmartDashboard.putData("Field", m_field);
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("DriveDistanceIN", getDriveDistanceIN());
+    m_odometry.update(m_gyro.getRotation2d(),
+    m_leftFrontEncoder.getPosition(),
+    m_rightFrontEncoder.getPosition());
+    m_field.setRobotPose(m_odometry.getPoseMeters());
 
+    m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
   }
 
-  
 
   @Override
   public void simulationPeriodic() {
@@ -108,8 +129,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     REVPhysicsSim.getInstance().run();
 
-  }
-  
+    m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
+
+  }  
 
   public void setDrive(double Speed, double turnRate) {
 
@@ -132,3 +154,4 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("sqrspeed", SqrSpeed);
   }
 }
+
