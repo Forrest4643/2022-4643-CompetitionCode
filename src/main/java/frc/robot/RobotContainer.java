@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import java.time.Instant;
+
+import edu.wpi.first.util.concurrent.Event;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.HoodConstants;
@@ -26,6 +29,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
@@ -86,6 +90,10 @@ public class RobotContainer {
 
     //r bump index fwd
     new JoystickButton(operateController, 6).whileActiveOnce(new indexerWheelsOn(IndexerSubsystem));
-  }
+   
+  }     
+
+  InstantCommand DriveSimStart = new InstantCommand(DriveSubsystem::DriveSiminit);
+
 
 }
