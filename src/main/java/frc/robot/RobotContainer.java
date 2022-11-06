@@ -4,11 +4,29 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.time.Instant;
+import java.util.List;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.util.concurrent.Event;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.StickDrive;
@@ -28,8 +46,9 @@ import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
@@ -42,58 +61,88 @@ public class RobotContainer {
   private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
-  private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
+  //private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
   private final XboxController driveController = new XboxController(0);
   private final XboxController operateController = new XboxController(1);
-  
+
+  String trajectoryJSON = "C:/Users/arkap/OneDrive/Documents/FRC/2022/2022-Robot-Code/PathWeaver/output/Ball1.wpilib.json";
+  private Trajectory Auto1 = new Trajectory();
 
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+      Auto1 = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+   } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+   }
+
     DriveSubsystem.setDefaultCommand(
 
-        new StickDrive(() -> driveController.getRawAxis(2) - driveController.getRawAxis(3),
-            () -> -driveController.getRawAxis(0), DriveSubsystem));
+        new StickDrive(() -> driveController.getRawAxis(5) - driveController.getRawAxis(4),
+            () -> driveController.getRawAxis(0), DriveSubsystem));
+
 
   }
 
   private void configureButtonBindings() {
-    // operate a button = front intake enable
-    new JoystickButton(operateController, 4)
-        .whileActiveOnce(new FrontIntakeEnable(IntakeSubsystem, PneumaticsSubsystem,
-            IndexerSubsystem));
-
-    // operate y button = rear intake enable
-    new JoystickButton(operateController, 2)
-        .whileActiveOnce(new RearIntakeEnable(IntakeSubsystem, PneumaticsSubsystem,
-            IndexerSubsystem));
-
-    // TESTING
-    // new JoystickButton(operateController, 3).whenPressed(new
-    // hoodPID(hoodSubsystem, () -> 1.25));
-    // new JoystickButton(operateController, 1).whenPressed(new
-    // hoodPID(hoodSubsystem, () -> 1.75));
-
-    //x high goal aim
-    new JoystickButton(driveController, 3).whileActiveOnce(new driveAim(DriveSubsystem, VisionSubsystem, true));
-    new JoystickButton(driveController, 3).whileActiveOnce(new hoodPID(hoodSubsystem, () -> HoodConstants.highGoal));
-    new JoystickButton(driveController, 3).whileActiveOnce(new shooterPID(shooterSubsystem, () -> ShooterConstants.highGoal));
-
-    //b low goal aim
-    new JoystickButton(driveController, 2).whileActiveOnce(new driveAim(DriveSubsystem, VisionSubsystem, false));
-    new JoystickButton(driveController, 2).whileActiveOnce(new hoodPID(hoodSubsystem, () -> HoodConstants.lowGoal));
-    new JoystickButton(driveController, 2).whileActiveOnce(new shooterPID(shooterSubsystem, () -> ShooterConstants.lowGoal));
-    
-    //l bump index rev
-    new JoystickButton(operateController, 5).whileActiveOnce(new indexerWheelsReverse(IndexerSubsystem));
-
-    //r bump index fwd
-    new JoystickButton(operateController, 6).whileActiveOnce(new indexerWheelsOn(IndexerSubsystem));
+  
    
   }     
 
   InstantCommand DriveSimStart = new InstantCommand(DriveSubsystem::DriveSiminit);
 
+  public Command getAutonomousCommand() {
 
+    // Create a voltage constraint to ensure we don't accelerate too fast
+    var autoVoltageConstraint =
+        new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(
+                DriveConstants.ksVolts,
+                DriveConstants.kvVoltSecondsPerMeter,
+                DriveConstants.kaVoltSecondsSquaredPerMeter),
+            DriveConstants.kDriveKinematics,
+            10);
+
+    // Create config for trajectory
+    TrajectoryConfig config =
+        new TrajectoryConfig(
+                AutoConstants.kMaxSpeedMetersPerSecond,
+                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(DriveConstants.kDriveKinematics)
+            // Apply the voltage constraint
+            .addConstraint(autoVoltageConstraint);
+
+    
+    // Reset odometry to the starting pose of the trajectory.
+    DriveSubsystem.resetOdometry(Auto1.getInitialPose());
+
+    RamseteCommand ramseteCommand =
+        new RamseteCommand(
+            Auto1,
+            DriveSubsystem::getPose,
+            new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+            new SimpleMotorFeedforward(
+                DriveConstants.ksVolts,
+                DriveConstants.kvVoltSecondsPerMeter,
+                DriveConstants.kaVoltSecondsSquaredPerMeter),
+            DriveConstants.kDriveKinematics,
+            DriveSubsystem::getWheelSpeeds,
+            new PIDController(DriveConstants.kPDriveVel, 0, 0),
+            new PIDController(DriveConstants.kPDriveVel, 0, 0),
+            // RamseteCommand passes volts to the callback
+            DriveSubsystem::tankDriveVolts,
+            DriveSubsystem);
+
+
+
+    // Run path following command, then stop at the end.
+    return ramseteCommand.andThen(() -> DriveSubsystem.tankDriveVolts(0, 0));
+  }
 }
+
+
+

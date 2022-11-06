@@ -1,82 +1,43 @@
 {
   "HALProvider": {
     "Other Devices": {
-      "AnalogGyro[1]": {
+      "CANSparkMax[12]": {
         "header": {
           "open": true
         }
       },
-      "SPARK MAX [10]": {
+      "CANSparkMax[13]": {
         "header": {
           "open": true
         }
       },
-      "SPARK MAX [11]": {
+      "CANSparkMax[2] - RelativeEncoder": {
         "header": {
           "open": true
         }
       },
       "SPARK MAX [12]": {
         "header": {
-          "open": true
+          "open": false
         }
       },
       "SPARK MAX [13]": {
         "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [1]": {
-        "header": {
-          "open": true
+          "open": false
         }
       },
       "SPARK MAX [2]": {
         "header": {
-          "open": true
+          "open": false
         }
       },
       "SPARK MAX [3]": {
         "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [4]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [6]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [7]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [8]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [9]": {
-        "header": {
-          "open": true
+          "open": false
         }
       }
     },
     "RoboRIO": {
-      "5V Rail": {
-        "open": true
-      },
-      "6V Rail": {
-        "open": true
-      },
-      "RoboRIO Input": {
-        "open": true
-      },
       "window": {
         "visible": true
       }
@@ -91,30 +52,17 @@
       "/LiveWindow/IndexerSubsystem": "Subsystem",
       "/LiveWindow/IntakeSubsystem": "Subsystem",
       "/LiveWindow/PneumaticsSubsystem": "Subsystem",
-      "/LiveWindow/ShooterPIDSubsystem": "Subsystem",
-      "/LiveWindow/ShooterPIDSubsystem/PID Controller": "PIDController",
       "/LiveWindow/ShooterSubsystem": "Subsystem",
       "/LiveWindow/TurretSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/AnalogGyro[1]": "Gyro",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
-      "/LiveWindow/Ungrouped/MotorControllerGroup[3]": "Motor Controller",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[6]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[7]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
-      "/LiveWindow/VisionSubsystem": "Subsystem",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "Robot": {
-          "style": "Line"
-        },
         "window": {
           "visible": true
         }
@@ -122,8 +70,8 @@
     }
   },
   "NetworkTables": {
-    "SmartDashboard": {
-      "Field": {
+    "LiveWindow": {
+      "Ungrouped": {
         "open": true
       },
       "open": true

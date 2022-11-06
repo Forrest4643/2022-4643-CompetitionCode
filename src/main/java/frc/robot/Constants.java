@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
@@ -24,10 +25,16 @@ public final class Constants {
         public static final double steerkI = 0;
         public static final double steerkD = 0;
 
-        public static final double highGoal = 12*6;
-        public static final double lowGoal = 12*2;
+        public static final double highGoal = 12 * 6;
+        public static final double lowGoal = 12 * 2;
 
+        //TODO sysid
         public static final double driveTickToIN = -22.28169203;
+        public static final double kaVoltSecondsSquaredPerMeter = 1;
+        public static final double ksVolts = 0.001;
+        public static final double kvVoltSecondsPerMeter = 1;
+        public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(0.7112);
+        public static final double kPDriveVel = 0.05;
     }
 
     public static final class IndexerConstants {
@@ -111,8 +118,31 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
-        public static final double cameraHeightMETERS = Units.inchesToMeters(37.65);
-        public static final double targetHeightMETERS = Units.inchesToMeters(104);
-        public static final double cameraAngleRAD = Units.degreesToRadians(30);
+        public static final double cameraHeightM = Units.inchesToMeters(37.650);
+        public static final double targetGroundHeightM = Units.inchesToMeters(104.000);
+        public static final double cameraAngleRAD = Units.degreesToRadians(30.0);
+        public static final double camDiagFOV = 170.0; // degrees - assume wide-angle camera
+        public static final double maxLEDRange = 20.0; // meters
+        public static final int camResolutionWidth = 640; // pixels
+        public static final int camResolutionHeight = 480; // pixels
+        public static final double minTargetAreaPIX = 10; // square pixels
+
+      
+        public static final double targetWidthM = Units.inchesToMeters(53.750);
+      
+        public static final double targetHeightM = Units.inchesToMeters(2.000);
+      
+        public static final double tgtXPos = Units.inchesToMeters(312.000);
+        public static final double tgtYPos = Units.inchesToMeters(164.000);
+               
+    }
+
+    public static final class AutoConstants {
+
+        public static final double kMaxSpeedMetersPerSecond = 3.0;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 1.0;
+        public static final double kRamseteB = 2.0;
+        public static final double kRamseteZeta = 0.7;
+
     }
 }

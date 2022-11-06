@@ -6,25 +6,32 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVPhysicsSim;
-import com.revrobotics.RelativeEncoder;
+import frc.robot.Constants.VisionConstants;
+import net.thefletcher.revrobotics.CANSparkMax;
+import net.thefletcher.revrobotics.enums.MotorType;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+
+import org.photonvision.SimVisionSystem;
+import org.photonvision.SimVisionTarget;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -39,11 +46,10 @@ public class DriveSubsystem extends SubsystemBase {
   // setting speed controller groups
 
   //defining encoders
-  private RelativeEncoder m_leftEncoder = leftLeader.getEncoder();
-  private RelativeEncoder m_rightEncoder = rightLeader.getEncoder();
+  public RelativeEncoder m_leftEncoder = leftLeader.getEncoder();
+  public RelativeEncoder m_rightEncoder = rightLeader.getEncoder();
 
-
-  private final DifferentialDrive m_robotDrive = new DifferentialDrive(leftLeader, rightLeader);
+  public final DifferentialDrive m_robotDrive = new DifferentialDrive(leftLeader, rightLeader);
 
   private AnalogGyro m_gyro = new AnalogGyro(1);
   private AnalogGyroSim m_gyroSim = new AnalogGyroSim(m_gyro);
@@ -51,7 +57,10 @@ public class DriveSubsystem extends SubsystemBase {
   private Field2d m_field = new Field2d();
 
   DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(
-    new Rotation2d(-m_gyro.getAngle()), new Pose2d(5.0, 5.0, new Rotation2d()));
+    new Rotation2d(-m_gyro.getAngle()), new Pose2d(6.383, 5.769, new Rotation2d()));
+
+  Pose2d farTargetPose = new Pose2d(new Translation2d(VisionConstants.tgtXPos, VisionConstants.tgtYPos), new Rotation2d(0.0));
+
 
   // Create the simulation model of our drivetrain.
   DifferentialDrivetrainSim m_driveSim = new DifferentialDrivetrainSim(
@@ -70,10 +79,23 @@ public class DriveSubsystem extends SubsystemBase {
     VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005)
   );
 
+  SimVisionSystem simVision =
+    new SimVisionSystem(
+            "photonvision",
+            VisionConstants.camDiagFOV,
+            VisionConstants.cameraAngleRAD,
+            new Transform2d(),
+            VisionConstants.cameraHeightM,
+            VisionConstants.maxLEDRange,
+            VisionConstants.camResolutionWidth,
+            VisionConstants.camResolutionHeight,
+            VisionConstants.minTargetAreaPIX);
+
   public void DriveSiminit() {
-    REVPhysicsSim.getInstance().addSparkMax(leftLeader, DCMotor.getNEO(2));
-    REVPhysicsSim.getInstance().addSparkMax(rightLeader, DCMotor.getNEO(2));
   }
+
+
+ 
 
 
   public void resetDriveEncoders() {
@@ -88,14 +110,16 @@ public class DriveSubsystem extends SubsystemBase {
 
     leftFollower.follow(leftLeader, false);
     rightFollower.follow(rightLeader, false);
+    
+    simVision.addSimVisionTarget(
+                new SimVisionTarget(farTargetPose, VisionConstants.targetGroundHeightM, VisionConstants.targetWidthM, VisionConstants.targetHeightM));
     SmartDashboard.putData("Field", m_field);
 
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    //TODO SmartDashboard.putNumber("DriveDistanceIN", getDriveDistanceIN());
+
     m_odometry.update(m_gyro.getRotation2d(),
     m_leftEncoder.getPosition(),
     m_rightEncoder.getPosition());
@@ -111,13 +135,16 @@ public class DriveSubsystem extends SubsystemBase {
     // Advance the model by 20 ms. Note that if you are running this
     // subsystem in a separate thread or have changed the nominal timestep
     // of TimedRobot, this value needs to match it.
-    System.out.println("leftDrivePOS:" + m_leftEncoder.getPosition());
-    System.out.println("rightDrivePOS:" + m_rightEncoder.getPosition());
-
-
     m_driveSim.update(0.02);
 
-    REVPhysicsSim.getInstance().run();
+    simVision.processFrame(m_driveSim.getPose());
+
+    m_leftEncoder.setPosition(m_driveSim.getLeftPositionMeters());
+    m_rightEncoder.setPosition(m_driveSim.getRightPositionMeters());
+
+    //System.out.println("leftDriveDist:" + m_leftEncoder.getPosition());
+    //System.out.println("rightDriveDist:" + m_rightEncoder.getPosition());
+
 
     m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
 
@@ -142,6 +169,41 @@ public class DriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("sqrturn", SqrTurn);
     SmartDashboard.putNumber("sqrspeed", SqrSpeed);
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getVelocity(), m_rightEncoder.getVelocity());
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    resetDriveEncoders();
+    m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+  }
+
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    leftLeader.setVoltage(leftVolts);
+    rightLeader.setVoltage(rightVolts);
+    m_robotDrive.feed();
+  }
+
+  public double getAverageEncoderDistance() {
+    return (m_leftEncoder.getPosition() + m_rightEncoder.getPosition()) / 2.0;
+  }
+
+  public void zeroHeading() {
+    m_gyro.reset();
+  }
+
+  public double getHeading() {
+    return m_gyro.getRotation2d().getDegrees();
+  }
+
+  public double getTurnRate() {
+    return -m_gyro.getRate();
+  }
+
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
   }
 }
 

@@ -65,6 +65,8 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
+    implementation "net.thefletcher:SparkMaxSim-java:RELEASE_TAG"
+
     testImplementation 'junit:junit:4.13.1'
 }
 
@@ -79,6 +81,11 @@ jar {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+//support for SPARKMAX simulation
+repositories {
+  maven { url 'https://jitpack.io' }
 }
 
 // Configure jar and deploy tasks
