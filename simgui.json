@@ -113,7 +113,7 @@
     "windows": {
       "/SmartDashboard/Field": {
         "Robot": {
-          "style": "Box/Image"
+          "style": "Line"
         },
         "window": {
           "visible": true
@@ -123,6 +123,9 @@
   },
   "NetworkTables": {
     "SmartDashboard": {
+      "Field": {
+        "open": true
+      },
       "open": true
     }
   }
