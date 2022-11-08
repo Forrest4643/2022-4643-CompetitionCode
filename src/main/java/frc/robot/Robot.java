@@ -2,26 +2,14 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+//Programmed by Forrest Lasell during the 2022 FRC season for team 4643, Butte Built Bots
+
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import javax.management.InstanceAlreadyExistsException;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVPhysicsSim;
-
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 
 

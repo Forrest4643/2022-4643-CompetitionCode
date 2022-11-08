@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+//Programmed by Forrest Lasell during the 2022 FRC season for team 4643, Butte Built Bots
+
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
