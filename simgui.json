@@ -47,6 +47,8 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/DriveSubsystem": "Subsystem",
+      "/LiveWindow/HoodPIDSubsystem": "Subsystem",
+      "/LiveWindow/HoodPIDSubsystem/PID Controller": "PIDController",
       "/LiveWindow/HoodSubsystem": "Subsystem",
       "/LiveWindow/IndexSensors": "Subsystem",
       "/LiveWindow/IndexerSubsystem": "Subsystem",

@@ -32,25 +32,21 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.StickDrive;
-import frc.robot.commands.driveAim;
-import frc.robot.commands.hoodPID;
-import frc.robot.commands.shooterPID;
-import frc.robot.commands.FrontIntake.FrontIntakeEnable;
-import frc.robot.commands.Indexer.indexerWheelsOn;
-import frc.robot.commands.Indexer.indexerWheelsReverse;
-import frc.robot.commands.RearIntake.RearIntakeEnable;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.HoodSubsystem;
-import frc.robot.subsystems.IndexSensors;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
@@ -58,17 +54,28 @@ public class RobotContainer {
   private final DriveSubsystem DriveSubsystem = new DriveSubsystem();
   private final IntakeSubsystem IntakeSubsystem = new IntakeSubsystem();
   private final PneumaticsSubsystem PneumaticsSubsystem = new PneumaticsSubsystem();
-  private final TurretSubsystem turretSubsystem = new TurretSubsystem();
-  private final IndexSensors indexSensors = new IndexSensors();
   private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
-  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-  private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
   //private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
   private final XboxController driveController = new XboxController(0);
   private final XboxController operateController = new XboxController(1);
 
   String trajectoryJSON = "C:/Users/arkap/OneDrive/Documents/FRC/2022/2022-Robot-Code/PathWeaver/output/Ball1.wpilib.json";
   private Trajectory Auto1 = new Trajectory();
+  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final Sensors m_sensors = new Sensors();
+  private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
+  private final IndexerSubsystem m_indexerSubsystem = new IndexerSubsystem();
+  private final ShooterPIDSubsystem m_shooterPIDsubsystem = new ShooterPIDSubsystem();
+  private final HoodPIDSubsystem m_hoodPIDsubsystem = new HoodPIDSubsystem();
+  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final TurretPIDSubsystem m_turretPIDsubsystem = new TurretPIDSubsystem(m_visionSubsystem, m_sensors);
+  private final XboxController m_driveController = new XboxController(0);
+  private final XboxController m_operateController = new XboxController(1);
+
+  private final LookForTarget m_lookfortarget = new LookForTarget(m_turretPIDsubsystem);
+  private final TrackTarget m_tracktarget = new TrackTarget(m_turretPIDsubsystem);
+  
 
   public RobotContainer() {
     // Configure the button bindings
@@ -81,11 +88,9 @@ public class RobotContainer {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
    }
 
-    DriveSubsystem.setDefaultCommand(
+    m_driveSubsystem.setDefaultCommand(new StickDrive(m_driveSubsystem, m_driveController, m_turretPIDsubsystem));
 
-        new StickDrive(() -> driveController.getRawAxis(5) - driveController.getRawAxis(4),
-            () -> driveController.getRawAxis(0), DriveSubsystem));
-
+    m_intakeSubsystem.setDefaultCommand(new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_sensors, m_operateController));
 
   }
 

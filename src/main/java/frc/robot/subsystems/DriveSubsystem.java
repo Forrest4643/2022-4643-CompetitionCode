@@ -32,6 +32,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -48,6 +49,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   // Defining drivetrain DifferentialDrive
   public final DifferentialDrive m_robotDrive = new DifferentialDrive(leftLeader, rightLeader);
+
+  SlewRateLimiter driveSlew = new SlewRateLimiter(DriveConstants.driveSlew);
+  SlewRateLimiter turnSlew = new SlewRateLimiter(DriveConstants.turnSlew);
 
   //Creates DriveSubsystem
   public DriveSubsystem() {
@@ -159,14 +163,9 @@ public class DriveSubsystem extends SubsystemBase {
   // main setDrive void, this is used for the StickDrive command in TeleOp
   public void setDrive(double Speed, double turnRate) {
 
-    // inputs to a power for a nice response curve
-    // applies a deadband to the stick inputs to prevent stick-drift
-    double SqrSpeed = Math.pow(
-        MathUtil.applyDeadband(Math.abs(Speed), DriveConstants.stickDB),
-        DriveConstants.speedPow);
-    double SqrTurn = Math.pow(
-        MathUtil.applyDeadband(Math.abs(turnRate), DriveConstants.stickDB),
-        DriveConstants.turnPow);
+    double SqrTurn = DriveConstants.turnSin * (Math.sin(turnRate));
+
+    double SqrSpeed = DriveConstants.speedSin * (Math.sin(Speed));
 
     // this ensures that negative inputs yield negative outputs,
     // and vise versa
@@ -176,8 +175,8 @@ public class DriveSubsystem extends SubsystemBase {
     if (turnRate < 0) {
       SqrTurn = SqrTurn * -1;
     }
-    // send speed and turn value to Drivetrain
-    m_robotDrive.arcadeDrive(SqrSpeed, SqrTurn);
+
+    m_robotDrive.arcadeDrive(driveSlew.calculate(SqrSpeed), turnSlew.calculate(SqrTurn) / 1.5);
 
     // debug info
     SmartDashboard.putNumber("sqrturn", SqrTurn);

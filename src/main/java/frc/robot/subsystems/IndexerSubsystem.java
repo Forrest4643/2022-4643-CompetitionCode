@@ -18,10 +18,16 @@ public class IndexerSubsystem extends SubsystemBase {
     private RelativeEncoder fEncoder = Front.getEncoder();
     private RelativeEncoder rEncoder = Rear.getEncoder();
 
+    public void setWheels(double speed) {
+        Front.set(speed);
+        Rear.set(speed);
+    }
+
     public void wheelsReverse() {
         Front.set(-1);
         Rear.set(-1);
     }
+
     public void wheelsOn() {
         Front.set(1);
         Rear.set(1);
@@ -31,6 +37,7 @@ public class IndexerSubsystem extends SubsystemBase {
         Front.set(0);
         Rear.set(0);
     }
+
     public void frontWheelsOn() {
         Front.set(1);
     }
@@ -67,10 +74,15 @@ public class IndexerSubsystem extends SubsystemBase {
         return rEncoder.getPosition();
     }
 
+    public double getPosition() {
+        return (((rEncoder.getPosition() + fEncoder.getPosition()) / 2) * 30) / 360;
+    }
+
     public void resetRearEncoder() {
         rEncoder.setPosition(0);
     }
 
+    
     @Override
     public void periodic() {
         SmartDashboard.putNumber("frontIndexerRPM", fEncoder.getVelocity());
