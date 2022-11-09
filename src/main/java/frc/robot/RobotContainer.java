@@ -51,14 +51,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
 
-  private final DriveSubsystem DriveSubsystem = new DriveSubsystem();
-  private final IntakeSubsystem IntakeSubsystem = new IntakeSubsystem();
-  private final PneumaticsSubsystem PneumaticsSubsystem = new PneumaticsSubsystem();
-  private final IndexerSubsystem IndexerSubsystem = new IndexerSubsystem();
-  //private final VisionSubsystem VisionSubsystem = new VisionSubsystem();
-  private final XboxController driveController = new XboxController(0);
-  private final XboxController operateController = new XboxController(1);
-
   String trajectoryJSON = "C:/Users/arkap/OneDrive/Documents/FRC/2022/2022-Robot-Code/PathWeaver/output/Ball1.wpilib.json";
   private Trajectory Auto1 = new Trajectory();
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
@@ -99,7 +91,7 @@ public class RobotContainer {
    
   }     
 
-  InstantCommand DriveSimStart = new InstantCommand(DriveSubsystem::DriveSiminit);
+  InstantCommand DriveSimStart = new InstantCommand(m_driveSubsystem::DriveSiminit);
 
   public Command getAutonomousCommand() {
 
@@ -125,29 +117,29 @@ public class RobotContainer {
 
     
     // Reset odometry to the starting pose of the trajectory.
-    DriveSubsystem.resetOdometry(Auto1.getInitialPose());
+    m_driveSubsystem.resetOdometry(Auto1.getInitialPose());
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
             Auto1,
-            DriveSubsystem::getPose,
+            m_driveSubsystem::getPose,
             new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
             new SimpleMotorFeedforward(
                 DriveConstants.ksVolts,
                 DriveConstants.kvVoltSecondsPerMeter,
                 DriveConstants.kaVoltSecondsSquaredPerMeter),
             DriveConstants.kDriveKinematics,
-            DriveSubsystem::getWheelSpeeds,
+            m_driveSubsystem::getWheelSpeeds,
             new PIDController(DriveConstants.kPDriveVel, 0, 0),
             new PIDController(DriveConstants.kPDriveVel, 0, 0),
             // RamseteCommand passes volts to the callback
-            DriveSubsystem::tankDriveVolts,
-            DriveSubsystem);
+            m_driveSubsystem::tankDriveVolts,
+            m_driveSubsystem);
 
 
 
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> DriveSubsystem.tankDriveVolts(0, 0));
+    return ramseteCommand.andThen(() -> m_driveSubsystem.tankDriveVolts(0, 0));
   }
 }
 

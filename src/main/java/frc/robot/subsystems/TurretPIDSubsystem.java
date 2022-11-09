@@ -34,17 +34,8 @@ public class TurretPIDSubsystem extends PIDSubsystem {
         this.m_sensors = m_sensors;
   }
 
-  public void zeroTurret() {
-    while (!m_sensors.turretZero()) {
-      turretMotor.set(.1);
-    }
-      turretMotor.set(0);
-    if (m_sensors.turretZero()) {
-      turretEncoder.setPosition(0);
-    }
-  }
-
   public void setMotor(double speed) {
+    
     double limitedOutput;
     if (turretPositionDEG() >= TurretConstants.turretForwardLimit) {
       limitedOutput = MathUtil.clamp(speed, -1, 0);

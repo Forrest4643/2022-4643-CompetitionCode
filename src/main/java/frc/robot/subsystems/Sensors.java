@@ -25,8 +25,6 @@ public class Sensors extends SubsystemBase {
   private final I2C.Port mXpPorti2c = I2C.Port.kMXP;
   private final ColorSensorV3 m_topSense = new ColorSensorV3(i2cPort);
   private final ColorSensorV3 m_bottomSense = new ColorSensorV3(mXpPorti2c); 
-  private final AnalogInput m_index1 = new AnalogInput(1);
-  private final AnalogInput m_turret0 = new AnalogInput(0);
 
   Color m_topColor;
 
@@ -70,8 +68,6 @@ public class Sensors extends SubsystemBase {
     SmartDashboard.putNumber("Pitch", pitch());
     SmartDashboard.putNumber("Roll", roll());
 
-    SmartDashboard.putBoolean("turretZero", turretZero());
-    SmartDashboard.putNumber("turretZeroVolt", m_turret0.getVoltage());
 
 
   }
@@ -86,10 +82,6 @@ public class Sensors extends SubsystemBase {
     return ahrs.getRoll();
   }
 
-  public boolean index1() {
-    return (m_index1.getVoltage() > IndexerConstants.thresh1);
-  }
-
   public boolean topBall() {
     return(m_topSense.getProximity() > IndexerConstants.topThresh);
   }
@@ -97,14 +89,6 @@ public class Sensors extends SubsystemBase {
   public boolean bottomBall() {
     return(m_bottomSense.getProximity() > IndexerConstants.bottomThresh);
   }
-
-  public boolean turretZero() {
-    return (m_turret0.getVoltage() < TurretConstants.zeroThresh);
-  }
-
-
-
- 
 
   public boolean topCargoBlue() {
     if (m_topColor.blue >= IndexerConstants.blueThresh) {

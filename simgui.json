@@ -15,26 +15,6 @@
         "header": {
           "open": true
         }
-      },
-      "SPARK MAX [12]": {
-        "header": {
-          "open": false
-        }
-      },
-      "SPARK MAX [13]": {
-        "header": {
-          "open": false
-        }
-      },
-      "SPARK MAX [2]": {
-        "header": {
-          "open": false
-        }
-      },
-      "SPARK MAX [3]": {
-        "header": {
-          "open": false
-        }
       }
     },
     "RoboRIO": {

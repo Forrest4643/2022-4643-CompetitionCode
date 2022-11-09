@@ -53,6 +53,9 @@ public class DriveSubsystem extends SubsystemBase {
   SlewRateLimiter driveSlew = new SlewRateLimiter(DriveConstants.driveSlew);
   SlewRateLimiter turnSlew = new SlewRateLimiter(DriveConstants.turnSlew);
 
+  private AnalogGyro m_gyro = new AnalogGyro(1);
+  private AnalogGyroSim m_gyroSim = new AnalogGyroSim(m_gyro);
+
   //Creates DriveSubsystem
   public DriveSubsystem() {
     // motor inversions
@@ -73,8 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putData("Field", m_field);
   } // end Public DriveSubsystem
 
-  private AnalogGyro m_gyro = new AnalogGyro(1);
-  private AnalogGyroSim m_gyroSim = new AnalogGyroSim(m_gyro);
+
 
   private Field2d m_field = new Field2d();
 

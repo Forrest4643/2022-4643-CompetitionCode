@@ -27,14 +27,14 @@ public class DriveDistance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivePID.setSetpoint(m_driveSubsystem.getDriveDistanceIN() + m_inches);
+    m_drivePID.setSetpoint(m_driveSubsystem.getAverageEncoderDistance() + m_inches);
     System.out.println("driveDist Start!");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_driveSubsystem.setDrive(MathUtil.clamp(-m_drivePID.calculate(m_driveSubsystem.getDriveDistanceIN()), -.5, .5), 0);
+    m_driveSubsystem.setDrive(MathUtil.clamp(-m_drivePID.calculate(m_driveSubsystem.getAverageEncoderDistance()), -.5, .5), 0);
   }
 
   // Called once the command ends or is interrupted.
