@@ -43,10 +43,11 @@ public class VisionSubsystem extends SubsystemBase {
             SmartDashboard.putBoolean("hasTargets", result.hasTargets());
             SmartDashboard.putNumber("targetDistanceIN", getTargetDistanceIN());
 
-            m_targetDistanceIN = VisionConstants.distC +
-                    (VisionConstants.distB * m_targetDistanceINRAW)
-                    + (Math.pow(m_targetDistanceINRAW, 2) * VisionConstants.distA);
+            m_targetDistanceIN = m_targetDistanceINRAW;
 
+        // VisionConstants.distC +
+        //            (VisionConstants.distB * m_targetDistanceINRAW)
+        //             + (Math.pow(m_targetDistanceINRAW, 2) * VisionConstants.distA); 
         } else {
             m_targetYaw = 0;
             m_targetDistanceIN = 0;

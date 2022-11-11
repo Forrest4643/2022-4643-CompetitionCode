@@ -6,6 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.HoodConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.ShooterPIDSubsystem;
 import frc.robot.subsystems.TurretPIDSubsystem;
@@ -14,8 +17,7 @@ public class HUB extends CommandBase {
   private ShooterPIDSubsystem m_shooterPIDsubsystem;
   private HoodPIDSubsystem m_hoodPIDsubsystem;
   private TurretPIDSubsystem m_turretPIDsubsystem;
-  private TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, -20); //TODO
-  
+  private TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, TurretConstants.HUBposition);  
   /** Creates a new HUB. */
   public HUB(TurretPosition m_turretposition, ShooterPIDSubsystem m_shooterPIDsubsystem, HoodPIDSubsystem m_hoodPIDsubsystem, TurretPIDSubsystem m_turretPIDsubsystem) {
     this.m_turretposition = m_turretposition;
@@ -45,8 +47,8 @@ public class HUB extends CommandBase {
       m_hoodPIDsubsystem.enable();
     }
 
-    m_shooterPIDsubsystem.setSetpoint(2000);
-    m_hoodPIDsubsystem.setSetpoint(74.5);
+    m_shooterPIDsubsystem.setSetpoint(ShooterConstants.hubShot);
+    m_hoodPIDsubsystem.setSetpoint(HoodConstants.hubShot);
     if (!m_turretposition.isScheduled()) {
       m_turretposition.schedule();
     }

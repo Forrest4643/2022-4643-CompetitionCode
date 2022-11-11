@@ -21,13 +21,19 @@ public class TurretPosition extends PIDCommand {
         // This should return the measurement
         () -> m_turretPIDsubsystem.turretPositionDEG(),
         // This should return the setpoint (can also be a constant)
-        () -> position,
+        () -> { 
+          System.out.println("TurretPos Setpoint: " + position);
+          return position; 
+        },
         // This uses the output
         output -> {
           m_turretPIDsubsystem.setMotor(output);
         });
 
-        System.out.println("TurretPos Setpoint: " + position);
+  }
+
+  public double getSetpoint() {
+    return this.m_controller.getSetpoint();
   }
 
   // Returns true when the command should end.

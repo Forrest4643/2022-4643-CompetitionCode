@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,7 +36,7 @@ public class RobotContainer {
 
         private final LookForTarget m_lookfortarget = new LookForTarget(m_turretPIDsubsystem);
         private final TrackTarget m_tracktarget = new TrackTarget(m_turretPIDsubsystem);
-        private final TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, -160);
+        private final TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, TurretConstants.HUBposition);
 
         public RobotContainer() {
                 // Configure the button bindings
@@ -120,22 +121,22 @@ public class RobotContainer {
                 // SmartDashboard.putBoolean("autonStart", true);
                 // return new DriveDistance(m_driveSubsystem, DriveConstants.autoDist);
 
-                // return new SequentialCommandGroup(
-                // new ParallelDeadlineGroup(
-                // new WaitCommand(3),
-                // new HUB(m_turretposition, m_shooterPIDsubsystem, m_hoodPIDsubsystem,
-                // m_turretPIDsubsystem),
-                // new SequentialCommandGroup(
-                // new WaitCommand(1.75),
-                // new InstantCommand(m_indexerSubsystem::wheelsOn),
-                // new WaitCommand(1),
-                // new InstantCommand(m_indexerSubsystem::wheelsOff)
-                // )
-                // ),
-                // new DriveDistance(m_driveSubsystem, DriveConstants.autoDist)
-                // );
+                return new SequentialCommandGroup(
+                new ParallelDeadlineGroup(
+                new WaitCommand(6),
+                new HUB(m_turretposition, m_shooterPIDsubsystem, m_hoodPIDsubsystem,
+                m_turretPIDsubsystem),
+                new SequentialCommandGroup(
+                new WaitCommand(1.75),
+                new InstantCommand(m_indexerSubsystem::wheelsOn),
+                new WaitCommand(3),
+                new InstantCommand(m_indexerSubsystem::wheelsOff)
+                )
+                ),
+                new DriveDistance(m_driveSubsystem, DriveConstants.autoDist)
+                );
 
-                return null;
+                // return null;
 
         }
 

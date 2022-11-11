@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -29,6 +30,7 @@ public class TurretPIDSubsystem extends PIDSubsystem {
 
         getController().setTolerance(TurretConstants.tolerance);
         turretMotor.setInverted(true);
+        turretMotor.setIdleMode(IdleMode.kBrake);
         turretEncoder.setPositionConversionFactor(TurretConstants.turretTicksToDegrees);
 
         this.m_visionsubsystem = m_visionsubsystem;
@@ -83,7 +85,7 @@ public class TurretPIDSubsystem extends PIDSubsystem {
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    return m_visionsubsystem.getTargetYaw();
+    return -m_visionsubsystem.getTargetYaw();
   }
 
   public double turretPositionDEG() {

@@ -98,6 +98,7 @@ public final class Constants {
         public static final double quadAimC = -0.061;
         public static final double quadAimD = 1515;
         public static final double efficiencyConversion = 1;
+        public static final double hubShot = 575;
 
     }
 
@@ -124,6 +125,7 @@ public final class Constants {
 
         public static final double lowGoal = 3;
         public static final double highGoal = 0;
+        public static final double hubShot = 53;
 
         public static final double quadAimA = -4.57;
         public static final double quadAimB = 0.0865;
@@ -140,24 +142,22 @@ public final class Constants {
         public static final double turretRightWarning = turretReverseLimit + 5;
         public static final double turretkP = 0.08;
         public static final double turretkI = 0;
-        public static final double turretkD = 0.001;
+        public static final double turretkD = 0.003;
         public static final double tolerance = .5;
         public static final double zeroThresh = 1;
-
+        public static final double HUBposition = -90;
 
     }
 
     public static final class VisionConstants {
 
-        public static final double distA = 0.000979;
-        public static final double distB = 1.14;
-        public static final double distC = 40.3;
-        public static final double distD = 0;
+        public static final double distA = -0.00168;
+        public static final double distB = 0.819;
+        public static final double distC = -25.3;
 
-        public static final double distanceOffset = 2.5;
         public static final double cameraHeightMETERS = Units.inchesToMeters(37.849256);
         public static final double targetHeightMETERS = Units.inchesToMeters(104);
-        public static final double cameraAngleRAD = Units.degreesToRadians(55); //TODO test.
+        public static final double cameraAngleRAD = Units.degreesToRadians(55);
     }
 
     public static final class ClimberConstants {
