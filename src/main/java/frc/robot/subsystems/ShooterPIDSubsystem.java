@@ -51,6 +51,10 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
     return rightMotor.getOutputCurrent();
   }
 
+  public void backDrive() {
+    setShooterVolts(-4);
+  }
+
   public void setShooterVolts(double volts) {
     leftMotor.setVoltage(MathUtil.clamp(volts, -11, 11));
     rightMotor.setVoltage(MathUtil.clamp(volts, -11, 11));

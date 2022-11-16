@@ -167,15 +167,15 @@ public class DriveSubsystem extends SubsystemBase {
 
     double SqrTurn = DriveConstants.turnSin * (Math.sin(turnRate));
 
-    double SqrSpeed = DriveConstants.speedSin * (Math.sin(Speed));
+    double SqrSpeed = (Math.sin(Speed));
 
     // this ensures that negative inputs yield negative outputs,
     // and vise versa
     if (Speed < 0) {
-      SqrSpeed = SqrSpeed * -1;
+      SqrSpeed = Math.abs(SqrSpeed) * -1;
     }
     if (turnRate < 0) {
-      SqrTurn = SqrTurn * -1;
+      SqrTurn = Math.abs(SqrTurn) * -1;
     }
 
     m_robotDrive.arcadeDrive(driveSlew.calculate(SqrSpeed), turnSlew.calculate(SqrTurn) / 1.5);

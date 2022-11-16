@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.IndexerConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.Sensors;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -26,6 +27,7 @@ public class AutoIndex extends CommandBase {
   private Sensors m_sensors;
   private BooleanSupplier m_forward;
   private BooleanSupplier m_reverse;
+  private BooleanSupplier m_intakereverse;
   private IntSupplier m_POV;
   private boolean m_toggled;
 
@@ -41,6 +43,8 @@ public class AutoIndex extends CommandBase {
 
     m_forward = () -> m_operateController.getRightBumper();
     m_reverse = () -> m_operateController.getLeftBumper();
+
+    m_intakereverse = () -> m_operateController.getBackButton();
 
     addRequirements(m_intakeSubsystem, m_indexerSubsystem);
   }
@@ -85,13 +89,21 @@ public class AutoIndex extends CommandBase {
   private void manual() {
 
     if (m_pneumaticsSubsystem.rearStatus()) {
-      m_intakeSubsystem.rearWheelsOn();
+      if (m_POV.getAsInt() == 180) {
+        m_intakeSubsystem.rearWheelsReverse();
+      } else if (m_POV.getAsInt() != 180){
+        m_intakeSubsystem.rearWheelsOn();
+      }
     } else {
       m_intakeSubsystem.rearWheelsOff();
     }
 
     if (m_pneumaticsSubsystem.frontStatus()) {
-      m_intakeSubsystem.frontWheelsOn();
+      if (m_POV.getAsInt() == 180) {
+        m_intakeSubsystem.frontWheelsReverse();
+      } else if (m_POV.getAsInt() != 180){
+        m_intakeSubsystem.frontWheelsOn();
+      }
     } else {
       m_intakeSubsystem.frontWheelsOff();
     }

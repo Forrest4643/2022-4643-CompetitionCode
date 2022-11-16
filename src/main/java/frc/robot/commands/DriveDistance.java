@@ -22,6 +22,7 @@ public class DriveDistance extends CommandBase {
     this.m_driveSubsystem = m_driveSubsystem;
     this.m_inches = m_inches;
     addRequirements(m_driveSubsystem);
+    m_drivePID.setTolerance(0.1);
   }
 
   // Called when the command is initially scheduled.
@@ -40,12 +41,13 @@ public class DriveDistance extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("DriveDistance End!");
+    System.out.println("DriveDistance End!" + interrupted);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //return false;
     return m_drivePID.atSetpoint();
   }
 }

@@ -34,6 +34,10 @@ public class IntakeSubsystem extends SubsystemBase {
         return fEncoder.getVelocity();
     }
 
+    public double frontIntakeCurrent() {
+        return Front.getOutputCurrent();
+    }
+
     public void rearWheelsOn() {
         Rear.set(1);
     }
@@ -49,6 +53,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public double getRearIntakeSpeed() {
         return rEncoder.getVelocity();
         
+    }
+
+    public double rearIntakeCurrent() {
+        return Rear.getOutputCurrent();
     }
 
     @Override

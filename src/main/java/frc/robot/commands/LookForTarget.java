@@ -13,25 +13,24 @@ public class LookForTarget extends CommandBase {
   /** Creates a new LookForTarget. */
   public LookForTarget(TurretPIDSubsystem m_turretPIDsubsystem) {
     this.m_turretPIDsubsystem = m_turretPIDsubsystem;
-    addRequirements(m_turretPIDsubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     m_turretPIDsubsystem.disable();
-    m_turretPIDsubsystem.setMotor(.5);
+    m_turretPIDsubsystem.setMotor(1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(m_turretPIDsubsystem.turretPositionDEG() > TurretConstants.turretLeftWarning) {
-      m_turretPIDsubsystem.setMotor(-.5);
+      m_turretPIDsubsystem.setMotor(-1);
     }
 
     if (m_turretPIDsubsystem.turretPositionDEG() < TurretConstants.turretRightWarning) {
-      m_turretPIDsubsystem.setMotor(.5);
+      m_turretPIDsubsystem.setMotor(1);
     }
   }
 

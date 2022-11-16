@@ -38,17 +38,17 @@ public class StickDrive extends CommandBase {
     m_Speed = m_driveController.getRawAxis(2) - m_driveController.getRawAxis(3);
     m_turnRate = -m_driveController.getRawAxis(0);
 
-    if (m_turretsubsystem.turretPositionDEG() > TurretConstants.turretLeftWarning) {
-      m_driveController.setRumble(RumbleType.kLeftRumble, 1);      
-    } else {
-      m_driveController.setRumble(RumbleType.kLeftRumble, 0);
-    }
+    // if (m_turretsubsystem.turretPositionDEG() > TurretConstants.turretLeftWarning) {
+    //   m_driveController.setRumble(RumbleType.kLeftRumble, 1);      
+    // } else {
+    //   m_driveController.setRumble(RumbleType.kLeftRumble, 0);
+    // }
 
-    if (m_turretsubsystem.turretPositionDEG() < TurretConstants.turretRightWarning) {
-      m_driveController.setRumble(RumbleType.kRightRumble, 1);      
-    } else {
-      m_driveController.setRumble(RumbleType.kRightRumble, 0);
-    }
+    // if (m_turretsubsystem.turretPositionDEG() < TurretConstants.turretRightWarning) {
+    //   m_driveController.setRumble(RumbleType.kRightRumble, 1);      
+    // } else {
+    //   m_driveController.setRumble(RumbleType.kRightRumble, 0);
+    // }
 
     m_driveSubsystem.setDrive(m_Speed, m_turnRate);
 

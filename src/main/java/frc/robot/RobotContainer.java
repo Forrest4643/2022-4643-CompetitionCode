@@ -43,10 +43,16 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
@@ -64,10 +70,10 @@ public class RobotContainer {
   private final TurretPIDSubsystem m_turretPIDsubsystem = new TurretPIDSubsystem(m_visionSubsystem, m_sensors);
   private final XboxController m_driveController = new XboxController(0);
   private final XboxController m_operateController = new XboxController(1);
-
+  private final ClimberSubsystem m_climbersubsystem = new ClimberSubsystem();
   private final LookForTarget m_lookfortarget = new LookForTarget(m_turretPIDsubsystem);
   private final TrackTarget m_tracktarget = new TrackTarget(m_turretPIDsubsystem);
-  
+  private final TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, TurretConstants.HUBposition);
 
   public RobotContainer() {
     // Configure the button bindings
@@ -76,50 +82,68 @@ public class RobotContainer {
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
       Auto1 = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-   } catch (IOException ex) {
+    } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-   }
+    }
 
     m_driveSubsystem.setDefaultCommand(new StickDrive(m_driveSubsystem, m_driveController, m_turretPIDsubsystem));
-
-    m_intakeSubsystem.setDefaultCommand(new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_sensors, m_operateController));
 
   }
 
   private void configureButtonBindings() {
-  
-   
-  }     
+    InstantCommand DriveSimStart = new InstantCommand(m_driveSubsystem::DriveSiminit);
+    // climber up
+    new JoystickButton(m_driveController, 6).whenPressed(new InstantCommand(m_climbersubsystem::up))
+        .whenReleased(new InstantCommand(m_climbersubsystem::idle));
 
-  InstantCommand DriveSimStart = new InstantCommand(m_driveSubsystem::DriveSiminit);
+    // climber down
+    new JoystickButton(m_driveController, 5).whenPressed(new InstantCommand(m_climbersubsystem::down))
+        .whenReleased(new InstantCommand(m_climbersubsystem::idle));
+
+    // Front intake
+    new JoystickButton(m_operateController, 4)
+        .whenPressed(new InstantCommand(m_pneumaticsSubsystem::frontIntakeOpen))
+        .whenReleased(new InstantCommand(m_pneumaticsSubsystem::frontIntakeClosed));
+
+    // Rear intake
+    new JoystickButton(m_operateController, 2)
+        .whenPressed(new InstantCommand(m_pneumaticsSubsystem::rearIntakeOpen))
+        .whenReleased(new InstantCommand(m_pneumaticsSubsystem::rearIntakeClosed));
+
+    // shooter+hood activate
+    new JoystickButton(m_operateController, 1).whileActiveOnce(
+        new AutoAim(m_hoodPIDsubsystem, m_visionSubsystem, m_shooterPIDsubsystem),
+        true);
+
+    // compressor toggle
+    new JoystickButton(m_operateController, 1)
+        .whenPressed(new InstantCommand(m_pneumaticsSubsystem::compOff))
+        .whenReleased(new InstantCommand(m_pneumaticsSubsystem::compOn));
+
+  }
 
   public Command getAutonomousCommand() {
+      var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+      new SimpleMotorFeedforward(
+          DriveConstants.ksVolts,
+          DriveConstants.kvVoltSecondsPerMeter,
+          DriveConstants.kaVoltSecondsSquaredPerMeter),
+      DriveConstants.kDriveKinematics,
+      10);
 
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    var autoVoltageConstraint =
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(
-                DriveConstants.ksVolts,
-                DriveConstants.kvVoltSecondsPerMeter,
-                DriveConstants.kaVoltSecondsSquaredPerMeter),
-            DriveConstants.kDriveKinematics,
-            10);
+  // Create config for trajectory
+  TrajectoryConfig config = new TrajectoryConfig(
+      AutoConstants.kMaxSpeedMetersPerSecond,
+      AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+          // Add kinematics to ensure max speed is actually obeyed
+          .setKinematics(DriveConstants.kDriveKinematics)
+          // Apply the voltage constraint
+          .addConstraint(autoVoltageConstraint);
 
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(DriveConstants.kDriveKinematics)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
+  // Reset odometry to the starting pose of the trajectory.
+  m_driveSubsystem.resetOdometry(Auto1.getInitialPose());
 
-    
-    // Reset odometry to the starting pose of the trajectory.
-    m_driveSubsystem.resetOdometry(Auto1.getInitialPose());
-
-    RamseteCommand ramseteCommand =
+  RamseteCommand ramseteCommand =
         new RamseteCommand(
             Auto1,
             m_driveSubsystem::getPose,
@@ -136,12 +160,11 @@ public class RobotContainer {
             m_driveSubsystem::tankDriveVolts,
             m_driveSubsystem);
 
+  // Run path following command, then stop at the end.
+  return ramseteCommand.andThen(()->m_driveSubsystem.tankDriveVolts(0,0));
 
-
-    // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> m_driveSubsystem.tankDriveVolts(0, 0));
   }
 }
-
+  // Create a voltage constraint to ensure we don't accelerate too fast
 
 
