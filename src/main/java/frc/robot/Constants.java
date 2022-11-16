@@ -28,12 +28,13 @@ public final class Constants {
         public static final double bangTol = .25;
 
         //TODO sysid
-        public static final double driveTickToIN = -22.28169203;
-        public static final double kaVoltSecondsSquaredPerMeter = 1;
-        public static final double ksVolts = 0.001;
-        public static final double kvVoltSecondsPerMeter = 1;
+        public static final double velocityConversionFactor = .0007983;
+        public static final double positionConversionFactor = 0.0479;
+        public static final double kaVoltSecondsSquaredPerMeter = 0;
+        public static final double ksVolts = 0.0;
+        public static final double kvVoltSecondsPerMeter = .05;
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(0.7112);
-        public static final double kPDriveVel = 0.05;
+        public static final double kPDriveVel = 1;
         public static final double steerkP = 0.05;
         public static final double steerkI = 0.0008;
         public static final double steerkD = 0.005;

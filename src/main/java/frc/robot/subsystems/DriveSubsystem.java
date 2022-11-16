@@ -6,7 +6,10 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 import net.thefletcher.revrobotics.CANSparkMax;
@@ -15,6 +18,10 @@ import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.io.IOException;
+import java.nio.file.Path;
+
 import com.revrobotics.RelativeEncoder;
 
 import org.photonvision.SimVisionSystem;
@@ -22,6 +29,9 @@ import org.photonvision.SimVisionTarget;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -29,8 +39,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -56,12 +72,20 @@ public class DriveSubsystem extends SubsystemBase {
   private AnalogGyro m_gyro = new AnalogGyro(1);
   private AnalogGyroSim m_gyroSim = new AnalogGyroSim(m_gyro);
 
+  String trajectoryJSON = "C:/Users/arkap/OneDrive/Documents/FRC/2022/2022-Robot-Code/PathWeaver/output/Ball1.wpilib.json";
+  private Trajectory Auto1 = new Trajectory();
   //Creates DriveSubsystem
   public DriveSubsystem() {
     // motor inversions
     leftLeader.setInverted(false);
     rightLeader.setInverted(true);
 
+    //defining velocity conversion factor
+    m_leftEncoder.setVelocityConversionFactor(DriveConstants.velocityConversionFactor);
+    m_rightEncoder.setVelocityConversionFactor(DriveConstants.velocityConversionFactor);
+
+    m_leftEncoder.setPositionConversionFactor(DriveConstants.positionConversionFactor);
+    m_rightEncoder.setPositionConversionFactor(DriveConstants.positionConversionFactor);
     // setting leftFront to follow leftRear,
     // and rightFront to follow rightRear
     leftFollower.follow(leftLeader, false);
@@ -74,6 +98,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     // sending simulated field data to SmartDashboard
     SmartDashboard.putData("Field", m_field);
+
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+      Auto1 = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+    }
+    
   } // end Public DriveSubsystem
 
 
@@ -131,8 +163,9 @@ public class DriveSubsystem extends SubsystemBase {
     m_odometry.update(m_gyro.getRotation2d(),
         m_leftEncoder.getPosition(),
         m_rightEncoder.getPosition());
-    m_field.setRobotPose(m_odometry.getPoseMeters());
+    m_field.setRobotPose(getPose());
     m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
+
   } // end void periodic
 
   @Override
@@ -154,8 +187,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightEncoder.setPosition(m_driveSim.getRightPositionMeters());
 
     // Debug info
-    // System.out.println("leftDriveDist:" + m_leftEncoder.getPosition());
-    // System.out.println("rightDriveDist:" + m_rightEncoder.getPosition());
+    System.out.println("leftDriveDist:" + m_leftEncoder.getPosition());
+    System.out.println("rightDriveDist:" + m_rightEncoder.getPosition());
 
     // sending simulated gyro heading to the main robot code
     m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
@@ -165,24 +198,24 @@ public class DriveSubsystem extends SubsystemBase {
   // main setDrive void, this is used for the StickDrive command in TeleOp
   public void setDrive(double Speed, double turnRate) {
 
-    double SqrTurn = DriveConstants.turnSin * (Math.sin(turnRate));
+    double sinTurn = DriveConstants.turnSin * (Math.sin(turnRate));
 
-    double SqrSpeed = (Math.sin(Speed));
+    double sinSpeed = (Math.sin(Speed));
 
     // this ensures that negative inputs yield negative outputs,
     // and vise versa
     if (Speed < 0) {
-      SqrSpeed = Math.abs(SqrSpeed) * -1;
+      sinSpeed = Math.abs(sinSpeed) * -1;
     }
     if (turnRate < 0) {
-      SqrTurn = Math.abs(SqrTurn) * -1;
+      sinTurn = Math.abs(sinTurn) * -1;
     }
 
-    m_robotDrive.arcadeDrive(driveSlew.calculate(SqrSpeed), turnSlew.calculate(SqrTurn) / 1.5);
+    m_robotDrive.arcadeDrive(driveSlew.calculate(sinSpeed), turnSlew.calculate(sinTurn) / 1.5);
 
     // debug info
-    SmartDashboard.putNumber("sqrturn", SqrTurn);
-    SmartDashboard.putNumber("sqrspeed", SqrSpeed);
+    SmartDashboard.putNumber("sinturn", sinTurn);
+    SmartDashboard.putNumber("sinspeed", sinSpeed);
   } // end setDrive
 
   // sets drive motors to a given voltage
@@ -194,6 +227,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   // this is used for path-following.
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    m_leftEncoder.setPosition(m_driveSim.getLeftPositionMeters());
+    m_rightEncoder.setPosition(m_driveSim.getRightPositionMeters());
     return new DifferentialDriveWheelSpeeds(m_leftEncoder.getVelocity(), m_rightEncoder.getVelocity());
   }
 
@@ -227,4 +262,6 @@ public class DriveSubsystem extends SubsystemBase {
     resetDriveEncoders();
     m_odometry.resetPosition(pose, m_gyro.getRotation2d());
   }
+
 }
+

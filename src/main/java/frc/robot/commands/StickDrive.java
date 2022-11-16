@@ -35,20 +35,8 @@ public class StickDrive extends CommandBase {
   // This runs once per scheduler run
   @Override
   public void execute() {
-    m_Speed = m_driveController.getRawAxis(2) - m_driveController.getRawAxis(3);
-    m_turnRate = -m_driveController.getRawAxis(0);
-
-    // if (m_turretsubsystem.turretPositionDEG() > TurretConstants.turretLeftWarning) {
-    //   m_driveController.setRumble(RumbleType.kLeftRumble, 1);      
-    // } else {
-    //   m_driveController.setRumble(RumbleType.kLeftRumble, 0);
-    // }
-
-    // if (m_turretsubsystem.turretPositionDEG() < TurretConstants.turretRightWarning) {
-    //   m_driveController.setRumble(RumbleType.kRightRumble, 1);      
-    // } else {
-    //   m_driveController.setRumble(RumbleType.kRightRumble, 0);
-    // }
+    m_Speed = m_driveController.getRawAxis(5) - m_driveController.getRawAxis(4);
+    m_turnRate = m_driveController.getRawAxis(0);
 
     m_driveSubsystem.setDrive(m_Speed, m_turnRate);
 

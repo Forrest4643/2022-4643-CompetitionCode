@@ -31,7 +31,6 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.StickDrive;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -86,12 +85,13 @@ public class RobotContainer {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
     }
 
-    m_driveSubsystem.setDefaultCommand(new StickDrive(m_driveSubsystem, m_driveController, m_turretPIDsubsystem));
 
+    
   }
 
   private void configureButtonBindings() {
-    InstantCommand DriveSimStart = new InstantCommand(m_driveSubsystem::DriveSiminit);
+
+
     // climber up
     new JoystickButton(m_driveController, 6).whenPressed(new InstantCommand(m_climbersubsystem::up))
         .whenReleased(new InstantCommand(m_climbersubsystem::idle));
@@ -122,7 +122,10 @@ public class RobotContainer {
 
   }
 
+  public InstantCommand DriveSimStart = new InstantCommand(m_driveSubsystem::DriveSiminit);
+
   public Command getAutonomousCommand() {
+
       var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
       new SimpleMotorFeedforward(
           DriveConstants.ksVolts,
@@ -131,8 +134,8 @@ public class RobotContainer {
       DriveConstants.kDriveKinematics,
       10);
 
-  // Create config for trajectory
-  TrajectoryConfig config = new TrajectoryConfig(
+    // Create config for trajectory
+    TrajectoryConfig config = new TrajectoryConfig(
       AutoConstants.kMaxSpeedMetersPerSecond,
       AutoConstants.kMaxAccelerationMetersPerSecondSquared)
           // Add kinematics to ensure max speed is actually obeyed
@@ -140,10 +143,9 @@ public class RobotContainer {
           // Apply the voltage constraint
           .addConstraint(autoVoltageConstraint);
 
-  // Reset odometry to the starting pose of the trajectory.
-  m_driveSubsystem.resetOdometry(Auto1.getInitialPose());
+    // Reset odometry to the starting pose of the trajectory.
 
-  RamseteCommand ramseteCommand =
+    RamseteCommand ramseteCommand =
         new RamseteCommand(
             Auto1,
             m_driveSubsystem::getPose,
@@ -159,9 +161,20 @@ public class RobotContainer {
             // RamseteCommand passes volts to the callback
             m_driveSubsystem::tankDriveVolts,
             m_driveSubsystem);
+    
+    m_driveSubsystem.resetOdometry(Auto1.getInitialPose());
+    
+    // Run path following command, then stop at the end.
+    return new InstantCommand(m_driveSubsystem::resetDriveEncoders).andThen(ramseteCommand).andThen(()->m_driveSubsystem.tankDriveVolts(0,0));
+    
+  }
 
-  // Run path following command, then stop at the end.
-  return ramseteCommand.andThen(()->m_driveSubsystem.tankDriveVolts(0,0));
+  public void teleInit() {
+    m_intakeSubsystem.setDefaultCommand(
+                    new AutoIndex(m_intakeSubsystem, m_indexerSubsystem, m_pneumaticsSubsystem, m_sensors,
+                                    m_operateController));
+
+    m_driveSubsystem.setDefaultCommand(new StickDrive(m_driveSubsystem, m_driveController, m_turretPIDsubsystem));
 
   }
 }
