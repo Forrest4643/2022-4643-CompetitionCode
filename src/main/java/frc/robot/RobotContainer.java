@@ -56,7 +56,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
 
-  String trajectoryJSON = "C:/Users/arkap/OneDrive/Documents/FRC/2022/2022-Robot-Code/PathWeaver/output/Ball1.wpilib.json";
+  String trajectoryJSON = "C:/Users/arkap/OneDrive/Documents/FRC/2022/2022-Robot-Code/PathWeaver/output/Unnamed.wpilib.json";
   private Trajectory Auto1 = new Trajectory();
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
@@ -144,6 +144,7 @@ public class RobotContainer {
           .addConstraint(autoVoltageConstraint);
 
     // Reset odometry to the starting pose of the trajectory.
+    m_driveSubsystem.resetOdometry(Auto1.getInitialPose());
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
@@ -162,10 +163,9 @@ public class RobotContainer {
             m_driveSubsystem::tankDriveVolts,
             m_driveSubsystem);
     
-    m_driveSubsystem.resetOdometry(Auto1.getInitialPose());
     
     // Run path following command, then stop at the end.
-    return new InstantCommand(m_driveSubsystem::resetDriveEncoders).andThen(ramseteCommand).andThen(()->m_driveSubsystem.tankDriveVolts(0,0));
+    return ramseteCommand.andThen( () -> m_driveSubsystem.tankDriveVolts(0,0));
     
   }
 
