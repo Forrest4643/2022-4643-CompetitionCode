@@ -35,6 +35,8 @@ public final class Constants {
         public static final double kvVoltSecondsPerMeter = .05;
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(0.7112);
         public static final double kPDriveVel = 1;
+        public static final double kIDriveVel = 0;
+        public static final double kDDriveVel = 0.2;
         public static final double steerkP = 0.05;
         public static final double steerkI = 0.0008;
         public static final double steerkD = 0.005;

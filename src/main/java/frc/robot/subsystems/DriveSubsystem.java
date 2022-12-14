@@ -138,29 +138,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Sets the sim inputs, -1 to 1 signal multiplied by robot controller voltage
-    m_driveSim.setInputs(leftLeader.get() * RobotController.getInputVoltage(),
-        rightLeader.get() * RobotController.getInputVoltage());
-
-    // Advance the model by 20 ms. Note that if you are running this
-    // subsystem in a separate thread or have changed the nominal timestep
-    // of TimedRobot, this value needs to match it.
-    m_driveSim.update(0.02);
-
-    // update photonvision simulation
-    simVision.processFrame(m_driveSim.getPose());
-
-    // sending simulated encoder values to the main robot code
-    m_leftEncoder.setPosition(m_driveSim.getLeftPositionMeters());
-    m_rightEncoder.setPosition(m_driveSim.getRightPositionMeters());
-
-    // Debug info
-    System.out.println("leftDriveDist:" + m_leftEncoder.getPosition());
-    System.out.println("rightDriveDist:" + m_rightEncoder.getPosition());
-
-    // sending simulated gyro heading to the main robot code
-    m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
-
+   
     // pass telemetry data to get Odometry data
     m_odometry.update(m_gyro.getRotation2d(),
         m_leftEncoder.getPosition(),
@@ -171,7 +149,28 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
+     // Sets the sim inputs, -1 to 1 signal multiplied by robot controller voltage
+     m_driveSim.setInputs(leftLeader.get() * RobotController.getInputVoltage(),
+     rightLeader.get() * RobotController.getInputVoltage());
 
+     // Advance the model by 20 ms. Note that if you are running this
+     // subsystem in a separate thread or have changed the nominal timestep
+     // of TimedRobot, this value needs to match it.
+     m_driveSim.update(0.02);
+
+     // update photonvision simulation
+     simVision.processFrame(m_driveSim.getPose());
+
+     // sending simulated encoder values to the main robot code
+     m_leftEncoder.setPosition(m_driveSim.getLeftPositionMeters());
+     m_rightEncoder.setPosition(m_driveSim.getRightPositionMeters());
+
+     // Debug info
+     System.out.println("leftDriveDist:" + m_leftEncoder.getPosition());
+     System.out.println("rightDriveDist:" + m_rightEncoder.getPosition());
+
+     // sending simulated gyro heading to the main robot code
+     m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
   } // end simulationPeriodic
 
   // main setDrive void, this is used for the StickDrive command in TeleOp
