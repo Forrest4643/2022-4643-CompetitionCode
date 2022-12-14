@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
 
+import edu.wpi.first.hal.simulation.SimulatorJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -56,8 +57,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
 
-  String trajectoryJSON = "C:/Users/arkap/OneDrive/Documents/FRC/2022/2022-Robot-Code/PathWeaver/output/Unnamed.wpilib.json";
-  private Trajectory Auto1 = new Trajectory();
+  String trajectoryJSON = "Output/Ball1.wpilib.json";
+
+  private Trajectory Auto1;
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
   private final Sensors m_sensors = new Sensors();
@@ -77,7 +79,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
       Auto1 = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
@@ -133,15 +134,6 @@ public class RobotContainer {
           DriveConstants.kaVoltSecondsSquaredPerMeter),
       DriveConstants.kDriveKinematics,
       10);
-
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-      AutoConstants.kMaxSpeedMetersPerSecond,
-      AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-          // Add kinematics to ensure max speed is actually obeyed
-          .setKinematics(DriveConstants.kDriveKinematics)
-          // Apply the voltage constraint
-          .addConstraint(autoVoltageConstraint);
 
     // Reset odometry to the starting pose of the trajectory.
     m_driveSubsystem.resetOdometry(Auto1.getInitialPose());

@@ -19,19 +19,12 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
 import com.revrobotics.RelativeEncoder;
 
 import org.photonvision.SimVisionSystem;
 import org.photonvision.SimVisionTarget;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -39,14 +32,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -72,15 +63,13 @@ public class DriveSubsystem extends SubsystemBase {
   private AnalogGyro m_gyro = new AnalogGyro(1);
   private AnalogGyroSim m_gyroSim = new AnalogGyroSim(m_gyro);
 
-  String trajectoryJSON = "C:/Users/arkap/OneDrive/Documents/FRC/2022/2022-Robot-Code/PathWeaver/output/Ball1.wpilib.json";
-  private Trajectory Auto1 = new Trajectory();
-  //Creates DriveSubsystem
+  // Creates DriveSubsystem
   public DriveSubsystem() {
     // motor inversions
     leftLeader.setInverted(false);
     rightLeader.setInverted(true);
 
-    //defining velocity conversion factor
+    // defining velocity conversion factor
     m_leftEncoder.setVelocityConversionFactor(DriveConstants.velocityConversionFactor);
     m_rightEncoder.setVelocityConversionFactor(DriveConstants.velocityConversionFactor);
 
@@ -99,16 +88,7 @@ public class DriveSubsystem extends SubsystemBase {
     // sending simulated field data to SmartDashboard
     SmartDashboard.putData("Field", m_field);
 
-    try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-      Auto1 = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-    }
-    
   } // end Public DriveSubsystem
-
-
 
   private Field2d m_field = new Field2d();
 
@@ -158,18 +138,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
-    // pass telemetry data to get Odometry data
-    m_odometry.update(m_gyro.getRotation2d(),
-        m_leftEncoder.getPosition(),
-        m_rightEncoder.getPosition());
-    m_field.setRobotPose(getPose());
-    m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
-
-  } // end void periodic
-
-  @Override
-  public void simulationPeriodic() {
     // Sets the sim inputs, -1 to 1 signal multiplied by robot controller voltage
     m_driveSim.setInputs(leftLeader.get() * RobotController.getInputVoltage(),
         rightLeader.get() * RobotController.getInputVoltage());
@@ -192,6 +160,17 @@ public class DriveSubsystem extends SubsystemBase {
 
     // sending simulated gyro heading to the main robot code
     m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
+
+    // pass telemetry data to get Odometry data
+    m_odometry.update(m_gyro.getRotation2d(),
+        m_leftEncoder.getPosition(),
+        m_rightEncoder.getPosition());
+    m_field.setRobotPose(getPose());
+
+  } // end void periodic
+
+  @Override
+  public void simulationPeriodic() {
 
   } // end simulationPeriodic
 
@@ -220,8 +199,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   // sets drive motors to a given voltage
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    leftLeader.setVoltage(leftVolts);
-    rightLeader.setVoltage(rightVolts);
+    leftLeader.set(leftVolts / 12);
+    rightLeader.set(rightVolts / 12);
     m_robotDrive.feed();
   }
 
@@ -264,4 +243,3 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
 }
-
