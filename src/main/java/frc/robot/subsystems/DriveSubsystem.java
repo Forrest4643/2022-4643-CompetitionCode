@@ -199,6 +199,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   // sets drive motors to a given voltage
   public void tankDriveVolts(double leftVolts, double rightVolts) {
+    //This uses .set and a divider of 12 because to run simulation the .set 
+    //command updates the simulated motor values, the .setVoltage command does not.
     leftLeader.set(leftVolts / 12);
     rightLeader.set(rightVolts / 12);
     m_robotDrive.feed();
