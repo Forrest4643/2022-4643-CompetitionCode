@@ -4,9 +4,14 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.Supplier;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,19 +29,19 @@ public class Sensors extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final I2C.Port mXpPorti2c = I2C.Port.kMXP;
   private final ColorSensorV3 m_topSense = new ColorSensorV3(i2cPort);
-  private final ColorSensorV3 m_bottomSense = new ColorSensorV3(mXpPorti2c); 
+  private final ColorSensorV3 m_bottomSense = new ColorSensorV3(mXpPorti2c);
+
+  SimDouble m_angle;
 
   Color m_topColor;
 
   Color m_bottomColor;
 
- 
-
   /** Creates a new IndexSensors. */
   public Sensors() {
-    //instantiate navx over USB
+    // instantiate navx over USB
     try {
-      ahrs = new AHRS(SerialPort.Port.kUSB);
+      ahrs = new AHRS(SerialPort.Port.kMXP);
     } catch (RuntimeException ex) {
       DriverStation.reportError("Error instantiating navX-USB: " + ex.getMessage(), true);
     }
@@ -68,26 +73,54 @@ public class Sensors extends SubsystemBase {
     SmartDashboard.putNumber("Pitch", pitch());
     SmartDashboard.putNumber("Roll", roll());
 
+  }
 
+  @Override
+  public void simulationPeriodic() {
+    int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[1]");
+    m_angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+  }
 
+  public Rotation2d rotation2d() {
+    return ahrs.getRotation2d();
+  }
+
+  public void updateAngle(double angle) {
+    m_angle.set(angle);
   }
 
   public double yaw() {
     return ahrs.getYaw();
   }
+
   public double pitch() {
     return ahrs.getPitch();
   }
+
   public double roll() {
     return ahrs.getRoll();
   }
 
+  // resets the onboard gyro to read 0 degrees
+  public void zeroHeading() {
+    ahrs.reset();
+  }
+
+  // returns the turn rate of the onboard gyro
+  public double getTurnRate() {
+    return ahrs.getRate();
+  }
+
+  public Rotation2d AHRSrotation2D() {
+    return ahrs.getRotation2d();
+  }
+
   public boolean topBall() {
-    return(m_topSense.getProximity() > IndexerConstants.topThresh);
+    return (m_topSense.getProximity() > IndexerConstants.topThresh);
   }
 
   public boolean bottomBall() {
-    return(m_bottomSense.getProximity() > IndexerConstants.bottomThresh);
+    return (m_bottomSense.getProximity() > IndexerConstants.bottomThresh);
   }
 
   public boolean topCargoBlue() {
@@ -97,7 +130,6 @@ public class Sensors extends SubsystemBase {
       return false;
     }
   }
-  
 
   public boolean bottomCargoBlue() {
     if (m_bottomColor.blue >= IndexerConstants.blueThresh) {

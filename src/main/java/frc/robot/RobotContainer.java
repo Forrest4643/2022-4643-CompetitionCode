@@ -58,23 +58,22 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
 
   String trajectoryJSON = "Output/Ball1.wpilib.json";
-
+  private Sensors m_sensors = new Sensors();
   private Trajectory Auto1;
-  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
-  private final Sensors m_sensors = new Sensors();
-  private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
-  private final IndexerSubsystem m_indexerSubsystem = new IndexerSubsystem();
-  private final ShooterPIDSubsystem m_shooterPIDsubsystem = new ShooterPIDSubsystem();
-  private final HoodPIDSubsystem m_hoodPIDsubsystem = new HoodPIDSubsystem();
-  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  private final TurretPIDSubsystem m_turretPIDsubsystem = new TurretPIDSubsystem(m_visionSubsystem, m_sensors);
-  private final XboxController m_driveController = new XboxController(0);
-  private final XboxController m_operateController = new XboxController(1);
-  private final ClimberSubsystem m_climbersubsystem = new ClimberSubsystem();
-  private final LookForTarget m_lookfortarget = new LookForTarget(m_turretPIDsubsystem);
-  private final TrackTarget m_tracktarget = new TrackTarget(m_turretPIDsubsystem);
-  private final TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, TurretConstants.HUBposition);
+  private IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
+  private IndexerSubsystem m_indexerSubsystem = new IndexerSubsystem();
+  private ShooterPIDSubsystem m_shooterPIDsubsystem = new ShooterPIDSubsystem();
+  private HoodPIDSubsystem m_hoodPIDsubsystem = new HoodPIDSubsystem();
+  private VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private TurretPIDSubsystem m_turretPIDsubsystem = new TurretPIDSubsystem(m_visionSubsystem, m_sensors);
+  private DriveSubsystem m_driveSubsystem = new DriveSubsystem(m_sensors);
+  private XboxController m_driveController = new XboxController(0);
+  private XboxController m_operateController = new XboxController(1);
+  private ClimberSubsystem m_climbersubsystem = new ClimberSubsystem();
+  private LookForTarget m_lookfortarget = new LookForTarget(m_turretPIDsubsystem);
+  private TrackTarget m_tracktarget = new TrackTarget(m_turretPIDsubsystem);
+  private TurretPosition m_turretposition = new TurretPosition(m_turretPIDsubsystem, TurretConstants.HUBposition);
 
   public RobotContainer() {
     // Configure the button bindings

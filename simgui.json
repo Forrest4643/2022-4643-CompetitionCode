@@ -68,6 +68,7 @@
       "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[9]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/navX-Sensor[1]": "Gyro",
       "/LiveWindow/Ungrouped/navX-Sensor[2]": "Gyro",
       "/LiveWindow/VisionSubsystem": "Subsystem",
       "/SmartDashboard/Field": "Field2d"
@@ -84,6 +85,9 @@
   "NetworkTables": {
     "LiveWindow": {
       "Ungrouped": {
+        "navX-Sensor[1]": {
+          "open": true
+        },
         "open": true
       },
       "open": true

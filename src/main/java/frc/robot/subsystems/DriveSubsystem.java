@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.RelativeEncoder;
 
 import org.photonvision.SimVisionSystem;
@@ -44,6 +46,11 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveSubsystem extends SubsystemBase {
 
+  Sensors m_sensors;
+
+  private DoubleSupplier m_heading;
+  private Rotation2d m_rotation2d;
+
   // defining motor names and CAN ID's
   private final CANSparkMax leftLeader = new CANSparkMax(DriveConstants.leftFrontID, MotorType.kBrushless);
   private final CANSparkMax leftFollower = new CANSparkMax(DriveConstants.leftRearID, MotorType.kBrushless);
@@ -64,7 +71,12 @@ public class DriveSubsystem extends SubsystemBase {
   private AnalogGyroSim m_gyroSim = new AnalogGyroSim(m_gyro);
 
   // Creates DriveSubsystem
-  public DriveSubsystem() {
+  public DriveSubsystem(Sensors m_sensors) {
+    this.m_sensors = m_sensors;
+
+    m_heading = () -> m_sensors.yaw();
+    m_rotation2d = m_sensors.ahrs.getRotation2d();
+
     // motor inversions
     leftLeader.setInverted(false);
     rightLeader.setInverted(true);
@@ -93,7 +105,7 @@ public class DriveSubsystem extends SubsystemBase {
   private Field2d m_field = new Field2d();
 
   DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(
-      new Rotation2d(-m_gyro.getAngle()), new Pose2d(6.383, 5.769, new Rotation2d()));
+      new Rotation2d(m_heading.getAsDouble()), new Pose2d(6.383, 5.769, new Rotation2d()));
 
   Pose2d farTargetPose = new Pose2d(new Translation2d(VisionConstants.tgtXPos, VisionConstants.tgtYPos),
       new Rotation2d(0.0));
@@ -138,9 +150,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-   
+    
     // pass telemetry data to get Odometry data
-    m_odometry.update(m_gyro.getRotation2d(),
+    m_odometry.update(m_sensors.AHRSrotation2D(),
         m_leftEncoder.getPosition(),
         m_rightEncoder.getPosition());
     m_field.setRobotPose(getPose());
@@ -171,6 +183,9 @@ public class DriveSubsystem extends SubsystemBase {
 
      // sending simulated gyro heading to the main robot code
      m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
+
+     m_sensors.updateAngle(-m_driveSim.getHeading().getDegrees());
+
   } // end simulationPeriodic
 
   // main setDrive void, this is used for the StickDrive command in TeleOp
@@ -215,21 +230,6 @@ public class DriveSubsystem extends SubsystemBase {
   // returns the average distance travelled between the left and right wheels
   public double getAverageEncoderDistance() {
     return (m_leftEncoder.getPosition() + m_rightEncoder.getPosition()) / 2.0;
-  }
-
-  // resets the onboard gyro to read 0 degrees
-  public void zeroHeading() {
-    m_gyro.reset();
-  }
-
-  // returns the heading in degrees of the onboard gyro
-  public double getHeading() {
-    return m_gyro.getRotation2d().getDegrees();
-  }
-
-  // returns the turn rate of the onboard gyro
-  public double getTurnRate() {
-    return -m_gyro.getRate();
   }
 
   // returns the read position of the robot on the field
