@@ -37,7 +37,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
         return pcmCompressor.getCurrent();
     }
 
-    public boolean frontStatus() {
+    public boolean frontIntakeStatus() {
         if (frontIntake.get() == Value.kForward) {
             return true;
         } else {
@@ -45,7 +45,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
         }
     }
 
-    public boolean rearStatus() {
+    public boolean rearIntakeStatus() {
         if (rearIntake.get() == Value.kForward) {
             return true;
         } else {

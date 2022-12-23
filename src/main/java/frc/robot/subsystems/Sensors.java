@@ -24,24 +24,31 @@ import edu.wpi.first.wpilibj.SerialPort;
 
 public class Sensors extends SubsystemBase {
 
-  AHRS ahrs;
+  //creating AHRS device "navX"
+  AHRS navX;
 
+  //defining onboard I2C port
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
+  //defining I2C port on NavX
   private final I2C.Port mXpPorti2c = I2C.Port.kMXP;
-  private final ColorSensorV3 m_topSense = new ColorSensorV3(i2cPort);
-  private final ColorSensorV3 m_bottomSense = new ColorSensorV3(mXpPorti2c);
+  //defining top and bottom REV V3 color sensors
+  private final ColorSensorV3 m_topV3ColorSensor = new ColorSensorV3(i2cPort);
+  private final ColorSensorV3 m_bottomV3ColorSensor = new ColorSensorV3(mXpPorti2c);
 
-  SimDouble m_angle;
+  //simulated yaw angle, for simulation.
+  SimDouble m_simYawAngle;
 
+  //creating color objects for the top and bottom color sensors
   Color m_topColor;
 
   Color m_bottomColor;
 
   /** Creates a new IndexSensors. */
   public Sensors() {
+
     // instantiate navx over USB
     try {
-      ahrs = new AHRS(SerialPort.Port.kMXP);
+      navX = new AHRS(SerialPort.Port.kMXP);
     } catch (RuntimeException ex) {
       DriverStation.reportError("Error instantiating navX-USB: " + ex.getMessage(), true);
     }
@@ -51,17 +58,14 @@ public class Sensors extends SubsystemBase {
   @Override
   public void periodic() {
 
-    double topProx = m_topSense.getProximity();
+    m_topColor = m_topV3ColorSensor.getColor();
 
-    double bottomProx = m_bottomSense.getProximity();
+    m_bottomColor = m_bottomV3ColorSensor.getColor();
 
-    m_topColor = m_topSense.getColor();
+    //sending info for debugging to the SmartDashboard
+    SmartDashboard.putNumber("topProx", m_topV3ColorSensor.getProximity());
 
-    m_bottomColor = m_bottomSense.getColor();
-
-    SmartDashboard.putNumber("topProx", topProx);
-
-    SmartDashboard.putNumber("bottomProx", bottomProx);
+    SmartDashboard.putNumber("bottomProx", m_bottomV3ColorSensor.getProximity());
 
     SmartDashboard.putNumber("topRedValue", m_topColor.red);
     SmartDashboard.putNumber("topBlueValue", m_topColor.blue);
@@ -69,58 +73,54 @@ public class Sensors extends SubsystemBase {
     SmartDashboard.putNumber("bottomRedValue", m_bottomColor.red);
     SmartDashboard.putNumber("bottomBlueValue", m_bottomColor.blue);
 
-    SmartDashboard.putNumber("Yaw", yaw());
-    SmartDashboard.putNumber("Pitch", pitch());
-    SmartDashboard.putNumber("Roll", roll());
+    SmartDashboard.putNumber("Yaw", navXYaw());
+    SmartDashboard.putNumber("Pitch", navXPitch());
+    SmartDashboard.putNumber("Roll", navXRoll());
 
   }
 
   @Override
   public void simulationPeriodic() {
+    //getting simulated device handle for navX
     int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
-    m_angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+    //setting simulated yaw angle to the JNI angle
+    m_simYawAngle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
   }
 
-  public Rotation2d rotation2d() {
-    return ahrs.getRotation2d();
+  public Rotation2d navXRotation2d() {
+    return navX.getRotation2d();
   }
 
-  public void updateAngle(double angle) {
-    m_angle.set(angle);
+  public void setNavXAngle(double angle) {
+    m_simYawAngle.set(angle);
   }
 
-  public double yaw() {
-    return ahrs.getYaw();
+  public double navXYaw() {
+    return navX.getYaw();
   }
 
-  public double pitch() {
-    return ahrs.getPitch();
+  public double navXPitch() {
+    return navX.getPitch();
   }
 
-  public double roll() {
-    return ahrs.getRoll();
+  public double navXRoll() {
+    return navX.getRoll();
   }
 
-  // resets the onboard gyro to read 0 degrees
-  public void zeroHeading() {
-    ahrs.reset();
+  public void zeroNavXHeading() {
+    navX.reset();
   }
 
-  // returns the turn rate of the onboard gyro
-  public double getTurnRate() {
-    return ahrs.getRate();
+  public double navXTurnRate() {
+    return navX.getRate();
   }
 
-  public Rotation2d AHRSrotation2D() {
-    return ahrs.getRotation2d();
+  public boolean topV3ColorSensor() {
+    return (m_topV3ColorSensor.getProximity() > IndexerConstants.topThresh);
   }
 
-  public boolean topBall() {
-    return (m_topSense.getProximity() > IndexerConstants.topThresh);
-  }
-
-  public boolean bottomBall() {
-    return (m_bottomSense.getProximity() > IndexerConstants.bottomThresh);
+  public boolean bottomV3ColorSensor() {
+    return (m_bottomV3ColorSensor.getProximity() > IndexerConstants.bottomThresh);
   }
 
   public boolean topCargoBlue() {

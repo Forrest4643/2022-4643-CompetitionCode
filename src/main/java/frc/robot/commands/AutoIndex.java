@@ -64,7 +64,7 @@ public class AutoIndex extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_sensors.pitch() < 10 && m_sensors.pitch() > -10) {
+    if (m_sensors.navXPitch() < 10 && m_sensors.navXPitch() > -10) {
       if (m_POV.getAsInt() == 90) {
         m_toggled = true;
       }
@@ -88,7 +88,7 @@ public class AutoIndex extends CommandBase {
 
   private void manual() {
 
-    if (m_pneumaticsSubsystem.rearStatus()) {
+    if (m_pneumaticsSubsystem.rearIntakeStatus()) {
       if (m_POV.getAsInt() == 180) {
         m_intakeSubsystem.rearWheelsReverse();
       } else if (m_POV.getAsInt() != 180){
@@ -98,7 +98,7 @@ public class AutoIndex extends CommandBase {
       m_intakeSubsystem.rearWheelsOff();
     }
 
-    if (m_pneumaticsSubsystem.frontStatus()) {
+    if (m_pneumaticsSubsystem.frontIntakeStatus()) {
       if (m_POV.getAsInt() == 180) {
         m_intakeSubsystem.frontWheelsReverse();
       } else if (m_POV.getAsInt() != 180){
@@ -132,7 +132,7 @@ public class AutoIndex extends CommandBase {
   // }
 
   private void dontDie() {
-      while(Math.abs(m_sensors.pitch()) > 20) {
+      while(Math.abs(m_sensors.navXPitch()) > 20) {
       m_pneumaticsSubsystem.rearIntakeOpen();
       m_pneumaticsSubsystem.frontIntakeOpen();
       }

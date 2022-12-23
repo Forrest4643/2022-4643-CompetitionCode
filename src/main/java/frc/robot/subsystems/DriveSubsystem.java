@@ -146,7 +146,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     
     // pass telemetry data to get Odometry data
-    m_odometry.update(m_sensors.AHRSrotation2D(),
+    m_odometry.update(m_sensors.navXRotation2d(),
         m_leftEncoder.getPosition(),
         m_rightEncoder.getPosition());
     m_field.setRobotPose(getPose());
@@ -176,8 +176,7 @@ public class DriveSubsystem extends SubsystemBase {
      System.out.println("rightDriveDist:" + m_rightEncoder.getPosition());
 
      // sending simulated gyro heading to the main robot code
-
-     m_sensors.updateAngle(-m_driveSim.getHeading().getDegrees());
+     m_sensors.setNavXAngle(-m_driveSim.getHeading().getDegrees());
 
   } // end simulationPeriodic
 
@@ -233,7 +232,7 @@ public class DriveSubsystem extends SubsystemBase {
   // resets the read position of the robot on the field
   public void resetOdometry(Pose2d pose) {
     resetDriveEncoders();
-    m_odometry.resetPosition(pose, m_sensors.rotation2d());
+    m_odometry.resetPosition(pose, m_sensors.navXRotation2d());
   }
 
 }
