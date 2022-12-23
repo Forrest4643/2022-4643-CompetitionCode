@@ -46,10 +46,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  Sensors m_sensors;
-
-  private DoubleSupplier m_heading;
-  private Rotation2d m_rotation2d;
 
   // defining motor names and CAN ID's
   private final CANSparkMax leftLeader = new CANSparkMax(DriveConstants.leftFrontID, MotorType.kBrushless);
@@ -67,45 +63,12 @@ public class DriveSubsystem extends SubsystemBase {
   SlewRateLimiter driveSlew = new SlewRateLimiter(DriveConstants.driveSlew);
   SlewRateLimiter turnSlew = new SlewRateLimiter(DriveConstants.turnSlew);
 
-  private AnalogGyro m_gyro = new AnalogGyro(1);
-  private AnalogGyroSim m_gyroSim = new AnalogGyroSim(m_gyro);
-
-  // Creates DriveSubsystem
-  public DriveSubsystem(Sensors m_sensors) {
-    this.m_sensors = m_sensors;
-
-    m_heading = () -> m_sensors.yaw();
-    m_rotation2d = m_sensors.ahrs.getRotation2d();
-
-    // motor inversions
-    leftLeader.setInverted(false);
-    rightLeader.setInverted(true);
-
-    // defining velocity conversion factor
-    m_leftEncoder.setVelocityConversionFactor(DriveConstants.velocityConversionFactor);
-    m_rightEncoder.setVelocityConversionFactor(DriveConstants.velocityConversionFactor);
-
-    m_leftEncoder.setPositionConversionFactor(DriveConstants.positionConversionFactor);
-    m_rightEncoder.setPositionConversionFactor(DriveConstants.positionConversionFactor);
-    // setting leftFront to follow leftRear,
-    // and rightFront to follow rightRear
-    leftFollower.follow(leftLeader, false);
-    rightFollower.follow(rightLeader, false);
-
-    // Defining simulated vision target
-    simVision.addSimVisionTarget(
-        new SimVisionTarget(farTargetPose, VisionConstants.targetGroundHeightM,
-            VisionConstants.targetWidthM, VisionConstants.targetHeightM));
-
-    // sending simulated field data to SmartDashboard
-    SmartDashboard.putData("Field", m_field);
-
-  } // end Public DriveSubsystem
+  Sensors m_sensors;
 
   private Field2d m_field = new Field2d();
 
   DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(
-      new Rotation2d(m_heading.getAsDouble()), new Pose2d(6.383, 5.769, new Rotation2d()));
+      new Rotation2d(0), new Pose2d(0, 0, new Rotation2d()));
 
   Pose2d farTargetPose = new Pose2d(new Translation2d(VisionConstants.tgtXPos, VisionConstants.tgtYPos),
       new Rotation2d(0.0));
@@ -137,6 +100,37 @@ public class DriveSubsystem extends SubsystemBase {
       // l and r velocity: 0.1 m/s
       // l and r position: 0.005 m
       VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005)); // end m_driveSim
+
+  // Creates DriveSubsystem
+  public DriveSubsystem(Sensors m_sensors) { 
+
+    this.m_sensors = m_sensors;
+
+
+    // motor inversions
+    leftLeader.setInverted(false);
+    rightLeader.setInverted(true);
+
+    // defining velocity conversion factor
+    m_leftEncoder.setVelocityConversionFactor(DriveConstants.velocityConversionFactor);
+    m_rightEncoder.setVelocityConversionFactor(DriveConstants.velocityConversionFactor);
+
+    m_leftEncoder.setPositionConversionFactor(DriveConstants.positionConversionFactor);
+    m_rightEncoder.setPositionConversionFactor(DriveConstants.positionConversionFactor);
+    // setting leftFront to follow leftRear,
+    // and rightFront to follow rightRear
+    leftFollower.follow(leftLeader, false);
+    rightFollower.follow(rightLeader, false);
+
+    // Defining simulated vision target
+    simVision.addSimVisionTarget(
+        new SimVisionTarget(farTargetPose, VisionConstants.targetGroundHeightM,
+            VisionConstants.targetWidthM, VisionConstants.targetHeightM));
+
+    // sending simulated field data to SmartDashboard
+    SmartDashboard.putData("Field", m_field);
+
+  } // end Public DriveSubsystem
 
   public void DriveSiminit() {
     // this runs once at the start of Simulation
@@ -182,7 +176,6 @@ public class DriveSubsystem extends SubsystemBase {
      System.out.println("rightDriveDist:" + m_rightEncoder.getPosition());
 
      // sending simulated gyro heading to the main robot code
-     m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
 
      m_sensors.updateAngle(-m_driveSim.getHeading().getDegrees());
 
@@ -240,7 +233,7 @@ public class DriveSubsystem extends SubsystemBase {
   // resets the read position of the robot on the field
   public void resetOdometry(Pose2d pose) {
     resetDriveEncoders();
-    m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+    m_odometry.resetPosition(pose, m_sensors.rotation2d());
   }
 
 }

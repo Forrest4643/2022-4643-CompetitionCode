@@ -75,7 +75,6 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\arkap\\OneDrive\\Documents\\FRC\\2022\\2022-4643-CompetitionCode\\PathWeaver\\Images\\2022-field.png",
         "window": {
           "visible": true
         }
